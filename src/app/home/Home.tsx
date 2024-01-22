@@ -1,24 +1,49 @@
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
+import { InputSelect } from './components/InputSelect'
+import { DataSelect } from './interfaces/data-select.interface'
 
 function Home () {
   const { setTitle } = useTitle()
+  const [operarios, setOperarios] = useState<DataSelect[]>([])
+  const [tiposAplicaciones, setTiposAplicaciones] = useState<DataSelect[]>([])
 
   useEffect(() => {
+    const fetchOperarios = async () => {
+      const response = await fetch('/data/operarios.json', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        }
+      })
+      const result = await response.json()
+      setOperarios(result)
+    }
+
+    const fetchTiposAplicaciones = async () => {
+      const response = await fetch('/data/tipos-aplicaciones.json', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        }
+      })
+      const result = await response.json()
+      setTiposAplicaciones(result)
+    }
+
     setTitle('Inicio Aplicación')
+    fetchOperarios()
+    fetchTiposAplicaciones()
   }, [])
 
   return (
     <>
-      <div className="top-[159px] absolute left-[142px] [font-family:'Roboto_Flex',Helvetica] font-bold text-[#32cf9c] text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-        Identificación Operario
-      </div>
+      <InputSelect label='Identificación Operario' data={operarios} />
       <div className="top-[305px] absolute left-[142px] [font-family:'Roboto_Flex',Helvetica] font-bold text-[#32cf9c] text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
         Identificación Lote
       </div>
-      <div className="absolute top-[449px] left-[143px] [font-family:'Roboto_Flex',Helvetica] font-bold text-[#32cf9c] text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-        Tipo de Aplicación
-      </div>
+
+      <InputSelect label='Tipo de Aplicación' data={tiposAplicaciones} />
       <div className='absolute w-[64px] h-[63px] top-[196px] left-[444px]'>
         <div className='relative h-[63px]'>
           <svg
