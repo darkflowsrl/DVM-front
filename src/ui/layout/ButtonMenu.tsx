@@ -1,10 +1,29 @@
+import React, { useEffect, useRef } from 'react'
 import { useToggle } from './hooks/useToggle'
 
 export function ButtonMenu () {
-  const { handleToggleSidebar } = useToggle()
+  const { isOpen, handleToggleSidebar } = useToggle()
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const closeClick = (e: Event) => {
+      // llamo para cerrar
+      if (e.target && buttonRef.current?.contains(e.target)) { return }
+      handleToggleSidebar()
+    }
+
+    window.addEventListener('click', closeClick)
+
+    return () => {
+      window.removeEventListener('click', closeClick)
+    }
+  }, [isOpen])
 
   return (
     <button
+      ref={buttonRef}
       id='sidebar-toggle'
       className='fixed z-30'
       onClick={handleToggleSidebar}
