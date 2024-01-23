@@ -8,6 +8,9 @@ module.exports = {
     fontFamily: {
       roboto: ['Roboto Flex', 'sans-serif']
     },
+    backgroundPosition: {
+      'right-24': 'right 24px'
+    },
     extend: {}
   },
   plugins: []
