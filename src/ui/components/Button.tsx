@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 interface Props {
   size?: 'sm' | 'md' | 'lg'
-  type?: 'success' | 'warning' | 'error' | 'default' | 'default-light'
+  type?: 'success' | 'success-dark' | 'warning' | 'error' | 'default' | 'default-light'
   disabled?: boolean
   children: string
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
@@ -25,6 +25,7 @@ export function Button ({ size = 'md', type = 'default', disabled = false, child
           'bg-default': type === 'default',
           'bg-success': type === 'success',
           'bg-warning': type === 'warning',
+          'bg-dark text-success': type === 'success-dark',
           'bg-error text-white': type === 'error',
           'bg-default/50': type === 'default' && disabled,
           'bg-success/50': type === 'success' && disabled,

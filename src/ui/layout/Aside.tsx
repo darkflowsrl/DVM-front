@@ -1,11 +1,11 @@
 import clsx from 'clsx'
-import { useToggle } from './hooks/useToggle'
+import { useToggle } from '../hooks/useToggle'
 import { ItemMenu } from './interfaces/item-menu.interface'
 import { ItemMenuAside } from './ItemMenuAside'
 import React, { useEffect, useState } from 'react'
 
 export function Aside () {
-  const { isOpen } = useToggle()
+  const { getStateToggle } = useToggle()
 
   const [data, setData] = useState<ItemMenu[]>()
 
@@ -37,7 +37,7 @@ export function Aside () {
       className={clsx(
         'fixed top-0 left-0 z-20 mt-[80px] w-[277px] h-screen transition-transform  bg-success rounded-r-lg dark:bg-success flex flex-col justify-between',
         {
-          '-translate-x-full': !isOpen
+          '-translate-x-full': !getStateToggle('menu-lateral')
         }
       )}
     >

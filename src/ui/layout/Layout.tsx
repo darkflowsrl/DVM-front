@@ -1,29 +1,42 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Header } from './Header'
 import { Aside } from './Aside'
 import clsx from 'clsx'
-import { useToggle } from './hooks/useToggle'
+import { useToggle } from '../hooks/useToggle'
 import { KeyBoard } from '../components/keyboard/KeyBoard'
 import { useCarga } from './hooks/useCarga'
+import { InfoLogin } from './InfoLogin'
+import { useFormInitial } from '../../app/home/components/FormInitial/hooks/UseFormInitial'
 
 interface Props {
   children: ReactNode;
 }
 
 export function Layout ({ children }: Props) {
-  const { isOpen } = useToggle()
+  const { toggles } = useToggle()
   const { cargando } = useCarga()
+  const [opendToggle, setOpendToggle] = useState<boolean>()
+  const { operario, lote, tipoAplicacion } = useFormInitial()
+
+  useEffect(() => {
+    console.log(toggles)
+    setOpendToggle(toggles.filter(t => t.isOpen).length > 0)
+  }, [])
+
+  const mostrarInfoLogin = () => operario.name !== '' && lote && tipoAplicacion.name !== ''
 
   return (
     <>
       <Header />
       <Aside />
-      <div className={clsx(
-        'w-full opacity-50  fixed top-0 left-0 z-10 bg-black',
-        {
-          hidden: !isOpen
-        }
-      )}
+      {mostrarInfoLogin() && <InfoLogin />}
+      <div
+        className={clsx(
+          'w-full opacity-50  fixed top-0 left-0 z-10 bg-black',
+          {
+            hidden: !opendToggle
+          }
+        )}
       />
       {!cargando
         ? <main hidden={cargando} className='w-screen h-[800px] relative bg-[#172530] pt-[64px]'>

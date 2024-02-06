@@ -13,7 +13,7 @@ export function Nodo ({ data }: Props) {
   })
 
   return (
-    <section className='flex gap-8 bg-box border-[1px] rounded-md border-[#A1A1A1] h-[140px] p-6 text-white shadow-2xl'>
+    <section className='flex gap-8 bg-dark border-[1px] rounded-md border-[#A1A1A1] h-[140px] p-6 text-white shadow-2xl'>
       <div className='flex flex-col justify-center items-center'>
         <p className='text-[20px] font-bold'>NODO</p>
         <h2 className='text-[48px] font-bold'>{data.nodo}</h2>

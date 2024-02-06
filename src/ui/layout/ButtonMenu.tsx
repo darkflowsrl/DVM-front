@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from 'react'
-import { useToggle } from './hooks/useToggle'
+import { useToggle } from '../hooks/useToggle'
 
 export function ButtonMenu () {
-  const { isOpen, handleToggleSidebar } = useToggle()
+  const { getStateToggle, addToggle, toggleOpenedState } = useToggle()
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    if (!isOpen) return
+    addToggle('menu-lateral')
 
     const closeClick = (e: Event) => {
       // llamo para cerrar
       if (e.target && buttonRef.current?.contains(e.target)) { return }
-      handleToggleSidebar()
+      if (getStateToggle('menu-lateral')) toggleOpenedState('menu-lateral')
     }
 
     window.addEventListener('click', closeClick)
@@ -19,14 +19,14 @@ export function ButtonMenu () {
     return () => {
       window.removeEventListener('click', closeClick)
     }
-  }, [isOpen])
+  }, [])
 
   return (
     <button
       ref={buttonRef}
       id='sidebar-toggle'
       className='fixed z-30 w-[96px] h-[80px]'
-      onClick={handleToggleSidebar}
+      onClick={() => toggleOpenedState('menu-lateral')}
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'

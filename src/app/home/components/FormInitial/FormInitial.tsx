@@ -36,7 +36,7 @@ export function FormInitial () {
     fetchTiposAplicaciones()
   }, [])
 
-  const { setFormInitial, operario, tipoAplicacion, lote } = useFormInitial()
+  const { setFormInitial, lote } = useFormInitial()
 
   useEffect(() => {
     addModal('agregar-operario')
@@ -56,7 +56,7 @@ export function FormInitial () {
       lote: dataForm.lote,
       tipoAplicacion: {
         id: dataForm.tipoAplicacion,
-        name: operarios.find(i => i.id === dataForm.tipoAplicacion)?.name ?? ''
+        name: tiposAplicaciones.find(i => i.id === dataForm.tipoAplicacion)?.name ?? ''
       }
     })
     console.log(dataForm)
