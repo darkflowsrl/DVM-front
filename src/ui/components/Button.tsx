@@ -2,20 +2,26 @@ import React from 'react'
 import clsx from 'clsx'
 
 interface Props {
-  type?: 'success' | 'warning' | 'error' | 'default'
+  size?: 'sm' | 'md' | 'lg'
+  type?: 'success' | 'warning' | 'error' | 'default' | 'default-light'
   disabled?: boolean
   children: string
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
-export function Button ({ type = 'default', disabled = false, children, onClick }: Props) {
+export function Button ({ size = 'md', type = 'default', disabled = false, children, onClick }: Props) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        'text-[17px] font-roboto text-[#1C2E3D] rounded-md px-[25px] py-[14px]',
+        'text-[17px] font-roboto text-[#1C2E3D] rounded-md w-full',
         {
+          'px-[15px] py-[7px]': size === 'sm',
+          'px-[25px] py-[14px]': size === 'md',
+          'px-[60px] py-[20px]': size === 'lg',
+          'border-[#A0A0A0] border-[1px] text-[#FFF]': type === 'default-light',
+          'bg-transparent': type === 'default-light',
           'bg-default': type === 'default',
           'bg-success': type === 'success',
           'bg-warning': type === 'warning',

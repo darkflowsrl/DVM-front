@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
-import { NodoData } from './interfaces/nodo-data'
-import { Nodo } from './components/Nodo'
 import clsx from 'clsx'
 import { Modal } from '../../ui/components/modal/Modal'
 import { Dialog, DialogProps } from '../../ui/components/dialog/Dialog'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../ui/components/modal/hooks/UseModal'
+import { Nodo } from '../../ui/components/nodo/Nodo'
+import { NodoData } from '../../ui/components/nodo/interfaces/nodo-data'
+import { Button } from '../../ui/components/Button'
 
 export function Testing () {
   const { setTitle } = useTitle()
@@ -45,9 +46,13 @@ export function Testing () {
     if (acept) { navigate('/') }
   }
 
-  const handleClick = () => {
+  const handleRepetirTestingClick = () => {
     if (getStateModal('repetir-testing')) return
     toggleOpenedState('repetir-testing')
+  }
+
+  const handleIniciarTrabajoClick = () => {
+    navigate('/trabajo')
   }
 
   return (
@@ -95,16 +100,12 @@ export function Testing () {
           </div>
         </div>
         <div className='flex gap-4'>
-          <button
-            onClick={handleClick}
-            className={clsx('bg-transparent border-2 text-[24px] font-roboto text-white w-[271px] h-[82px]',
-              {
-                'bg-success/50': !true
-              }
-            )}
+          <Button
+            onClick={handleRepetirTestingClick}
+            type='default-light'
           >
             Repetir Test
-          </button>
+          </Button>
           <Modal<DialogProps>
             idModal='repetir-testing'
             ModalContent={Dialog}
@@ -117,15 +118,12 @@ export function Testing () {
             crossClose
             outsideClose
           />
-          <button
-            className={clsx('bg-success text-[24px] font-roboto text-[#1C2E3D] w-[271px] h-[82px]',
-              {
-                'bg-success/50': !true
-              }
-            )}
+          <Button
+            type='success'
+            onClick={handleIniciarTrabajoClick}
           >
             Iniciar Trabajo
-          </button>
+          </Button>
         </div>
       </section>
     </article>

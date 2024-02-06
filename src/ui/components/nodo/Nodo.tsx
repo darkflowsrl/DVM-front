@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AspersorData, NodoData } from '../interfaces/nodo-data'
+import { AspersorData, NodoData } from './interfaces/nodo-data'
 
 interface Props {
   data: NodoData
