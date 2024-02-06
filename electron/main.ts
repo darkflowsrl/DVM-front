@@ -79,11 +79,11 @@ ipcMain.handle('getOperariosAsync', async () => {
   return await operariosStore.all()
 })
 
-ipcMain.handle('addOperarioAsync', async (event: IpcMainInvokeEvent, name: string) => {
+ipcMain.handle('addOperarioAsync', async (_: IpcMainInvokeEvent, name: string) => {
   return await operariosStore.add({ name })
 })
 
-ipcMain.handle('removeOperarioAsync', async (event: IpcMainInvokeEvent, id: number) => {
+ipcMain.handle('removeOperarioAsync', async (_: IpcMainInvokeEvent, id: number) => {
   return await operariosStore.remove(id)
 })
 

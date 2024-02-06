@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
 import { ButtonMenu } from './ButtonMenu'
 import { useFormInitial } from '../../app/home/components/FormInitial/hooks/UseFormInitial'
@@ -47,7 +47,9 @@ export function Header () {
 
     const closeClick = (e: Event) => {
       // llamo para cerrar
-      if (e.target && buttonRef.current?.contains(e.target)) { return }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (e && e.target && buttonRef.current?.contains(e.target)) { return }
       if (getStateToggle('info-login')) toggleOpenedState('info-login')
     }
 

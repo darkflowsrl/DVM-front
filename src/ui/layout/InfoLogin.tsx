@@ -17,7 +17,7 @@ export function InfoLogin () {
   }, [])
 
   const modalClosed = (acept: boolean) => {
-
+    console.log(acept)
   }
 
   const handleEditClick = () => {

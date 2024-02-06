@@ -1,4 +1,3 @@
-import React from 'react'
 import { ItemMenu } from './interfaces/item-menu.interface'
 import { Link } from 'react-router-dom'
 import { useToggle } from '../hooks/useToggle'

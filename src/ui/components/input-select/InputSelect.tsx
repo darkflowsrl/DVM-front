@@ -1,4 +1,3 @@
-import React from 'react'
 import { FieldErrors, RegisterOptions, UseFormRegister } from 'react-hook-form'
 import { DataSelect } from '../../../app/home/interfaces/data-select.interface'
 import clsx from 'clsx'

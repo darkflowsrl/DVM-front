@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import clsx from 'clsx'
 
 interface Props {
   size?: 'sm' | 'md' | 'lg'
   type?: 'success' | 'success-dark' | 'warning' | 'error' | 'default' | 'default-light'
   disabled?: boolean
-  children: string
+  children: ReactNode
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 

@@ -60,7 +60,7 @@ export function Trabajo () {
   }, [])
 
   const modalClosed = (acept: boolean) => {
-    if (acept) { navigate('/') }
+    if (acept) { navigate('/trabajo') }
   }
 
   const handleTipoGotaClick = () => {

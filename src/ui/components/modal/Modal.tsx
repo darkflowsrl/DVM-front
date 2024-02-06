@@ -4,8 +4,8 @@ import { useModal } from './hooks/UseModal'
 
 export interface ModalProps<T = undefined> {
   props?: T
-  close: () => void
-  acept: () => void
+  close?: () => void
+  acept?: () => void
 }
 
 interface Props<T> {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useToggle } from '../hooks/useToggle'
 
 export function ButtonMenu () {
@@ -10,6 +10,8 @@ export function ButtonMenu () {
 
     const closeClick = (e: Event) => {
       // llamo para cerrar
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       if (e.target && buttonRef.current?.contains(e.target)) { return }
       if (getStateToggle('menu-lateral')) toggleOpenedState('menu-lateral')
     }

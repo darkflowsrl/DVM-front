@@ -9,7 +9,6 @@ import { useModal } from '../../ui/components/modal/hooks/UseModal'
 import { Dialog, DialogProps } from '../../ui/components/dialog/Dialog'
 import { useNavigate } from 'react-router-dom'
 import { useFormInitial } from './components/FormInitial/hooks/UseFormInitial'
-import { DatosMeteorologicos } from './interfaces/datos-meteorologicos.interface'
 
 function Home () {
   const navigate = useNavigate()
@@ -51,7 +50,7 @@ function Home () {
   }
 
   const modalClosed = (acept: boolean) => {
-    if (acept) { navigate('/') }
+    if (acept) { navigate('/testing') }
   }
 
   return (
@@ -59,7 +58,7 @@ function Home () {
       className='w-full flex flex-col content-center justify-around h-[100%] px-20'
     >
       <section className='flex flex-row content-center items-center justify-between'>
-        <FormInitial />
+        <FormInitial acept={() => {}} close={() => {}} openedModal={false} />
         <section className='bg-[#1C2E3D] w-[480px] h-[528px] flex flex-col justify-evenly'>
           {items}
         </section>

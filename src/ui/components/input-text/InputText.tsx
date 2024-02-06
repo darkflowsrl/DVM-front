@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { FieldErrors, RegisterOptions, UseFormRegister } from 'react-hook-form'
 import clsx from 'clsx'
 import { useKeyBoard } from '../keyboard/hooks/UseKeyBoard'

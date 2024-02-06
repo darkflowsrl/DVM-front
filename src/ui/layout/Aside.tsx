@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useToggle } from '../hooks/useToggle'
 import { ItemMenu } from './interfaces/item-menu.interface'
 import { ItemMenuAside } from './ItemMenuAside'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function Aside () {
   const { getStateToggle } = useToggle()

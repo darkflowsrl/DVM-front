@@ -1,4 +1,4 @@
-import create from "zustand";
+import create from 'zustand'
 
 interface KeyBoardsState {
   openedKeyBoard: boolean;
@@ -7,8 +7,8 @@ interface KeyBoardsState {
   setValue: (value: string) => void;
 }
 
-export const useKeyBoard = create<KeyBoardsState>((set, get) => ({
-  value: "",
+export const useKeyBoard = create<KeyBoardsState>((set) => ({
+  value: '',
   openedKeyBoard: false,
   toggleKeyBoard: () =>
     set((state) => ({
@@ -17,7 +17,7 @@ export const useKeyBoard = create<KeyBoardsState>((set, get) => ({
     })),
   setValue: (value: string) =>
     set((state) => ({
-      value: value,
-      openedKeyBoard: state.openedKeyBoard,
-    })),
-}));
+      value,
+      openedKeyBoard: state.openedKeyBoard
+    }))
+}))

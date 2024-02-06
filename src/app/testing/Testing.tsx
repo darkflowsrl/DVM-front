@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
-import clsx from 'clsx'
 import { Modal } from '../../ui/components/modal/Modal'
 import { Dialog, DialogProps } from '../../ui/components/dialog/Dialog'
 import { useNavigate } from 'react-router-dom'
@@ -43,7 +42,7 @@ export function Testing () {
   }, [])
 
   const modalClosed = (acept: boolean) => {
-    if (acept) { navigate('/') }
+    if (acept) { navigate('/testing') }
   }
 
   const handleRepetirTestingClick = () => {
