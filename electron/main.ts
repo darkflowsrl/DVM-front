@@ -20,16 +20,20 @@ let win: BrowserWindow | null
 const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
 function createWindow () {
-
   win = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    frame: false,
+    minWidth: 1290,
+    minHeight: 830,
+    frame: true,
+    resizable: false,
+    alwaysOnTop: false,
+    useContentSize: false,
+    fullscreen: false,
     autoHideMenuBar: true,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      sandbox: false
+      sandbox: false,
+      devTools: true
     }
   })
 
@@ -66,22 +70,22 @@ app.on('activate', () => {
 
 app.whenReady().then(createWindow)
 
-const operariosStore = OperariosStore({ urlDataJson:  path.join(process.env.DIST, '../data/operarios.json') })
+const operariosStore = OperariosStore({ urlDataJson: path.join(process.env.DIST, '../data/operarios.json') })
 
-const tiposAplicacionesStore = TiposAplicacionesStore({ urlDataJson:  path.join(process.env.DIST, '../data/tipos-aplicaciones.json') })
+const tiposAplicacionesStore = TiposAplicacionesStore({ urlDataJson: path.join(process.env.DIST, '../data/tipos-aplicaciones.json') })
 
 ipcMain.handle('getOperariosAsync', async () => {
   return await operariosStore.all()
-});
+})
 
 ipcMain.handle('addOperarioAsync', async (event: IpcMainInvokeEvent, name: string) => {
-  return await operariosStore.add({name})
-});
+  return await operariosStore.add({ name })
+})
 
 ipcMain.handle('removeOperarioAsync', async (event: IpcMainInvokeEvent, id: number) => {
   return await operariosStore.remove(id)
-});
+})
 
 ipcMain.handle('getTiposAplicacionesAsync', async () => {
   return await tiposAplicacionesStore.all()
-});
+})

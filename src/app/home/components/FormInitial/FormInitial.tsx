@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ChangeEvent } from 'react'
 import { InputSelect } from '../../../../ui/components/input-select/InputSelect'
 import { InputText } from '../../../../ui/components/input-text/InputText'
 import { DataSelect } from '../../interfaces/data-select.interface'
-import { useForm } from 'react-hook-form'
 import { useFormInitial } from './hooks/UseFormInitial'
 import { useModal } from '../../../../ui/components/modal/hooks/UseModal'
 import { Modal } from '../../../../ui/components/modal/Modal'
 import AgregarOperario from '../agregar-operario/AgregarOperario'
+import { useForm } from 'react-hook-form'
 
 export function FormInitial () {
-  const [operarios, setOperarios] = useState<DataSelect[]>([])
-  const [tiposAplicaciones, setTiposAplicaciones] = useState<DataSelect[]>([])
-
   const {
     register,
-    handleSubmit,
+    getValues,
     formState: { errors, isValid }
   } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange'
   })
+
+  const [operarios, setOperarios] = useState<DataSelect[]>([])
+  const [tiposAplicaciones, setTiposAplicaciones] = useState<DataSelect[]>([])
 
   const fetchOperarios = async () => {
     const result = (await window.api.invoke.getOperariosAsync()).map<DataSelect>(v => ({ name: v.name, id: v.id.toString() }))
@@ -36,23 +36,35 @@ export function FormInitial () {
     fetchTiposAplicaciones()
   }, [])
 
-  const { setEsValid } = useFormInitial()
-
-  const onSubmit = () => {}
+  const { setFormInitial, operario, tipoAplicacion, lote } = useFormInitial()
 
   useEffect(() => {
-    setEsValid(isValid)
     addModal('agregar-operario')
   }, [])
   const { addModal, toggleOpenedState } = useModal()
 
-  const onChangeForm = (e) => {
-    setEsValid(isValid)
-    if (e?.target?.value === '-1') toggleOpenedState('agregar-operario')
+  const handleChange = (event: ChangeEvent<HTMLFormElement>) => {
+    if (event?.target?.value === '-1') toggleOpenedState('agregar-operario')
+    console.log(event.target.value)
+    const dataForm = getValues()
+    setFormInitial({
+      isValid: dataForm.operario && dataForm.tipoAplicacion && dataForm.lote,
+      operario: {
+        id: dataForm.operario,
+        name: operarios.find(i => i.id === dataForm.operario)?.name ?? ''
+      },
+      lote: dataForm.lote,
+      tipoAplicacion: {
+        id: dataForm.tipoAplicacion,
+        name: operarios.find(i => i.id === dataForm.tipoAplicacion)?.name ?? ''
+      }
+    })
+    console.log(dataForm)
+    console.log(tiposAplicaciones.find(i => i.id === dataForm.tipoAplicacion)?.name ?? '')
   }
 
   return (
-    <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
+    <form className='flex flex-col' onChange={handleChange}>
       <InputSelect
         label='Identificación Operario'
         data={operarios}
@@ -60,7 +72,7 @@ export function FormInitial () {
         register={register}
         withAdd
         errors={errors}
-        options={{ required: true, onChange: onChangeForm, onBlur: onChangeForm }}
+        options={{ required: true }}
       />
       <Modal<undefined>
         idModal='agregar-operario'
@@ -69,8 +81,8 @@ export function FormInitial () {
         crossClose
         outsideClose
       />
-      <InputText label='Identificación Lote' name='lote' register={register} errors={errors} options={{ required: true, onChange: onChangeForm }} />
-      <InputSelect label='Tipo de Aplicación' data={tiposAplicaciones} name='tipoAplicacion' register={register} errors={errors} options={{ required: true, onChange: onChangeForm }} />
+      <InputText initialValue={lote} label='Identificación Lote' name='lote' register={register} errors={errors} options={{ required: true }} />
+      <InputSelect label='Tipo de Aplicación' data={tiposAplicaciones} name='tipoAplicacion' register={register} errors={errors} options={{ required: true }} />
     </form>
   )
 }

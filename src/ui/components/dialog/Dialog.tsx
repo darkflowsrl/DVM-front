@@ -1,9 +1,15 @@
-import { Button } from '../../../../ui/components/Button'
-import { ModalProps } from '../../../../ui/components/modal/Modal'
+import { Button } from '../Button'
+import { ModalProps } from '../modal/Modal'
+import clsx from 'clsx'
 
-export function InfoInitTesting ({ close, acept }: ModalProps) {
+export interface DialogProps extends ModalProps {
+  title: string
+  message: string
+  type: 'success' | 'warning' | 'error' | 'default'
+}
+export function Dialog ({ title, message, type, close, acept }: DialogProps) {
   return (
-    <div className='flex flex-col justify-between  w-[591px] h-[362px] bg-[#1C2E3D] boder border-white p-[28px]'>
+    <div className='flex flex-col justify-between  w-[591px] h-auto gap-10 bg-[#1C2E3D] boder border-white p-[28px]'>
 
       <div className='flex items-center'>
         <div className='mr-[14px]'>
@@ -13,15 +19,16 @@ export function InfoInitTesting ({ close, acept }: ModalProps) {
             <path d='M17.3332 24.0001C17.3332 23.2637 16.7362 22.6667 15.9998 22.6667C15.2635 22.6667 14.6665 23.2637 14.6665 24.0001C14.6665 24.7365 15.2635 25.3334 15.9998 25.3334C16.7362 25.3334 17.3332 24.7365 17.3332 24.0001Z' fill='#FFC107' />
           </svg>
         </div>
-        <h3 className='text-warning text-3xl not-italic font-bold'>Importante</h3>
+        <h3 className={clsx('text-3xl not-italic font-bold', {
+          'text-success': type === 'success',
+          'text-warning': type === 'warning',
+          'text-error': type === 'error'
+        })}
+        >{title}
+        </h3>
       </div>
       <div>
-        <small className='text-xs not-italic font-normal text-white'>(Variables del mensaje según estén dadas las condiciones climáticas)</small>
-        <br />
-        <br />
-        <p className='text-2xl not-italic font-normal text-white'>Las condiciones meteorológicas actuales no son las adecuadas para continuar con el trabajo</p>
-        <br />
-        <p className='text-2xl not-italic font-normal text-white'>Al aceptar se iniciará el testeo de los aspersores</p>
+        <p className='text-2xl not-italic font-normal text-white'>{message}</p>
       </div>
       <div className='w-full flex flex-row gap-4 justify-end'>
         <Button type='error' onClick={close}>

@@ -3,15 +3,20 @@ import './keyboard.css'
 import Keyboard from 'react-simple-keyboard'
 import { useKeyBoard } from './hooks/UseKeyBoard'
 
-interface Props {
-  nameInput: string
-}
-
-export function KeyBoard ({ nameInput }: Props) {
-  const { toggleKeyBoard, changeValue, openedKeyBoard } = useKeyBoard()
+export function KeyBoard () {
+  const { toggleKeyBoard, setValue, value, openedKeyBoard } = useKeyBoard()
 
   const onChange = (input: string) => {
-    changeValue({ id: nameInput, value: input })
+    setValue(`${value ?? ''}${input}`)
+  }
+
+  const display = {
+    '{bksp}': 'Retroceso',
+    '{enter}': 'Enter',
+    '{space}': 'Espacio',
+    '{tab}': 'Tab',
+    '{lock}': 'Lock',
+    '{shift}': 'Shift'
   }
 
   const onKeyPress = (button: string) => {
@@ -29,7 +34,7 @@ export function KeyBoard ({ nameInput }: Props) {
   return openedKeyBoard
     ? (
       <div className='absolute inset-x-0 bottom-0  z-50' onClick={handleOnClickOutside}>
-        <Keyboard onChange={onChange} onKeyPress={onKeyPress} />
+        <Keyboard onChange={onChange} onKeyPress={onKeyPress} display={display} />
       </div>
       )
     : (

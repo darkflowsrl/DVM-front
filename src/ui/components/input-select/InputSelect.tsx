@@ -1,8 +1,8 @@
+import React from 'react'
 import { FieldErrors, RegisterOptions, UseFormRegister } from 'react-hook-form'
 import { DataSelect } from '../../../app/home/interfaces/data-select.interface'
 import clsx from 'clsx'
 import { useModal } from '../modal/hooks/UseModal'
-import { Button } from '../Button'
 
 interface Props {
   label: string
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function InputSelect ({ label, name, data, register, options = {}, errors, withAdd = false }: Props) {
-  const optiones = [<option key={-1} className='border-b-success p-[30px]' />, ...data.map((value, i) => {
+  const optiones = [<option key={-1} className='border-b-success p-[30px]' selected />, ...data.map((value, i) => {
     return <option key={i} value={value.id} className='border-b-success p-[30px]'>{value.name}</option>
   })]
 

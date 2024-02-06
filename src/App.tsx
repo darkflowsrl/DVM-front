@@ -12,8 +12,8 @@ export function App () {
     <Router>
       <Layout>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/testing' element={<Testing />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/' element={<Testing />} />
         </Routes>
       </Layout>
     </Router>

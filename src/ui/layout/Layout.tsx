@@ -23,7 +23,7 @@ export function Layout ({ children }: Props) {
         }
       )}
       />
-      <main className='w-screen h-[720px] relative bg-[#172530] pt-[64px]'>
+      <main className='w-screen h-[800px] relative bg-[#172530] pt-[64px]'>
         {children}
 
         <KeyBoard />

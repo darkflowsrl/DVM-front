@@ -3,18 +3,21 @@ import { useTitle } from '../../lib/hooks/UseTitle'
 import { ItemInfo } from './components/ItemInfo'
 import { ItemInfoData } from './interfaces/item-info.interface'
 import { Modal } from '../../ui/components/modal/Modal'
-import { InfoInitTesting } from './components/FormInitial/InfoInitTesting'
 import { FormInitial } from './components/FormInitial/FormInitial'
 import clsx from 'clsx'
-import { useFormInitial } from './components/FormInitial/hooks/UseFormInitial'
 import { useModal } from '../../ui/components/modal/hooks/UseModal'
+import { Dialog, DialogProps } from '../../ui/components/dialog/Dialog'
+import { useNavigate } from 'react-router-dom'
+import { useFormInitial } from './components/FormInitial/hooks/UseFormInitial'
 
 function Home () {
+  const navigate = useNavigate()
   const { setTitle } = useTitle()
   const [data, setData] = useState<ItemInfoData[]>()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
 
   const { isValid } = useFormInitial()
+
   const fetchData = async () => {
     const response = await fetch('/data/items-info.json', {
       headers: {
@@ -43,18 +46,24 @@ function Home () {
     }
   }
 
+  const modalClosed = (acept: boolean) => {
+    if (acept) { navigate('/') }
+  }
+
   return (
     <article
-      className='w-full flex content-center items-center justify-around'
+      className='w-full flex flex-col content-center justify-around h-[100%] px-20'
     >
-      <FormInitial />
-      <section className='flex flex-col content-center items-end justify-around '>
+      <section className='flex flex-row content-center items-center justify-between'>
+        <FormInitial />
         <section className='bg-[#1C2E3D] w-[480px] h-[528px] flex flex-col justify-evenly'>
           {items}
         </section>
+      </section>
+      <section className='self-end'>
         <button
           onClick={handleClick}
-          className={clsx('bg-success text-[24px] font-roboto text-[#1C2E3D] w-[271px] h-[82px] mt-[32px]',
+          className={clsx('bg-success text-[24px] font-roboto text-[#1C2E3D] w-[271px] h-[82px]',
             {
               'bg-success/50': !isValid
             }
@@ -62,10 +71,15 @@ function Home () {
         >
           Iniciar Testing
         </button>
-        <Modal<undefined>
+        <Modal<DialogProps>
           idModal='init-testing'
-          ModalContent={InfoInitTesting}
-          modalContentProps={undefined}
+          ModalContent={Dialog}
+          modalContentProps={{
+            title: 'Iniciar Testeo',
+            message: '¿Confirma iniciar el testeo de los aspersores?',
+            type: 'warning'
+          }}
+          closed={modalClosed}
           crossClose
           outsideClose
         />

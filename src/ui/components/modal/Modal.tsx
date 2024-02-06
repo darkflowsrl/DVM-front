@@ -3,17 +3,18 @@ import { MouseEvent, ReactNode, FC, useEffect } from 'react'
 import { useModal } from './hooks/UseModal'
 
 export interface ModalProps<T = undefined> {
-  props: T
+  props?: T
   close: () => void
+  acept: () => void
 }
 
 interface Props<T> {
   idModal: string,
-  children: ReactNode
   ModalContent: FC<T>
   modalContentProps: T
   crossClose?: boolean
   outsideClose?: boolean
+  closed: (acept: boolean) => void
 }
 
 export function Modal<T> ({
@@ -21,21 +22,23 @@ export function Modal<T> ({
   ModalContent,
   modalContentProps,
   outsideClose,
-  crossClose
+  closed
 }: Props<T>) {
   const { toggleOpenedState, getStateModal } = useModal()
 
   const onClickOutside = () => {
+    closed(false)
     if (outsideClose !== true) return
     toggleOpenedState(idModal)
   }
 
-  const onClickCross = () => {
-    if (crossClose !== true) return
+  const onEventClose = () => {
+    closed(false)
     toggleOpenedState(idModal)
   }
 
-  const onEventClose = () => {
+  const onEventAcept = () => {
+    closed(true)
     toggleOpenedState(idModal)
   }
 
@@ -46,9 +49,8 @@ export function Modal<T> ({
       {getStateModal(idModal) && (
         <ModalContainer
           onClickOutside={onClickOutside}
-          onClickCross={onClickCross}
         >
-          <ModalContent close={onEventClose} {...modalContentProps} />
+          <ModalContent close={onEventClose} acept={onEventAcept} {...modalContentProps} />
         </ModalContainer>
       )}
     </>
@@ -57,7 +59,6 @@ export function Modal<T> ({
 
 interface PropsModalContainer {
   onClickOutside?: (event: MouseEvent<HTMLDivElement>) => void
-  onClickCross?: (event: MouseEvent<HTMLButtonElement>) => void
   children: ReactNode
 }
 

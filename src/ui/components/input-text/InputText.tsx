@@ -1,7 +1,7 @@
+import React, { useEffect } from 'react'
 import { FieldErrors, RegisterOptions, UseFormRegister } from 'react-hook-form'
 import clsx from 'clsx'
 import { useKeyBoard } from '../keyboard/hooks/UseKeyBoard'
-import { useEffect, useState } from 'react'
 
 interface Props {
   label: string
@@ -9,16 +9,20 @@ interface Props {
   options: RegisterOptions<Record<string, string>>
   register: UseFormRegister<Record<string, string>>
   errors?: FieldErrors
+  initialValue?: string
 }
 
-export function InputText ({ label, name, register, options, errors }: Props) {
-  const { toggleKeyBoard, value } = useKeyBoard()
+export function InputText ({ label, name, initialValue = '', register, options, errors }: Props) {
+  const { toggleKeyBoard, value, setValue, openedKeyBoard } = useKeyBoard()
 
-  useEffect(() => toggleKeyBoard(), [])
+  useEffect(() => {
+    setValue(initialValue)
+    toggleKeyBoard()
+  }, [])
 
   const onFocusInput = () => {
-    toggleKeyBoard()
-  }  
+    if (!openedKeyBoard) { toggleKeyBoard() }
+  }
 
   return (
     <div className='flex flex-col mt-[46px]'>

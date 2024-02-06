@@ -1,25 +1,23 @@
-import create from 'zustand'
+import create from "zustand";
 
 interface KeyBoardsState {
-  openedKeyBoard: boolean
-  value: string
-  toggleKeyBoard: () => void
-  setValue: (value: string) => void
+  openedKeyBoard: boolean;
+  value: string;
+  toggleKeyBoard: () => void;
+  setValue: (value: string) => void;
 }
 
 export const useKeyBoard = create<KeyBoardsState>((set, get) => ({
-  value: '',
+  value: "",
   openedKeyBoard: false,
   toggleKeyBoard: () =>
     set((state) => ({
       openedKeyBoard: !state.openedKeyBoard,
       value: state.value
     })),
-  setValue: (value: string) => 
+  setValue: (value: string) =>
     set((state) => ({
-      value : value,
-      openedKeyBoard: state.openedKeyBoard
-    }) 
-  )
-  })
-  )
+      value: value,
+      openedKeyBoard: state.openedKeyBoard,
+    })),
+}));

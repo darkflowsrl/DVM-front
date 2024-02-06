@@ -11,5 +11,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 // Remove Preload scripts loading
 postMessage({ payload: 'removeLoading' }, '*')
-
-

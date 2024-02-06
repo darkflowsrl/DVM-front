@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
 import { ButtonMenu } from './ButtonMenu'
+import { useFormInitial } from '../../app/home/components/FormInitial/hooks/UseFormInitial'
 
 export function Header () {
   const { title } = useTitle()
   const [dayCurrent, setDayCurrent] = useState('')
+  const { operario } = useFormInitial()
 
   useEffect(() => {
     setDayCurrent(getCurrentDate())
@@ -41,6 +43,7 @@ export function Header () {
       <header className='w-full fixed h-[64px] bg-[#1C2E3D] z-10 pl-[112px] pr-[96px] flex items-center justify-between'>
         <h1 className='text-white font-roboto text-base not-italic'>{title}</h1>
         <div className='flex text-white'>
+          <span className='mr-[21px] font-roboto text-sm text-success not-italic font-normal'>{operario.name}</span>
           <span className='mr-[21px] font-roboto text-sm text-white not-italic font-normal'>
             {dayCurrent}
           </span>
