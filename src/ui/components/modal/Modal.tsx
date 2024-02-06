@@ -11,7 +11,7 @@ export interface ModalProps<T = undefined> {
 interface Props<T> {
   idModal: string,
   ModalContent: FC<T>
-  modalContentProps: T
+  modalContentProps?: T
   crossClose?: boolean
   outsideClose?: boolean
   closed: (acept: boolean) => void

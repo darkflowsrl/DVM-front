@@ -16,20 +16,18 @@ export function Layout ({ children }: Props) {
   const { toggles } = useToggle()
   const { cargando } = useCarga()
   const [opendToggle, setOpendToggle] = useState<boolean>()
-  const { operario, lote, tipoAplicacion } = useFormInitial()
+  const { isValid } = useFormInitial()
 
   useEffect(() => {
     console.log(toggles)
     setOpendToggle(toggles.filter(t => t.isOpen).length > 0)
   }, [])
 
-  const mostrarInfoLogin = () => operario.name !== '' && lote && tipoAplicacion.name !== ''
-
   return (
     <>
       <Header />
       <Aside />
-      {mostrarInfoLogin() && <InfoLogin />}
+      {isValid && <InfoLogin />}
       <div
         className={clsx(
           'w-full opacity-50  fixed top-0 left-0 z-10 bg-black',
