@@ -18,7 +18,6 @@ export const useToggle = create<TogglesState>((set, get) => ({
   toggles: [],
   getStateToggle: (id: string) => {
     const state = get().toggles.find(m => m.id === id)
-    console.log(id, state)
     if (!state) return false
     return state.isOpen
   },

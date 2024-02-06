@@ -16,7 +16,7 @@ export function FormInitial ({ close, acept, openedModal = false }: Props) {
   const {
     register,
     getValues,
-    formState: { errors, isValid }
+    formState: { errors }
   } = useForm({
     mode: 'onChange',
     reValidateMode: 'onChange'
@@ -26,12 +26,12 @@ export function FormInitial ({ close, acept, openedModal = false }: Props) {
   const [tiposAplicaciones, setTiposAplicaciones] = useState<DataSelect[]>([])
 
   const fetchOperarios = async () => {
-    const result = (await window.api.invoke.getOperariosAsync()).map<DataSelect>(v => ({ name: v.name, id: v.id.toString() }))
+    const result = (await window.api.invoke.getOperariosAsync())
     setOperarios(result)
   }
 
   const fetchTiposAplicaciones = async () => {
-    const result = (await window.api.invoke.getTiposAplicacionesAsync()).map<DataSelect>(v => ({ name: v.name, id: v.id.toString() }))
+    const result = (await window.api.invoke.getTiposAplicacionesAsync())
     setTiposAplicaciones(result)
   }
 
@@ -49,7 +49,6 @@ export function FormInitial ({ close, acept, openedModal = false }: Props) {
 
   const handleChange = (event: ChangeEvent<HTMLFormElement>) => {
     if (event?.target?.value === '-1') toggleOpenedState('agregar-operario')
-    console.log(event.target.value)
     const dataForm = getValues()
     setFormInitial({
       isValid: dataForm.operario && dataForm.tipoAplicacion && dataForm.lote,
@@ -63,8 +62,6 @@ export function FormInitial ({ close, acept, openedModal = false }: Props) {
         name: tiposAplicaciones.find(i => i.id === dataForm.tipoAplicacion)?.name ?? ''
       }
     })
-    console.log(dataForm)
-    console.log(tiposAplicaciones.find(i => i.id === dataForm.tipoAplicacion)?.name ?? '')
   }
 
   return (

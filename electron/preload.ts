@@ -1,12 +1,13 @@
 import {
   contextBridge,
   createIpcRenderer,
-  GetApiType,
-} from 'electron-typescript-ipc';
-import { Operario } from './api/operarios/operarios.store';
-import { TipoAplicacion } from './api/tipos-aplicaciones/tipos-aplicaciones.store';
+  GetApiType
+} from 'electron-typescript-ipc'
+import { Operario } from './api/operarios/operarios.store'
+import { TipoAplicacion } from './api/tipos-aplicaciones/tipos-aplicaciones.store'
+import { DatosMeteorologicos } from './api/socket/socket'
 
-const ipcRenderer = createIpcRenderer<Api>();
+const ipcRenderer = createIpcRenderer<Api>()
 
 export type Api = GetApiType<
   {
@@ -14,6 +15,7 @@ export type Api = GetApiType<
     addOperarioAsync: (name: string) => Promise<Operario>;
     removeOperarioAsync: (id: number) => Promise<Operario>;
     getTiposAplicacionesAsync: () => Promise<TipoAplicacion[]>;
+    getDatosMeteorologicosAsync: () => Promise<DatosMeteorologicos>;
   },
   {
   }
@@ -22,22 +24,25 @@ export type Api = GetApiType<
 const api: Api = {
   invoke: {
     getOperariosAsync: async () => {
-      return await ipcRenderer.invoke('getOperariosAsync');
+      return await ipcRenderer.invoke('getOperariosAsync')
     },
     addOperarioAsync: async (name: string) => {
-      return await ipcRenderer.invoke('addOperarioAsync', name);
+      return await ipcRenderer.invoke('addOperarioAsync', name)
     },
     removeOperarioAsync: async (id: number) => {
-      return await ipcRenderer.invoke('removeOperarioAsync', id);
+      return await ipcRenderer.invoke('removeOperarioAsync', id)
     },
     getTiposAplicacionesAsync: async () => {
-      return await ipcRenderer.invoke('getTiposAplicacionesAsync');
+      return await ipcRenderer.invoke('getTiposAplicacionesAsync')
+    },
+    getDatosMeteorologicosAsync: async () => {
+      return await ipcRenderer.invoke('getDatosMeteorologicosAsync')
     }
   },
   on: {
 
   }
-};
+}
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('api', api)
@@ -49,7 +54,7 @@ declare global {
 }
 
 // --------- Preload scripts loading ---------
-function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
+function domReady (condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {
     if (condition.includes(document.readyState)) {
       resolve(true)
@@ -64,16 +69,16 @@ function domReady(condition: DocumentReadyState[] = ['complete', 'interactive'])
 }
 
 const safeDOM = {
-  append(parent: HTMLElement, child: HTMLElement) {
+  append (parent: HTMLElement, child: HTMLElement) {
     if (!Array.from(parent.children).find(e => e === child)) {
       parent.appendChild(child)
     }
   },
-  remove(parent: HTMLElement, child: HTMLElement) {
+  remove (parent: HTMLElement, child: HTMLElement) {
     if (Array.from(parent.children).find(e => e === child)) {
       parent.removeChild(child)
     }
-  },
+  }
 }
 
 /**
@@ -82,8 +87,8 @@ const safeDOM = {
  * https://projects.lukehaas.me/css-loaders
  * https://matejkustec.github.io/SpinThatShit
  */
-function useLoading() {
-  const className = `loaders-css__square-spin`
+function useLoading () {
+  const className = 'loaders-css__square-spin'
   const styleContent = `
 @keyframes square-spin {
   25% { transform: perspective(100px) rotateX(180deg) rotateY(0); }
@@ -120,14 +125,14 @@ function useLoading() {
   oDiv.innerHTML = `<div class="${className}"><div></div></div>`
 
   return {
-    appendLoading() {
+    appendLoading () {
       safeDOM.append(document.head, oStyle)
       safeDOM.append(document.body, oDiv)
     },
-    removeLoading() {
+    removeLoading () {
       safeDOM.remove(document.head, oStyle)
       safeDOM.remove(document.body, oDiv)
-    },
+    }
   }
 }
 

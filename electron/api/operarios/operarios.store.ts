@@ -14,7 +14,7 @@ export const OperariosStore = ({ urlDataJson }: Props) => {
     all: async () => JSON.parse(await readFileSync(urlDataJson).toString()) as Operario[],
     get: async (id: number) =>
       (await (JSON.parse(readFileSync(urlDataJson).toString()) as Operario[]).find((m) => {
-        return m.id == id
+        return m.id === id
       })) ?? null,
     add: async (value: { name: string }) => {
       const data = JSON.parse(readFileSync(urlDataJson).toString()) as Operario[]
@@ -22,7 +22,7 @@ export const OperariosStore = ({ urlDataJson }: Props) => {
         data.reduce((accumulator, current) => {
           return accumulator.id > current.id ? accumulator : current
         }).id++ ?? 0
-      const nuevoOperario = { name: value.name, id: id }
+      const nuevoOperario = { name: value.name, id }
 
       data.push(nuevoOperario)
       await writeFileSync(urlDataJson, JSON.stringify(data))
@@ -31,8 +31,8 @@ export const OperariosStore = ({ urlDataJson }: Props) => {
     },
     remove: async (id: number) => {
       let data = JSON.parse(readFileSync(urlDataJson).toString()) as Operario[]
-      const operario = data.find((d) => d.id == id)
-      data = data.filter((value) => value.id != id)
+      const operario = data.find((d) => d.id === id)
+      data = data.filter((value) => value.id !== id)
       await writeFileSync(urlDataJson, JSON.stringify(data))
       return operario
     }

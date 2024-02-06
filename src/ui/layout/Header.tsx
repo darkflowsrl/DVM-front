@@ -10,14 +10,8 @@ export function Header () {
   const [dayCurrent, setDayCurrent] = useState('')
   const { cargando } = useCarga()
   const { addToggle, toggleOpenedState, getStateToggle } = useToggle()
-  const { operario, lote, tipoAplicacion, isValid } = useFormInitial()
+  const { operario, isValid } = useFormInitial()
   const buttonRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    console.log(operario)
-    console.log(lote)
-    console.log(tipoAplicacion)
-  }, [operario, tipoAplicacion, lote])
 
   useEffect(() => {
     setDayCurrent(getCurrentDate())

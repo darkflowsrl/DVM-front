@@ -19,7 +19,6 @@ export function Layout ({ children }: Props) {
   const { isValid } = useFormInitial()
 
   useEffect(() => {
-    console.log(toggles)
     setOpendToggle(toggles.filter(t => t.isOpen).length > 0)
   }, [])
 

@@ -9,6 +9,7 @@ import { useModal } from '../../ui/components/modal/hooks/UseModal'
 import { Dialog, DialogProps } from '../../ui/components/dialog/Dialog'
 import { useNavigate } from 'react-router-dom'
 import { useFormInitial } from './components/FormInitial/hooks/UseFormInitial'
+import { DatosMeteorologicos } from './interfaces/datos-meteorologicos.interface'
 
 function Home () {
   const navigate = useNavigate()
@@ -17,6 +18,9 @@ function Home () {
   const { getStateModal, addModal, toggleOpenedState } = useModal()
 
   const { isValid } = useFormInitial()
+
+  useEffect(() => {
+  }, [])
 
   const fetchData = async () => {
     const response = await fetch('/data/items-info.json', {

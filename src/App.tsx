@@ -28,8 +28,8 @@ export function App () {
       : <Router>
         <Layout>
           <Routes>
-            <Route path='/home' element={<Home />} />
-            <Route path='/' element={<Testing />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/home' element={<Testing />} />
             <Route path='/trabajo' element={<Trabajo />} />
           </Routes>
         </Layout>

@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from 'electron'
 import path from 'node:path'
 import { OperariosStore } from './api/operarios/operarios.store'
 import { TiposAplicacionesStore } from './api/tipos-aplicaciones/tipos-aplicaciones.store'
+import { asyncEmit } from './api/socket/socket'
 
 // The built directory structure
 //
@@ -88,4 +89,8 @@ ipcMain.handle('removeOperarioAsync', async (event: IpcMainInvokeEvent, id: numb
 
 ipcMain.handle('getTiposAplicacionesAsync', async () => {
   return await tiposAplicacionesStore.all()
+})
+
+ipcMain.handle('getDatosMeteorologicosAsync', async () => {
+  return await asyncEmit('datosMeteorologicos')
 })

@@ -14,7 +14,7 @@ export const TiposAplicacionesStore = ({ urlDataJson }: Props) => {
     all: async () => JSON.parse(await readFileSync(urlDataJson).toString()) as TipoAplicacion[],
     get: async (id: number) =>
       (await (JSON.parse(readFileSync(urlDataJson).toString()) as TipoAplicacion[]).find((m) => {
-        return m.id == id
+        return m.id === id
       })) ?? null,
     add: async (value: { name: string }) => {
       const data = JSON.parse(readFileSync(urlDataJson).toString()) as TipoAplicacion[]
@@ -22,7 +22,7 @@ export const TiposAplicacionesStore = ({ urlDataJson }: Props) => {
         data.reduce((accumulator, current) => {
           return accumulator.id > current.id ? accumulator : current
         }).id++ ?? 0
-      const nuevoTipoAplicacion = { name: value.name, id: id }
+      const nuevoTipoAplicacion = { name: value.name, id }
 
       data.push(nuevoTipoAplicacion)
       await writeFileSync(urlDataJson, JSON.stringify(data))
@@ -31,8 +31,8 @@ export const TiposAplicacionesStore = ({ urlDataJson }: Props) => {
     },
     remove: async (id: number) => {
       let data = JSON.parse(readFileSync(urlDataJson).toString()) as TipoAplicacion[]
-      const tipoAplicacion = data.find((d) => d.id == id)
-      data = data.filter((value) => value.id != id)
+      const tipoAplicacion = data.find((d) => d.id === id)
+      data = data.filter((value) => value.id !== id)
       await writeFileSync(urlDataJson, JSON.stringify(data))
       return tipoAplicacion
     }

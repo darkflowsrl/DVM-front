@@ -18,7 +18,6 @@ export const useModal = create<ModalsState>((set, get) => ({
   modals: [],
   getStateModal: (id: string) => {
     const state = get().modals.find(m => m.id === id)
-    console.log(id, state)
     if (!state) return false
     return state.isOpen
   },
