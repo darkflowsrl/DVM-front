@@ -3,9 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "homepage": "./",
+  "description": "DVM-App",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc && vite build && electron-builder build --linux deb --arm64",
+    "build": "tsc && vite build && electron-builder build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --host 0.0.0.0"
   },
@@ -46,5 +47,11 @@
     "vite-plugin-electron": "^0.14.0",
     "vite-plugin-electron-renderer": "^0.14.5"
   },
-  "main": "dist-electron/main.js"
+  "main": "dist-electron/main.js",
+  "build": {
+    "appId": "dvm-app",
+    "mac": {
+      "category": "Aplicación"
+    }
+  }
 }
