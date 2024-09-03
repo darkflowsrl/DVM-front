@@ -41,7 +41,7 @@ m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: applicatio
 #m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > $FILE 2>&1)
 if [ $? -ne 0 ] ; then
   echo "Error: ""$m"
-  exit 1
+  exit 1  
 fi
 
 chmod +x "/root/$FILE"
@@ -66,9 +66,9 @@ if [ "$ASSET_ID" != "null" ]; then
     exit 1
   fi
 
-  BACKUP_FILES_CONFIG_DIR="/root/backup_files_config_$(date +%Y%m%d_%H%M%S)"
-  mkdir -p "$BACKUP_FILES_CONFIG_DIR" 
-  cp -r /root/dvm-app-front/* "$BACKUP_FILES_CONFIG_DIR" 
+  # BACKUP_FILES_CONFIG_DIR="/root/backup_files_config_$(date +%Y%m%d_%H%M%S)"
+  # mkdir -p "$BACKUP_FILES_CONFIG_DIR" 
+  # cp -r /root/dvm-app-front/* "$BACKUP_FILES_CONFIG_DIR" 
   
   mkdir -p "/root/dvm-app-front"
   #mkdir -p "dvm-app-front"

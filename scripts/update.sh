@@ -33,7 +33,7 @@ fi
 
 chmod a+x download-front.sh
 
-source download-front.sh $TOKEN $REPO dvm-app-front-$VERSION_FRONT.AppImage $VERSION_FRONT
+source download-front.sh $TOKEN $REPO dvm-app-front.AppImage $VERSION_FRONT
 
 cd /root/Darkflow-HMI-Backend || exit 1
 git pull
@@ -43,20 +43,20 @@ if [ $? -ne 0 ]; then
 fi
 
 
-BASHRC="/root/.bashrc"
-NEW_LINE="startx /root/dvm-app-front-$VERSION_FRONT.AppImage --no-sandbox -- -nocursor"
+# BASHRC="/root/.bashrc"
+# NEW_LINE="startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor"
 
-if grep -q "startx /root/dvm-app-front-.*.AppImage --no-sandbox -- -nocursor" "$BASHRC"; then
-  sed -i "s|startx /root/dvm-app-front-.*.AppImage --no-sandbox -- -nocursor|$NEW_LINE|" "$BASHRC"
-else
-  echo "$NEW_LINE" >> "$BASHRC"
-fi
+# if grep -q "startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor" "$BASHRC"; then
+#   sed -i "s|startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor|$NEW_LINE|" "$BASHRC"
+# else
+#   echo "$NEW_LINE" >> "$BASHRC"
+# fi
 
-if [ $? -ne 0 ]; then
-  echo "Error al actualizar el archivo .bashrc."
-  exit 1
-fi
+# if [ $? -ne 0 ]; then
+#   echo "Error al actualizar el archivo .bashrc."
+#   exit 1
+# fi
 
-echo "Archivo .bashrc actualizado exitosamente."
+# echo "Archivo .bashrc actualizado exitosamente."
 
 reboot
