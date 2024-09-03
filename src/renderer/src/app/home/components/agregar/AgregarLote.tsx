@@ -112,7 +112,6 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
           <div className="flex items-end justify-between">
             <InputNumber
               label="Latitud"
-              width="[180px]"
               valueInitial={value.geoposicionamiento.lat}
               unidad=""
               required={true}
@@ -128,7 +127,6 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
             />
             <InputNumber
               label="Longitud"
-              width="[180px]"
               valueInitial={value.geoposicionamiento.long}
               unidad=""
               required={true}

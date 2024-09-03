@@ -138,7 +138,7 @@ export const NodosStore = () => {
       let data = JSON.parse(readFileSync(urlDataJson).toString()) as Nodo[]
 
       data = data.map((n) => {
-        n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: a.deshabilitado ? 0 : rpm }))
+        n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: rpm }))
         return n
       })
 
@@ -151,7 +151,7 @@ export const NodosStore = () => {
 
       data = data.map((n) => {
         if (n.id === id)
-          n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: a.deshabilitado ? 0 : rpm }))
+          n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: rpm }))
         return n
       })
 
@@ -192,8 +192,7 @@ export const NodosStore = () => {
           n.deshabilitado = !n.deshabilitado
           n.aspersores = n.aspersores.map((a) => ({
             ...a,
-            deshabilitado: n.deshabilitado,
-            rpmDeseado: n.deshabilitado ? 0 : a.rpmDeseado
+            deshabilitado: n.deshabilitado
           }))
         }
         return n
@@ -214,8 +213,9 @@ export const NodosStore = () => {
           n = {
             ...n,
             aspersores: n.aspersores.map((a) => {
-              if (a.id == idAspersor) a.deshabilitado = deshabilitado
-              a.rpmDeseado = deshabilitado ? 0 : a.rpmDeseado
+              if (a.id == idAspersor) {
+                a.deshabilitado = deshabilitado
+              }
               return a
             })
           }

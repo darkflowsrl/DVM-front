@@ -40,7 +40,7 @@ export function Nodo({ data, posicion, animacion = false }: Props): JSX.Element 
           key={i}
           posicion={posicion * 4 + aspersorData.id}
           data={aspersorData}
-          animacion={animacion}
+          animacion={animacion && !!aspersorData.rpm && !!aspersorData.rpmDeseado}
         />
       )
     })
@@ -126,6 +126,7 @@ function Aspersor({ data, posicion, animacion = false }: PropsAspersor): JSX.Ele
         descripcion: ''
       }
     }
+    console.log(data)
     switch (data.estado?.id) {
       case 0: // Ok
         setColor('#32CF9C')
