@@ -17,7 +17,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-BACKUP_DIR="/backup/backup_$(date +%Y%m%d_%H%M%S)"
+BACKUP_DIR="/backups/backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 cp -r /root/* "$BACKUP_DIR"
 if [ $? -ne 0 ]; then

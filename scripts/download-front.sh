@@ -13,10 +13,10 @@ GITHUB_API_ENDPOINT="api.github.com"
 
 alias errcho='>&2 echo'
 
-dpkg --configure -a
-apt update && apt upgrade
+# dpkg --configure -a
+# apt update && apt upgrade
 
-apt install -y jq curl unrar
+# apt install -y jq curl unrar
 
 function gh_curl() {
   curl -sL -H "Authorization: token $TOKEN" \
