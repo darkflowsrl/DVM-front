@@ -24,7 +24,7 @@ export function Nodo({ data, posicion, animacion = false }: Props): JSX.Element 
         key={i}
         posicion={posicion * 4 + aspersorData.id}
         data={aspersorData}
-        animacion={animacion && !!aspersorData.rpm && !!aspersorData.rpmDeseado}
+        animacion={animacion && aspersorData.rpm != undefined && aspersorData.rpm > 0}
       />
     )
   })
@@ -135,10 +135,10 @@ function Aspersor({ data, posicion, animacion = false }: PropsAspersor): JSX.Ele
         break
       case 1:
       case 2:
+      case 3:
         setColor('#DC3545')
         setSpeed('animate-[spin_0s_linear_infinite]')
         break
-      case 3:
       case 4:
       case 5:
       case 6:

@@ -27,6 +27,7 @@ import { DataUnidad } from '../home/interfaces/data-unidad.interface'
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Trabajo(): JSX.Element {
+  const [pausado, setPausado] = useState<boolean>(false)
   const { setTitle } = useTitle()
   const navigate = useNavigate()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
@@ -160,6 +161,7 @@ export function Trabajo(): JSX.Element {
   const iniciarOPausarTrabajoClick = async (): Promise<void> => {
     if (runningJob) {
       log.info('Trabajo pausado')
+      setPausado(true)
       socket.emit('stopJob')
       setNodos(
         nodos.map((nodo, i) => {
@@ -167,6 +169,7 @@ export function Trabajo(): JSX.Element {
         })
       )
     } else {
+      setPausado(false)
       log.info('Inicio el trabajo')
       socket.emit('startJob', await getRPMDeseado(tipoGotaseleccionada))
       socket.on('getStateNodo', (nodos) => {
@@ -420,7 +423,7 @@ export function Trabajo(): JSX.Element {
             onClick={() => openModal('end-job')}
             type="error"
             size="lg"
-            disabled={!runningJob}
+            disabled={!runningJob && !pausado}
           >
             Finalizar
           </Button>

@@ -6,7 +6,10 @@ import { Modal } from '@renderer/ui/components/modal/Modal'
 import { ConfiguracionDeNodo } from './components/ConfiguracionDeNodo'
 import { useModal } from '@renderer/ui/components/modal/hooks/UseModal'
 import { NodoData } from '@renderer/ui/components/nodo/interfaces/nodo-data'
-import { ConfiguracionesAvanzadasData } from './interfaces/configuraciones-avanzadas-data'
+import {
+  ConfiguracionesAvanzadasData,
+  SendConfiguracionesAvanzadasData
+} from './interfaces/configuraciones-avanzadas-data'
 import { Socket, io } from 'socket.io-client'
 import Keyboard from 'react-simple-keyboard'
 import {
@@ -84,6 +87,16 @@ export default function ConfiguracionAvanzada(): JSX.Element {
       await window.api.invoke.editConfiguracionesAvanzadasAsync(configuracionesAvanzadasData)
     setConfiguracionesAvanzadasData(configuracionesAvanzadasEditData)
     openModal('guardo-configuracion')
+
+    const data: SendConfiguracionesAvanzadasData = {
+      variacionRPM: configuracionesAvanzadasData.variacionRPM,
+      subcorriente: configuracionesAvanzadasData.corriente.minimo,
+      sobrecorriente: configuracionesAvanzadasData.corriente.maximo,
+      cortocicuito: configuracionesAvanzadasData.corriente.limite,
+      sensor: configuracionesAvanzadasData.sensorRPM,
+      electrovalvula: configuracionesAvanzadasData.electroValvula
+    }
+    socket.emit('setConfiguracion', data)
   }
 
   const handleGuardarClick = (): void => {
@@ -769,6 +782,110 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
             crossClose
             outsideClose
           />
+          {/* <div
+            ref={divRef}
+            className={clsx('fixed inset-x-0 bottom-0 z-50', {
+              hidden: !showKeyboard
+            })}
+          >
+            <Keyboard
+              keyboardRef={(r) => (keyboardRef.current = r)}
+              theme="hg-theme-default"
+              layout={{
+                default: ['1 2 3', '4 5 6', '7 8 9', '{bksp} 0 {enter}']
+              }}
+              mergeDisplay
+              display={display}
+              onChange={setValue}
+              onKeyPress={onKeyPress}
+              onKeyReleased={() => {
+                if (inputRef && inputRef.current) inputRef.current.value = value
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-4">
+        <div className=" flex justify-between  gap-4">
+          <div className="flex flex-col">
+            <h4 className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
+              Tipo de Aplicación
+            </h4>
+            <p className="font-roboto text-dark dark:text-light text-[20px]">
+              Edita y carga nuevos campos precargados
+            </p>
+          </div>
+        </div>
+        <div className="w-full rounded-[5px] p-12 flex flex-col gap-8">
+          <div className="flex flex-col gap-4 flex-wrap ">
+            {nodos?.map((nodoData, i) => {
+              return (
+                <div key={i}>
+                  <div className="flex justify-around items-center border-b border-b-solid border-b-success gap-4">
+                    <p className="font-roboto text-dark dark:text-light text-[20px]">
+                      {nodoData.nombre}
+                    </p>{' '}
+                    <Button
+                      type="success-light"
+                      size="sm"
+                      onClick={() => openModal('configuracion-de-nodo' + i)}
+                    >
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17.2024 0.79797C16.6907 0.286996 15.9971 0 15.2739 0C14.5507 0 13.8571 0.286996 13.3454 0.79797L1.10278 13.0408C0.75219 13.3894 0.47421 13.8041 0.284923 14.2609C0.0956352 14.7176 -0.00120286 15.2074 1.1277e-05 15.7018V17.2472C1.1277e-05 17.4469 0.0793178 17.6383 0.220484 17.7795C0.361651 17.9207 0.553114 18 0.752753 18H2.29813C2.79251 18.0014 3.28224 17.9047 3.739 17.7155C4.19575 17.5264 4.61045 17.2485 4.95907 16.8979L17.2024 4.65435C17.7132 4.14262 18 3.44916 18 2.72616C18 2.00316 17.7132 1.3097 17.2024 0.79797ZM3.8947 15.8335C3.47015 16.2553 2.89653 16.4927 2.29813 16.4945H1.5055V15.7018C1.50473 15.4052 1.56282 15.1113 1.6764 14.8372C1.78997 14.5632 1.95678 14.3144 2.16716 14.1052L11.4582 4.81393L13.1896 6.54527L3.8947 15.8335ZM16.1373 3.58995L14.2509 5.47711L12.5196 3.74953L14.4067 1.86237C14.5204 1.74894 14.6553 1.659 14.8038 1.59771C14.9522 1.53641 15.1112 1.50495 15.2718 1.50513C15.4324 1.5053 15.5914 1.53711 15.7397 1.59873C15.888 1.66034 16.0227 1.75057 16.1362 1.86425C16.2496 1.97793 16.3395 2.11284 16.4008 2.26128C16.4621 2.40972 16.4936 2.56878 16.4934 2.72937C16.4932 2.88997 16.4614 3.04895 16.3998 3.19726C16.3382 3.34556 16.248 3.48028 16.1343 3.59371L16.1373 3.58995Z"
+                          fill="#172530"
+                        />
+                      </svg>
+                      Editar
+                    </Button>
+                    <Button
+                      type="success-light"
+                      size="sm"
+                      maxWith={false}
+                      onClick={() => openModal('configuracion-de-nodo' + i)}
+                    >
+                      <svg
+                        width="25"
+                        height="30"
+                        viewBox="0 0 25 30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24.6667 4.93333H18.5V2.46667C18.5 1.81247 18.2401 1.18506 17.7775 0.72247C17.3149 0.25988 16.6875 0 16.0333 0L8.63333 0C7.97913 0 7.35173 0.25988 6.88914 0.72247C6.42655 1.18506 6.16667 1.81247 6.16667 2.46667V4.93333H0V7.4H2.46667V25.9C2.46667 26.8813 2.85649 27.8224 3.55037 28.5163C4.24426 29.2102 5.18537 29.6 6.16667 29.6H18.5C19.4813 29.6 20.4224 29.2102 21.1163 28.5163C21.8102 27.8224 22.2 26.8813 22.2 25.9V7.4H24.6667V4.93333ZM8.63333 2.46667H16.0333V4.93333H8.63333V2.46667ZM19.7333 25.9C19.7333 26.2271 19.6034 26.5408 19.3721 26.7721C19.1408 27.0034 18.8271 27.1333 18.5 27.1333H6.16667C5.83957 27.1333 5.52586 27.0034 5.29457 26.7721C5.06327 26.5408 4.93333 26.2271 4.93333 25.9V7.4H19.7333V25.9Z"
+                          fill="#172530"
+                        />
+                      </svg>
+                    </Button>
+                    <Modal<{
+                      nodoData: NodoData
+                    }>
+                      idModal={'configuracion-de-nodo' + i}
+                      ModalContent={ConfiguracionDeNodo}
+                      modalContentProps={{ nodoData }}
+                      closed={modalClosed}
+                      crossClose
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          <Button
+            type="success"
+            size="md"
+            disabled={!(nodosDisponibles && nodosDisponibles.length > 0)}
+            onClick={handleGuardarClick}
+          >
+            Guardar
+          </Button> */}
+
           <div
             ref={divRef}
             className={clsx('fixed inset-x-0 bottom-0 z-50', {
