@@ -219,7 +219,7 @@ export default function ConfiguracionGeneral(): JSX.Element {
       <div className="flex w-full items-center justify-between gap-10 border-2 border-success rounded-lg p-4">
         <div>
           <h1 className="text-success font-bold text-[20px]">Versión</h1>
-          <p className="text-white text-[20px]">
+          <p className="text-dark dark:text-light text-[20px]">
             App: v{versionFront}&emsp;Api: {versionBack.version}&emsp;Placa:{' '}
             {versionBack.boardVersion}
           </p>
