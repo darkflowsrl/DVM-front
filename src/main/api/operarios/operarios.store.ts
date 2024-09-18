@@ -1,6 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
-import { APP_DATA_PATH } from '../../utils/urls'
 
 export interface Operario {
   id: number
@@ -9,7 +8,7 @@ export interface Operario {
 }
 
 export const OperariosStore = () => {
-  let urlDataJson = path.join(APP_DATA_PATH(), 'operarios.json')
+  let urlDataJson = path.join('/root/frontend/data', 'operarios.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/operarios.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {
