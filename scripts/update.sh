@@ -33,7 +33,7 @@ fi
 
 chmod a+x download-front.sh
 
-source download-front.sh $TOKEN $REPO dvm-app-front.AppImage $VERSION_FRONT
+source download-front.sh $TOKEN $REPO frontend.AppImage $VERSION_FRONT
 
 cd /root/Darkflow-HMI-Backend || exit 1
 git pull
@@ -44,10 +44,10 @@ fi
 
 
 # BASHRC="/root/.bashrc"
-# NEW_LINE="startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor"
+# NEW_LINE="startx /root/frontend.AppImage --no-sandbox -- -nocursor"
 
-# if grep -q "startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor" "$BASHRC"; then
-#   sed -i "s|startx /root/dvm-app-front.AppImage --no-sandbox -- -nocursor|$NEW_LINE|" "$BASHRC"
+# if grep -q "startx /root/frontend.AppImage --no-sandbox -- -nocursor" "$BASHRC"; then
+#   sed -i "s|startx /root/frontend.AppImage --no-sandbox -- -nocursor|$NEW_LINE|" "$BASHRC"
 # else
 #   echo "$NEW_LINE" >> "$BASHRC"
 # fi

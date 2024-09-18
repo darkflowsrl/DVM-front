@@ -68,14 +68,14 @@ if [ "$ASSET_ID" != "null" ]; then
 
   # BACKUP_FILES_CONFIG_DIR="/root/backup_files_config_$(date +%Y%m%d_%H%M%S)"
   # mkdir -p "$BACKUP_FILES_CONFIG_DIR" 
-  # cp -r /root/dvm-app-front/* "$BACKUP_FILES_CONFIG_DIR" 
+  # cp -r /root/frontend/* "$BACKUP_FILES_CONFIG_DIR" 
   
-  mkdir -p "/root/dvm-app-front"
-  #mkdir -p "dvm-app-front"
-  unrar x -y -r /root/data.rar /root/dvm-app-front
-  #unrar x -y -r data.rar dvm-app-front
-  chmod -R 777 "/root/dvm-app-front"
-  #chmod -R 777 "dvm-app-front"
+  mkdir -p "/root/frontend/data"
+  #mkdir -p "frontend/data"
+  unrar x -y -r /root/data.rar /root/frontend/data
+  #unrar x -y -r data.rar frontend/ata
+  chmod -R 777 "/root/frontend/data"
+  #chmod -R 777 "frontend"
   echo "Agregando archivos de configuración"
 fi
 
