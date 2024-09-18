@@ -16,7 +16,7 @@ export const TiposAplicacionesStore = (): {
   add: (value: ITipoAplicacion) => Promise<ITipoAplicacion | undefined>
   remove: (id: number) => Promise<ITipoAplicacion | undefined>
 } => {
-  let urlDataJson = path.join(APP_DATA_PATH(), 'tipos-aplicaciones.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'data', 'tipos-aplicaciones.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/tipos-aplicaciones.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {

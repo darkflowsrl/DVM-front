@@ -20,7 +20,7 @@ export const LotesStore = (): {
   add: (value: ILote) => Promise<ILote | undefined>
   remove: (id: number) => Promise<ILote | undefined>
 } => {
-  let urlDataJson = path.join(APP_DATA_PATH(), 'lotes.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'data', 'lotes.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/lotes.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {

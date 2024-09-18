@@ -10,7 +10,7 @@ export interface ItemMenu {
 }
 
 export const ItemsMenuStore = () => {
-  let urlDataJson = path.join(APP_DATA_PATH(), 'items-menu.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'data', 'items-menu.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/items-menu.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {
