@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
+import { APP_DATA_PATH } from '../../utils/urls'
 
 
 export interface ILote {
@@ -19,7 +20,7 @@ export const LotesStore = (): {
   add: (value: ILote) => Promise<ILote | undefined>
   remove: (id: number) => Promise<ILote | undefined>
 } => {
-  let urlDataJson = path.join('/root/frontend/data', 'lotes.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'lotes.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/lotes.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {

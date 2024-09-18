@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
+import { APP_DATA_PATH } from '../../utils/urls'
 
 
 export type IdsEstadoAspersorType = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
@@ -86,7 +87,7 @@ export interface Nodo {
 }
 
 export const NodosStore = () => {
-  let urlDataJson = path.join('/root/frontend/data', 'nodos.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'nodos.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/nodos.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {

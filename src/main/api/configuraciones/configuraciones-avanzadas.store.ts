@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
+import { APP_DATA_PATH } from '../../utils/urls'
 
 
 export type TipoGotaType = 'FINA' | 'MEDIA' | 'GRUESA' | 'CUSTOM'
@@ -25,7 +26,7 @@ export interface ConfiguracionesAvanzadas {
 }
 
 export const ConfiguracionesAvanzadasStore = () => {
-  let urlDataJson = path.join('/root/frontend/data', 'configuraciones-avanzadas.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'configuraciones-avanzadas.json')
   const urlDataJsonDefault = path.join(
     __dirname,
     '../../resources/data/configuraciones-avanzadas.json'

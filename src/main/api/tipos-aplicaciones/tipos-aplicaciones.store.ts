@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
+import { APP_DATA_PATH } from '../../utils/urls'
 
 
 export interface ITipoAplicacion {
@@ -15,7 +16,7 @@ export const TiposAplicacionesStore = (): {
   add: (value: ITipoAplicacion) => Promise<ITipoAplicacion | undefined>
   remove: (id: number) => Promise<ITipoAplicacion | undefined>
 } => {
-  let urlDataJson = path.join('/root/frontend/data', 'tipos-aplicaciones.json')
+  let urlDataJson = path.join(APP_DATA_PATH(), 'tipos-aplicaciones.json')
   const urlDataJsonDefault = path.join(__dirname, '../../resources/data/tipos-aplicaciones.json')
   if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
   return {
