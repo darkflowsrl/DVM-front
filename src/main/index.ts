@@ -22,7 +22,7 @@ import {
   ConfiguracionesAvanzadas,
   ConfiguracionesAvanzadasStore
 } from './api/configuraciones/configuraciones-avanzadas.store'
-import { execFile } from 'child_process'
+import { exec, execFile } from 'child_process'
 
 log.initialize()
 ConfiguracionLogger()
@@ -86,6 +86,13 @@ app.whenReady().then(() => {
   })
 
   log.info('Comenzo la aplicacion...')
+
+  exec('nmcli dev wifi connect "dvm" password "dvm12345"', (error, stdout) => {
+    if (error) {
+      console.log(`No se pudo conectar: ${error}`)
+    }
+    console.log(`Se conectó a la red: ${stdout}`)
+  })
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
