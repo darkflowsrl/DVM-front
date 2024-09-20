@@ -24,7 +24,7 @@ export function Nodo({ data, posicion, animacion = false }: Props): JSX.Element 
         key={i}
         posicion={posicion * 4 + aspersorData.id}
         data={aspersorData}
-        animacion={animacion && aspersorData.rpm != undefined && aspersorData.rpm > 0}
+        animacion={animacion}
       />
     )
   })
