@@ -11,12 +11,14 @@ import {
   ServerToClientEvents
 } from '@renderer/lib/socket/interfaces/socket-client.interface'
 import { Socket, io } from 'socket.io-client'
+import { useApp } from '../hooks/useApp'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Aside(): JSX.Element {
   const { getStateToggle } = useToggle()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
+  const { modeApp } = useApp()
 
   const [data, setData] = useState<ItemMenu[]>()
 
@@ -36,13 +38,15 @@ export function Aside(): JSX.Element {
     toggleOpenedState(idModal)
   }
 
-  const items = data?.map(function (item, i) {
-    return (
-      <li key={i}>
-        <ItemMenuAside itemMenu={item} />
-      </li>
-    )
-  })
+  const items = data
+    ?.filter((i) => i.modesApp.includes(modeApp))
+    .map(function (item, i) {
+      return (
+        <li key={i}>
+          <ItemMenuAside itemMenu={item} />
+        </li>
+      )
+    })
 
   const modalClosed = (idModal: string, acept: boolean): void => {
     if (acept) {
@@ -95,7 +99,8 @@ export function Aside(): JSX.Element {
               itemMenu={{
                 icon: '<svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.99997 0.441176C10.6497 0.441176 11.1764 1.03374 11.1764 1.7647V6.17647C11.1764 6.90743 10.6497 7.5 9.99997 7.5C9.35023 7.5 8.8235 6.90743 8.8235 6.17647V1.7647C8.8235 1.03374 9.35019 0.441176 9.99997 0.441176Z" fill="#1C2E3D"/><path d="M13.1778 4.81948C13.1711 5.25129 13.4018 5.65561 13.7877 5.88799C17.2147 7.86347 18.2954 12.086 16.2015 15.3192C14.1076 18.5524 9.63206 19.5721 6.20503 17.5966C2.778 15.6211 1.69729 11.3986 3.79121 8.16532C4.38951 7.24148 5.21107 6.46432 6.18871 5.8974C6.58117 5.66501 6.81815 5.25744 6.815 4.82028C6.81709 4.10985 6.20835 3.53236 5.45534 3.53039C5.19671 3.5297 4.9432 3.59844 4.72441 3.72861C0.0334977 6.47755 -1.4072 12.2936 1.50645 16.7193C4.4201 21.1449 10.5848 22.5041 15.2756 19.7552C19.9665 17.0063 21.4072 11.1902 18.4935 6.7646C17.6825 5.53272 16.5814 4.49383 15.2756 3.72865C14.6366 3.34833 13.7919 3.52874 13.3887 4.1316C13.251 4.33749 13.1779 4.57599 13.1778 4.81948Z" fill="#1C2E3D"/></svg>',
                 title: 'Apagar',
-                link: ''
+                link: '',
+                modesApp: ['full']
               }}
             />
           </div>

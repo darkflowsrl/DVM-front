@@ -114,7 +114,7 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
       </label>
       <div
         onClick={() => setOpen(!open)}
-        className={`bg-light dark:bg-dark w-full flex items-center justify-between rounded-[5px] mr-8 p-4 border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light ${
+        className={`h-[64px] bg-light dark:bg-dark w-full flex items-center justify-between rounded-[5px] mr-8 p-4 border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light ${
           !selected && 'text-gray-700'
         }`}
       >

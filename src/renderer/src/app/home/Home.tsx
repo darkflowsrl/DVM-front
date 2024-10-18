@@ -10,6 +10,8 @@ import { useFormInitial } from './components/form-initial/hooks/UseFormInitial'
 import { Button } from '@renderer/ui/components/Button'
 import log from 'electron-log/renderer'
 import { useOperario } from '@renderer/lib/hooks/UseOperario'
+import { useApp } from '@renderer/ui/hooks/useApp'
+import clsx from 'clsx'
 
 function Home(): JSX.Element {
   const navigate = useNavigate()
@@ -18,6 +20,7 @@ function Home(): JSX.Element {
   //const { getStateModal, addModal, toggleOpenedState } = useModal()
   const { operario } = useOperario()
   const { isValid } = useFormInitial()
+  const { modeApp } = useApp()
 
   useEffect(() => {}, [])
 
@@ -54,11 +57,18 @@ function Home(): JSX.Element {
 
   return (
     <article className="w-full flex flex-col content-center justify-around h-[100%] px-20">
-      <section className="flex flex-row content-center items-center justify-between">
+      <section
+        className={clsx('flex flex-row content-center items-center', {
+          'justify-between': modeApp === 'full',
+          'justify-center': modeApp === 'light'
+        })}
+      >
         <FormInitial props={{ openedModal: false }} />
-        <section className="bg-light dark:bg-dark w-[606px] h-[528px] flex flex-col justify-evenly shadow-2xl dark:shadow-slate-700">
-          {items}
-        </section>
+        {modeApp === 'full' && (
+          <section className="bg-light dark:bg-dark w-[606px] h-[528px] flex flex-col justify-evenly shadow-2xl dark:shadow-slate-700">
+            {items}
+          </section>
+        )}
       </section>
       <section className="self-end">
         <Button onClick={handleClick} type="success" size="lg" disabled={!isValid}>

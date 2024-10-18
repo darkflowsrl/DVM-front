@@ -1,0 +1,19 @@
+{
+  "idioma": "Language",
+  "configuracionGeneral": "General Settings",
+  "iluminacion": "Lightning",
+  "unidadesDeMedida": "Units of measurement",
+  "velocidad": "Speed",
+  "temperatura": "Temperature",
+  "espaniol": "Spanish",
+  "ingles": "English",
+  "version": "Version",
+  "actualizarVersion": "Update version",
+  "domingo": "Sunday",
+  "lunes": "Monday",
+  "martes": "Tuesday",
+  "miercoles": "Wednesday",
+  "jueves": "Thursday",
+  "viernes": "Friday",
+  "sabado": "Saturday"
+}

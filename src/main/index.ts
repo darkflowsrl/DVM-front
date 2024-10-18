@@ -23,6 +23,7 @@ import {
   ConfiguracionesAvanzadasStore
 } from './api/configuraciones/configuraciones-avanzadas.store'
 import { exec, execFile } from 'child_process'
+import { LangStore, LangType } from './api/lang/lang.store'
 
 log.initialize()
 ConfiguracionLogger()
@@ -125,6 +126,18 @@ ipcMain.handle('removeOperarioAsync', async (_: IpcMainInvokeEvent, id: number) 
   const operarioEliminado = await operariosStore.remove(id)
 
   return operarioEliminado
+})
+
+const langStore = LangStore()
+
+ipcMain.handle('getLangAsync', async (_: IpcMainInvokeEvent, lang?: LangType) => {
+  const langAll = await (lang ? langStore.all(lang) : langStore.all())
+  return langAll
+})
+
+ipcMain.handle('cambiarLangAsync', async (_: IpcMainInvokeEvent, lang: LangType) => {
+  const langAll = await langStore.cambiarLangAsync(lang)
+  return langAll
 })
 
 const lotesStore = LotesStore()

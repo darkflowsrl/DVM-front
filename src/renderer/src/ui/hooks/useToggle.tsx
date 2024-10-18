@@ -6,48 +6,48 @@ interface ToggleState {
 }
 
 interface TogglesState {
-  toggles: ToggleState[];
+  toggles: ToggleState[]
   getStateToggle: (id: string) => boolean
-  addToggle: (id: string) => void;
-  removeToggle: (id: string) => void;
-  toggleOpenedState: (id: string) => void;
+  addToggle: (id: string) => void
+  removeToggle: (id: string) => void
+  toggleOpenedState: (id: string) => void
 }
 
 export const useToggle = create<TogglesState>((set, get) => ({
   // initial state
   toggles: [],
-  getStateToggle: (id: string) => {
-    const state = get().toggles.find(m => m.id === id)
+  getStateToggle: (id: string): boolean => {
+    const state = get().toggles.find((m) => m.id === id)
     if (!state) return false
     return state.isOpen
   },
   // methods for manipulating state
-  addToggle: (id: string) => {
+  addToggle: (id: string): void => {
     set((state) => {
-      if (state.toggles.find(m => m.id === id)) { return { toggles: state.toggles } }
+      if (state.toggles.find((m) => m.id === id)) {
+        return { toggles: state.toggles }
+      }
 
       return {
         toggles: [
           ...state.toggles,
-        {
-          id,
-          isOpen: false
-        } as ToggleState
+          {
+            id,
+            isOpen: false
+          } as ToggleState
         ]
       }
     })
   },
-  removeToggle: (id) => {
+  removeToggle: (id): void => {
     set((state) => ({
       toggles: state.toggles.filter((toggle) => toggle.id !== id)
     }))
   },
-  toggleOpenedState: (id) => {
+  toggleOpenedState: (id): void => {
     set((state) => ({
       toggles: state.toggles.map((toggle) =>
-        toggle.id === id
-          ? ({ ...toggle, isOpen: !toggle.isOpen } as ToggleState)
-          : toggle
+        toggle.id === id ? ({ ...toggle, isOpen: !toggle.isOpen } as ToggleState) : toggle
       )
     }))
   }

@@ -11,6 +11,7 @@ import {
   ServerToClientEvents
 } from '@renderer/lib/socket/interfaces/socket-client.interface'
 import clsx from 'clsx'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -25,7 +26,7 @@ export function Header(): JSX.Element {
   const [isOnline, setOnline] = useState(() => {
     return navigator.onLine
   })
-
+  const { dataLang } = useLang()
   useEffect(() => {
     window.addEventListener('online', () => setOnline(true))
     window.addEventListener('offline', () => setOnline(false))
@@ -39,11 +40,19 @@ export function Header(): JSX.Element {
   useEffect(() => {
     setDayCurrent(getCurrentDate())
     socket.on('getDatosMeteorologicos', (res) => setDatosMeteorologicos(res))
-  }, [dayCurrent])
+  }, [dayCurrent, dataLang])
 
   const getCurrentDate = (): string => {
     // Days array
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    const days = [
+      dataLang?.domingo ?? 'Domingo',
+      dataLang?.lunes ?? 'Lunes',
+      dataLang?.martes ?? 'Martes',
+      dataLang?.miercoles ?? 'Miércoles',
+      dataLang?.jueves ?? 'Jueves',
+      dataLang?.viernes ?? 'Viernes',
+      dataLang?.sabado ?? 'Sábado'
+    ]
 
     const newDate = new Date()
     const date = newDate.getDate()

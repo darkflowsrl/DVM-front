@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../../../../ui/components/Button'
 import clsx from 'clsx'
 import InputDropdown from '@renderer/ui/components/input-dropdown/InputDropdown'
+import { InputText } from '@renderer/ui/components/input-text/InputText'
 
 interface Props extends ModalProps<{ openedModal: boolean }> {}
 export function FormInitial({ close, acept, props }: Props): JSX.Element {
@@ -71,7 +72,7 @@ export function FormInitial({ close, acept, props }: Props): JSX.Element {
       })}
       onChange={handleChange}
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         <InputDropdown
           label="Identificación Operario"
           data={operarios}
@@ -81,15 +82,18 @@ export function FormInitial({ close, acept, props }: Props): JSX.Element {
           errors={errors}
           options={{ required: true }}
         />
-        <InputDropdown
-          label="Identificación Lote"
-          data={lotes}
-          name="lote"
-          register={register}
-          withAdd
-          errors={errors}
-          options={{ required: true }}
-        />
+        <div className="flex flex-row gap-4">
+          <InputDropdown
+            label="Identificación Lote"
+            data={lotes}
+            name="lote"
+            register={register}
+            withAdd
+            errors={errors}
+            options={{ required: true }}
+          />
+          <InputText label="Hectáreas" unidad="" required={true} onChange={() => {}} />
+        </div>
         <InputDropdown
           label="Tipo de Aplicación"
           data={tiposAplicaciones}

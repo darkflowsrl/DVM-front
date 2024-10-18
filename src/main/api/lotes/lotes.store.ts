@@ -2,7 +2,6 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { APP_DATA_PATH } from '../../utils/urls'
 
-
 export interface ILote {
   id?: number
   name: string

@@ -8,6 +8,7 @@ import { Nodo, UbicacionAspersorType } from '../main/api/nodos/nodos.store'
 import { Unidad } from '../main/api/unidades/unidades.store'
 import { ConfiguracionesAvanzadas } from '../main/api/configuraciones/configuraciones-avanzadas.store'
 import { ITipoAplicacion } from '../main/api/tipos-aplicaciones/tipos-aplicaciones.store'
+import { ILang, LangType } from '../main/api/lang/lang.store'
 
 const ipcRenderer = createIpcRenderer<Api>()
 
@@ -16,6 +17,8 @@ export type Api = GetApiType<
     getOperariosAsync: () => Promise<Operario[]>
     addOperarioAsync: (name: string) => Promise<Operario>
     removeOperarioAsync: (id: number) => Promise<Operario>
+    getLangAsync: (lang?: LangType) => Promise<ILang>
+    cambiarLangAsync: (lang: LangType) => Promise<LangType>
     getLotesAsync: () => Promise<ILote[] | undefined>
     addLoteAsync: (lote: ILote) => Promise<ILote | undefined>
     removeLoteAsync: (id: number) => Promise<ILote | undefined>
@@ -67,6 +70,14 @@ const api: Api = {
     },
     removeOperarioAsync: async (id: number) => {
       return await ipcRenderer.invoke('removeOperarioAsync', id)
+    },
+    getLangAsync: async (lang?: LangType) => {
+      return await (lang
+        ? ipcRenderer.invoke('getLangAsync', lang)
+        : ipcRenderer.invoke('getLangAsync'))
+    },
+    cambiarLangAsync: async (lang: LangType) => {
+      return await ipcRenderer.invoke('cambiarLangAsync', lang)
     },
     getLotesAsync: async () => {
       return await ipcRenderer.invoke('getLotesAsync')

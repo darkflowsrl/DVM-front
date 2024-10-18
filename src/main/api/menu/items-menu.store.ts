@@ -2,11 +2,13 @@ import { existsSync, readFileSync } from 'fs'
 import path from 'path'
 import { APP_DATA_PATH } from '../../utils/urls'
 
+export type ModeAppType = 'light' | 'full'
 
 export interface ItemMenu {
   icon: string
   title: string
   link: string
+  modeApp: ModeAppType[]
 }
 
 export const ItemsMenuStore = () => {

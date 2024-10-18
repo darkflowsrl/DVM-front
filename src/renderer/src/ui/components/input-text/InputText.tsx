@@ -63,14 +63,14 @@ export function InputText({
 
   return (
     <>
-      <div className="flex flex-col mt-[46px]">
+      <div className="flex flex-col">
         <label className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap mb-[13px]">
           {label}
         </label>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center">
           <input
             className={clsx(
-              `h-[64px] w-${width} rounded-[5px] text-2xl bg-white dark:bg-dark border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light p-4`,
+              `h-[64px] w-${width} rounded-[5px] text-2xl bg-white dark:bg-dark border border-solid border-dark dark:border-light text-dark dark:text-light p-4`,
               {
                 'border-error': required && inputRef && inputRef.current && !inputRef.current.value,
                 'focus:border-error':
