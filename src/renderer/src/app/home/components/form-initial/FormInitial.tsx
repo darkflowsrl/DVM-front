@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../../../../ui/components/Button'
 import clsx from 'clsx'
 import InputDropdown from '@renderer/ui/components/input-dropdown/InputDropdown'
-import { InputText } from '@renderer/ui/components/input-text/InputText'
+import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
 
 interface Props extends ModalProps<{ openedModal: boolean }> {}
 export function FormInitial({ close, acept, props }: Props): JSX.Element {
@@ -61,7 +61,8 @@ export function FormInitial({ close, acept, props }: Props): JSX.Element {
       tipoAplicacion: {
         id: dataForm.tipoAplicacion,
         name: tiposAplicaciones.find((i) => i.id === dataForm.tipoAplicacion)?.name ?? ''
-      }
+      },
+      hectareas: dataForm.hectareas
     })
   }
 
@@ -92,7 +93,15 @@ export function FormInitial({ close, acept, props }: Props): JSX.Element {
             errors={errors}
             options={{ required: true }}
           />
-          <InputText label="Hectáreas" unidad="" required={true} onChange={() => {}} />
+          <InputNumber
+            label="Hectáreas"
+            valueInitial={0}
+            unidad=""
+            register={register}
+            errors={errors}
+            options={{ required: true }}
+            onChange={() => {}}
+          />
         </div>
         <InputDropdown
           label="Tipo de Aplicación"

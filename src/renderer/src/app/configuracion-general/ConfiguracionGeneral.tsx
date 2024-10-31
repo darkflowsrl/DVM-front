@@ -11,7 +11,7 @@ import {
   ServerToClientEvents
 } from '@renderer/lib/socket/interfaces/socket-client.interface'
 import { useCarga } from '@renderer/ui/layout/hooks/useCarga'
-import { LangType, useLang } from './hooks/useLang'
+import { useLang } from './hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -30,11 +30,9 @@ export default function ConfiguracionGeneral(): JSX.Element {
 
   const [mostrarDropDownVelocidad, setMostrarDropDownVelocidad] = useState<boolean>(false)
   const [mostrarDropDownTemperatura, setMostrarDropDownTemperatura] = useState<boolean>(false)
-  const [mostrarDropDownIdioma, setMostrarDropDownIdioma] = useState<boolean>(false)
-  const [idiomaActual, setIdiomaActual] = useState<LangType>('es')
   const [unidades, setUnidades] = useState<DataUnidad[]>([])
   const { getStateModal, addModal, toggleOpenedState } = useModal()
-  const { setLang, dataLang } = useLang()
+  const { dataLang } = useLang()
 
   const fetchBrilloActual = async (): Promise<void> => {
     const brilloActual = await window.api.invoke.getBrilloActual()
@@ -79,20 +77,13 @@ export default function ConfiguracionGeneral(): JSX.Element {
     window.api.invoke.setBrillo(porcentaje + 10)
   }
 
-  const handleClickDropdown = (input: 'velocidad' | 'temperatura' | 'idioma'): void => {
+  const handleClickDropdown = (input: 'velocidad' | 'temperatura'): void => {
     if (input === 'temperatura') {
       setMostrarDropDownVelocidad(false)
       setMostrarDropDownTemperatura(!mostrarDropDownTemperatura)
-      setMostrarDropDownIdioma(false)
     }
     if (input === 'velocidad') {
       setMostrarDropDownVelocidad(!mostrarDropDownVelocidad)
-      setMostrarDropDownTemperatura(false)
-      setMostrarDropDownIdioma(false)
-    }
-    if (input === 'idioma') {
-      setMostrarDropDownIdioma(!mostrarDropDownIdioma)
-      setMostrarDropDownVelocidad(false)
       setMostrarDropDownTemperatura(false)
     }
   }
@@ -101,7 +92,6 @@ export default function ConfiguracionGeneral(): JSX.Element {
     await window.api.invoke.cambiarUnidadTemperatura(input)
     setMostrarDropDownVelocidad(false)
     setMostrarDropDownTemperatura(false)
-    setMostrarDropDownIdioma(false)
     fetchUnidades()
   }
 
@@ -109,17 +99,7 @@ export default function ConfiguracionGeneral(): JSX.Element {
     await window.api.invoke.cambiarUnidadVelocidad(input)
     setMostrarDropDownVelocidad(false)
     setMostrarDropDownTemperatura(false)
-    setMostrarDropDownIdioma(false)
     fetchUnidades()
-  }
-
-  const setIdioma = async (input: LangType): Promise<void> => {
-    await window.api.invoke.cambiarLangAsync(input)
-    setMostrarDropDownVelocidad(false)
-    setMostrarDropDownTemperatura(false)
-    setMostrarDropDownIdioma(false)
-    setIdiomaActual(input)
-    setLang(input)
   }
 
   const modalClosed = (idModal: string, acept: boolean): void => {
@@ -241,51 +221,6 @@ export default function ConfiguracionGeneral(): JSX.Element {
                   className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
                 >
                   °F
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
-      </div>
-      <h1 className="text-success mt-12 text-[20px]">{dataLang?.idioma ?? 'Idioma'}</h1>
-      <div className="flex w-full gap-10">
-        <div className="flex">
-          <div className="flex flex-col cursor-pointer">
-            <div
-              className="bg-white dark:bg-dark w-full flex items-center justify-evenly rounded-[5px] mr-8 p-4 border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light"
-              onClick={() => handleClickDropdown('idioma')}
-            >
-              {
-                [
-                  { id: 'es', description: dataLang?.espaniol ?? 'Español' },
-                  { id: 'en', description: dataLang?.ingles ?? 'Ingles' }
-                ].find((lang) => lang.id === idiomaActual).description
-              }
-              <svg
-                width="16"
-                height="9"
-                viewBox="0 0 16 9"
-                className="fill-current text-dark dark:text-light"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.4225 7.67263L15.6677 2.29759C15.8805 2.07819 16 1.78139 16 1.47202C16 1.16265 15.8805 0.865846 15.6677 0.646438C15.5615 0.536679 15.4351 0.449561 15.2958 0.39011C15.1566 0.330658 15.0072 0.300049 14.8563 0.300049C14.7055 0.300049 14.5561 0.330658 14.4169 0.39011C14.2776 0.449561 14.1512 0.536679 14.045 0.646438L8.81122 6.03319C8.70498 6.14295 8.5786 6.23006 8.43934 6.28952C8.30009 6.34897 8.15072 6.37958 7.99987 6.37958C7.84901 6.37958 7.69965 6.34897 7.56039 6.28952C7.42114 6.23006 7.29475 6.14295 7.18852 6.03319L1.95474 0.646438C1.74107 0.425928 1.45067 0.30143 1.14743 0.300332C0.844186 0.299234 0.552936 0.421626 0.337752 0.640583C0.122569 0.85954 0.00107761 1.15713 5.671e-06 1.46788C-0.00106627 1.77862 0.118372 2.07708 0.33204 2.29759L5.57725 7.67263C6.22004 8.33052 7.09138 8.70005 7.99987 8.70005C8.90835 8.70005 9.77969 8.33052 10.4225 7.67263Z" />
-              </svg>
-            </div>
-            {mostrarDropDownIdioma && (
-              <ul className=" z-30 bg-white dark:bg-dark border-[1px] border-dark dark:border-light rounded-[5px] text-dark dark:text-light mt-2 overflow-y-auto w-full max-h-[140px]">
-                <li
-                  onClick={() => setIdioma('es')}
-                  key={1}
-                  className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
-                >
-                  {dataLang?.espaniol ?? 'Español'}
-                </li>
-                <li
-                  onClick={() => setIdioma('en')}
-                  key={2}
-                  className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
-                >
-                  {dataLang?.ingles ?? 'Ingles'}
                 </li>
               </ul>
             )}

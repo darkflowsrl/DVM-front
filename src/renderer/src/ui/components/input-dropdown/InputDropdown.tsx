@@ -28,7 +28,7 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
   const [dataSelect, setDataSelect] = useState<any[]>([])
   const { setOperario } = useOperario()
 
-  const { setFormInitial, isValid, operario, lote, tipoAplicacion } = useFormInitial()
+  const { setFormInitial, isValid, operario, lote, tipoAplicacion, hectareas } = useFormInitial()
 
   const divRef = useRef<HTMLDivElement>(null)
 
@@ -39,8 +39,10 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
         isValid,
         operario,
         lote,
-        tipoAplicacion
+        tipoAplicacion,
+        hectareas
       }
+
       switch (name) {
         case 'operario': {
           nuevoEstado.operario = { id: selected?.id, name: selected?.name }

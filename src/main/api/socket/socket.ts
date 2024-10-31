@@ -247,7 +247,7 @@ try {
       command: 'testing',
       nodos: nodos.map((n) => n.id)
     }
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'development') {
       const nodos = await nodosStore.all()
       const estadosNodosTesting = nodos.map<EstadoNodoTesting>((n) => ({
         command: 'testing',
@@ -390,7 +390,7 @@ try {
     let estadosNodosJob: EstadoNodoJob[]
 
     const listenJob = (): void => {
-      if (process.env.NODE_ENV !== 'development') {
+      if (process.env.NODE_ENV === 'development') {
         const refreshIntervalId = setInterval(async () => {
           if (!runningJob) {
             clearInterval(refreshIntervalId)
@@ -544,7 +544,7 @@ try {
       }
     }
 
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'development') {
       setInterval(async () => {
         const datos: DatosMeteorologicos = {
           humedad: getRandomArbitrary(0, 100, 0),

@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Keyboard from 'react-simple-keyboard'
+import { FieldErrors, RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { useFormInitial } from '@renderer/app/home/components/form-initial/hooks/UseFormInitial'
 
 interface Props {
   label: string
   required?: boolean
+  register?: UseFormRegister<Record<string, number>>
+  errors?: FieldErrors
+  options?: RegisterOptions
   onChange: (value: string) => void
   unidad: string
   valueInitial: number
-  width?: string
 }
 
 export function InputNumber({
@@ -16,7 +20,7 @@ export function InputNumber({
   required,
   valueInitial,
   onChange,
-  width = '[150px]',
+  register,
   unidad
 }: Props): JSX.Element {
   const [showKeyboard, setShowKeyboard] = useState<boolean>(false)
@@ -25,6 +29,8 @@ export function InputNumber({
   const [value, setValue] = useState<string>(valueInitial.toString() ?? '')
   const divRef = useRef<HTMLDivElement>(null)
   const keyboardRef = useRef(null)
+
+  const { setFormInitial, isValid, operario, lote, tipoAplicacion } = useFormInitial()
 
   useEffect(() => {
     const handleClickOutside = (event): void => {
@@ -111,7 +117,19 @@ export function InputNumber({
           display={display}
           onChange={setValue}
           onKeyPress={onKeyPress}
-          onKeyReleased={() => onChange(value)}
+          onKeyReleased={() => {
+            if (register) {
+              const nuevoEstado = {
+                isValid,
+                operario,
+                lote,
+                tipoAplicacion,
+                hectareas: Number.parseFloat(value ?? '0')
+              }
+              setFormInitial(nuevoEstado)
+            }
+            onChange(value)
+          }}
         />
       </div>
     </>

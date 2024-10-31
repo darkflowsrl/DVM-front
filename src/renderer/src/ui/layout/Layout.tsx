@@ -16,6 +16,7 @@ import {
 import { useModal } from '../components/modal/hooks/UseModal'
 import { Dialog, DialogType } from '../components/dialog/Dialog'
 import { Modal } from '../components/modal/Modal'
+import { useApp } from '../hooks/useApp'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 interface Props {
@@ -32,10 +33,13 @@ export function Layout({ children }: Props): JSX.Element {
   const { getStateModal, addModal, toggleOpenedState } = useModal()
   const [mostrarMasCartelDeNoDatosMeteorologicos, setMostrarMasCartelDeNoDatosMeteorologicos] =
     useState<boolean>(true)
-  const timerId = useRef(null)
   const [ultimaDataMeteorologica, setUltimaDataMeteorologica] = useState(new Date())
+  const { modeApp } = useApp()
 
   useEffect(() => {
+    if (modeApp === 'light') {
+      setMostrarMasCartelDeNoDatosMeteorologicos(false)
+    }
     addModal('sin-datos-meteorologicos')
     navigate('/')
     socket.on('getDatosMeteorologicos', (res) => {

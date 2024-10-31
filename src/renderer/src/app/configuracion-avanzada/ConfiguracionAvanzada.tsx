@@ -19,6 +19,7 @@ import {
 import { DataSelect } from '../home/interfaces/data-select.interface'
 import { Dialog, DialogType } from '@renderer/ui/components/dialog/Dialog'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
+import { useApp } from '@renderer/ui/hooks/useApp'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -272,6 +273,7 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
   const divRef = useRef<HTMLDivElement>(null)
   const keyboardRef = useRef(null)
   const [showKeyboard, setShowKeyboard] = useState<boolean>(false)
+  const { modeApp } = useApp()
 
   useEffect(() => {
     const handleClickOutside = (event): void => {
@@ -399,14 +401,28 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
 
   return (
     <div className="bg-light dark:bg-dark rounded-[5px] w-full h-[528px] overflow-y-scroll touch-auto flex flex-col gap-8 p-20">
-      <p className="font-roboto text-dark dark:text-light text-[20px]">
-        Ajuste de los valores por defecto para el trabajo
-      </p>
       {configuracionesAvanzadasData && (
         <div className=" flex flex-col gap-8">
           <div className=" flex flex-col gap-4">
             <h4 className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-              Dimensiones del trabajo
+              Contador de horas
+            </h4>
+            <div className="flex flex-col">
+              <InputNumber
+                label=""
+                valueInitial={configuracionesAvanzadasData.ancho}
+                unidad="hs."
+                required={true}
+                onChange={($e) => onChangeConfiguracionesAvanzada($e, 'ancho')}
+              />
+            </div>
+          </div>
+          <p className="font-roboto text-dark dark:text-light text-[20px]">
+            Ajuste de los valores predeterminados
+          </p>
+          <div className=" flex flex-col gap-4">
+            <h4 className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
+              Dimensiones del equipo
             </h4>
             <div className="flex flex-col">
               <InputNumber
@@ -537,24 +553,26 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
                   type="checkbox"
                 />
               </div>
-              <div className="flex gap-4 items-center">
-                <label className="font-roboto text-dark dark:text-light text-[20px]">
-                  Electroválvula
-                </label>
-                <input
-                  defaultChecked={configuracionesAvanzadasData.electroValvula}
-                  onChange={($e) => onChangeConfiguracionesAvanzada($e, 'electroValvula')}
-                  className={clsx(
-                    'h-[33px] w-[33px] text-2xl appearance-none rounded-[5px] checked:appearance-auto accent-success bg-transparent border border-solid border-dark dark:border-light',
-                    {
-                      'border-error': error,
-                      'focus:border-error': error,
-                      'focus-visible:border-error': error
-                    }
-                  )}
-                  type="checkbox"
-                />
-              </div>
+              {modeApp !== 'light' && (
+                <div className="flex gap-4 items-center">
+                  <label className="font-roboto text-dark dark:text-light text-[20px]">
+                    Electroválvula
+                  </label>
+                  <input
+                    defaultChecked={configuracionesAvanzadasData.electroValvula}
+                    onChange={($e) => onChangeConfiguracionesAvanzada($e, 'electroValvula')}
+                    className={clsx(
+                      'h-[33px] w-[33px] text-2xl appearance-none rounded-[5px] checked:appearance-auto accent-success bg-transparent border border-solid border-dark dark:border-light',
+                      {
+                        'border-error': error,
+                        'focus:border-error': error,
+                        'focus-visible:border-error': error
+                      }
+                    )}
+                    type="checkbox"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
