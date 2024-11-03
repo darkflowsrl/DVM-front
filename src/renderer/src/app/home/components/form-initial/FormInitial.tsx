@@ -95,6 +95,7 @@ export function FormInitial({ close, acept, props }: Props): JSX.Element {
           />
           <InputNumber
             label="Hectáreas"
+            labelSuccess={true}
             valueInitial={0}
             unidad=""
             register={register}

@@ -5,6 +5,7 @@ import { ModalProps } from '../../../../ui/components/modal/Modal'
 import { useForm } from 'react-hook-form'
 import { Button } from '../../../../ui/components/Button'
 import InputDropdown from '@renderer/ui/components/input-dropdown/InputDropdown'
+import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
 
 interface Props extends ModalProps<undefined> {}
 interface ILote {
@@ -75,7 +76,8 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
       tipoAplicacion: {
         id: dataForm.tipoAplicacion,
         name: tiposAplicaciones.find((i) => i.id === dataForm.tipoAplicacion)?.name ?? ''
-      }
+      },
+      hectareas: dataForm.hectareas
     })
   }
 
@@ -87,17 +89,18 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
       <div className="flex items-center">
         <h3 className=" text-3xl not-italic font-bold text-dark dark:text-light">Editar campos</h3>
       </div>
-      <div className="flex flex-col gap-4 mt-8">
-        <div className="flex gap-4">
-          <InputDropdown
-            label="Identificación Operario"
-            data={operarios}
-            name="operario"
-            register={register}
-            withAdd
-            errors={errors}
-            options={{ required: true }}
-          />
+
+      <div className="flex flex-col gap-8">
+        <InputDropdown
+          label="Identificación Operario"
+          data={operarios}
+          name="operario"
+          register={register}
+          withAdd
+          errors={errors}
+          options={{ required: true }}
+        />
+        <div className="flex flex-row gap-4">
           <InputDropdown
             label="Identificación Lote"
             data={lotes}
@@ -106,6 +109,16 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
             withAdd
             errors={errors}
             options={{ required: true }}
+          />
+          <InputNumber
+            label="Hectáreas"
+            labelSuccess={true}
+            valueInitial={0}
+            unidad=""
+            register={register}
+            errors={errors}
+            options={{ required: true }}
+            onChange={() => {}}
           />
         </div>
         <InputDropdown

@@ -6,6 +6,7 @@ import { useFormInitial } from '@renderer/app/home/components/form-initial/hooks
 
 interface Props {
   label: string
+  labelSuccess?: boolean
   required?: boolean
   register?: UseFormRegister<Record<string, number>>
   errors?: FieldErrors
@@ -17,6 +18,7 @@ interface Props {
 
 export function InputNumber({
   label,
+  labelSuccess = false,
   required,
   valueInitial,
   onChange,
@@ -82,14 +84,21 @@ export function InputNumber({
   return (
     <>
       <div className="flex flex-col">
-        <label className="font-roboto text-dark dark:text-light text-[20px] mb-2">{label}</label>
+        <label
+          className={clsx('font-roboto text-dark dark:text-light text-[20px] mb-2', {
+            'dark:text-success': labelSuccess,
+            'font-bold': labelSuccess
+          })}
+        >
+          {label}
+        </label>
         <div className="flex gap-4 items-center">
           <input
             onClick={onFocusInput}
             ref={inputRef}
             value={value}
             className={clsx(
-              `h-[60px] w-[150px] text-2xl rounded-[5px] bg-white dark:bg-dark border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light p-4`,
+              `h-[64px] w-[150px] text-2xl rounded-[5px] bg-white dark:bg-dark border border-solid border-dark dark:border-light pl-[18px] text-dark dark:text-light p-4`,
               {
                 'border-error': required && inputRef && inputRef.current && !inputRef.current.value,
                 'focus:border-error':
