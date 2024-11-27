@@ -20,6 +20,7 @@ import { DataSelect } from '../home/interfaces/data-select.interface'
 import { Dialog, DialogType } from '@renderer/ui/components/dialog/Dialog'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
 import { useApp } from '@renderer/ui/hooks/useApp'
+import useTime from '@renderer/ui/hooks/useTime'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -274,6 +275,7 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
   const keyboardRef = useRef(null)
   const [showKeyboard, setShowKeyboard] = useState<boolean>(false)
   const { modeApp } = useApp()
+  const { get, reset } = useTime()
 
   useEffect(() => {
     const handleClickOutside = (event): void => {
@@ -407,14 +409,11 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
             <h4 className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
               Contador de horas
             </h4>
-            <div className="flex flex-col">
-              <InputNumber
-                label=""
-                valueInitial={configuracionesAvanzadasData.ancho}
-                unidad="hs."
-                required={true}
-                onChange={($e) => onChangeConfiguracionesAvanzada($e, 'ancho')}
-              />
+            <div className="flex gap-2 items-center ">
+              <label className="font-roboto text-dark dark:text-light text-[20px]">{get()}</label>
+              <Button type="success-light" maxWith={false} size="sm" onClick={reset}>
+                Resetear
+              </Button>
             </div>
           </div>
           <p className="font-roboto text-dark dark:text-light text-[20px]">

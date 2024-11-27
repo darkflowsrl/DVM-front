@@ -24,6 +24,7 @@ import { useMenu } from '@renderer/lib/hooks/UseMenu'
 import { useBomba } from '@renderer/lib/hooks/UseBomba'
 import { DataUnidad } from '../home/interfaces/data-unidad.interface'
 import { useApp } from '@renderer/ui/hooks/useApp'
+import useTime from '@renderer/ui/hooks/useTime'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -47,12 +48,14 @@ export function Trabajo(): JSX.Element {
   const { modeApp } = useApp()
   const [hayErrores, setHayErrores] = useState<boolean>(false)
 
-  const fetchConfiguracionesAvanzadas = async () => {
+  const { start, pause, stop, saveTime, loadTime } = useTime()
+
+  const fetchConfiguracionesAvanzadas = async (): Promise<void> => {
     const configuracionesAvanzadasData = await window.api.invoke.getConfiguracionesAvanzadasAsync()
     setConfiguracionesAvanzadasData(configuracionesAvanzadasData)
   }
 
-  const fetchUnidades = async () => {
+  const fetchUnidades = async (): Promise<void> => {
     const result = await window.api.invoke.getUnidadesAsync()
     setUnidades(result)
   }
@@ -81,6 +84,10 @@ export function Trabajo(): JSX.Element {
   }
 
   useEffect(() => {
+    loadTime() // Cargar el tiempo guardado cuando la aplicación se inicia
+  }, [loadTime])
+
+  useEffect(() => {
     if (state && state.length > 0) {
       setNodos(
         state.map((nodoData, i) => {
@@ -104,7 +111,7 @@ export function Trabajo(): JSX.Element {
     fetchUnidades()
   }, [])
 
-  const modalClosed = (idModal: string, acept: boolean) => {
+  const modalClosed = (idModal: string, acept: boolean): void => {
     if (acept) {
       if (idModal === 'init-job') {
         if (tipoGotaseleccionada) {
@@ -141,10 +148,12 @@ export function Trabajo(): JSX.Element {
     }
   }
 
-  const finalizarTrabajoClick = () => {
+  const finalizarTrabajoClick = (): void => {
     socket.emit('stopJob')
     setHabilitar(true)
     navigate('/reportes')
+    stop()
+    saveTime()
   }
 
   const openModal = (idModal: string): void => {
@@ -180,8 +189,10 @@ export function Trabajo(): JSX.Element {
           return <Nodo key={i} posicion={i} data={nodo.props['data']} animacion={false} />
         })
       )
+      pause()
     } else {
       setPausado(false)
+      start()
       log.info('Inicio el trabajo')
       socket.emit('startJob', await getRPMDeseado(tipoGotaseleccionada))
       socket.on('getStateNodo', (nodos) => {
@@ -200,7 +211,7 @@ export function Trabajo(): JSX.Element {
                 .forEach((a) =>
                   logs.push(
                     <li
-                      className={clsx('', {
+                      className={clsx('text-[20px]', {
                         'text-error': [1, 2, 3].includes(a.estado?.id ?? 0),
                         'text-warning': [4, 5, 6, 7, 8, 9].includes(a.estado?.id ?? 0),
                         'text-[#696767]': [-1].includes(a.estado?.id ?? 0)

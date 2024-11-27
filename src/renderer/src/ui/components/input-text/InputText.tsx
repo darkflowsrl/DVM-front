@@ -4,6 +4,7 @@ import Keyboard from 'react-simple-keyboard'
 
 interface Props {
   label: string
+  inicialValue?: string
   required?: boolean
   onChange: (input: string, e?: MouseEvent) => void
   width?: string
@@ -13,6 +14,7 @@ interface Props {
 export function InputText({
   label,
   required,
+  inicialValue,
   onChange,
   width = '[366px]',
   unidad = ''
@@ -40,6 +42,12 @@ export function InputText({
       document.removeEventListener('click', handleClickOutside, true)
     }
   }, [])
+
+  useEffect(() => {
+    if (inicialValue) {
+      setValue(inicialValue)
+    }
+  }, [inicialValue])
 
   const onKeyPress = (button: string): void => {
     if (button === '{enter}') {
