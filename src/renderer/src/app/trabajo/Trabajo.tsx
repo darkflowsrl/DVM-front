@@ -17,14 +17,14 @@ import { Dialog, DialogType } from '@renderer/ui/components/dialog/Dialog'
 import { PanelLateralDerecha } from './components/PanelLateralDerecha'
 import { PanelLateralIzquierdo } from './components/PanelLateralIzquierdo'
 import { ConfiguracionesAvanzadasData } from '../configuracion-avanzada/interfaces/configuraciones-avanzadas-data'
-import PreparacionBomba from '@renderer/ui/components/preparacion-bomba/PreparacionBomba'
+import EncenderBomba from '@renderer/ui/components/preparacion-bomba/EncenderBomba'
 import log from 'electron-log/renderer'
 import clsx from 'clsx'
 import { useMenu } from '@renderer/lib/hooks/UseMenu'
-import { useBomba } from '@renderer/lib/hooks/UseBomba'
 import { DataUnidad } from '../home/interfaces/data-unidad.interface'
 import { useApp } from '@renderer/ui/hooks/useApp'
 import useTime from '@renderer/ui/hooks/useTime'
+import ApagarBomba from '@renderer/ui/components/preparacion-bomba/ApagarBomba'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -38,7 +38,6 @@ export function Trabajo(): JSX.Element {
   const [logNodos, setLogNodos] = useState<JSX.Element[]>([])
   const [runningJob, setRunningJob] = useState<boolean>(false)
   const { state } = useLocation()
-  const { setEncendidoApagado } = useBomba()
   const [direccionViento, setDireccionViento] = useState<number>(0)
   const [velocidadViento, setVelocidadViento] = useState<number>(0)
   const [configuracionesAvanzadasData, setConfiguracionesAvanzadasData] =
@@ -59,6 +58,16 @@ export function Trabajo(): JSX.Element {
     const result = await window.api.invoke.getUnidadesAsync()
     setUnidades(result)
   }
+
+  useEffect(() => {
+    if (runningJob && !getStateModal('apagar-bomba')) {
+      if (habilitar) {
+        finalizarTrabajoClick()
+      } else {
+        iniciarOPausarTrabajoClick()
+      }
+    }
+  }, [getStateModal('apagar-bomba')])
 
   const getUnidadVelocidadViento = (): {
     valor: string
@@ -100,7 +109,8 @@ export function Trabajo(): JSX.Element {
   useEffect(() => {
     addModal('tipo-gota')
     addModal('init-job')
-    addModal('preparacion-bomba')
+    addModal('encender-bomba')
+    addModal('apagar-bomba')
     addModal('end-job')
     setTitle('Trabajo')
     socket.on('getDatosMeteorologicos', (res) => {
@@ -116,8 +126,7 @@ export function Trabajo(): JSX.Element {
       if (idModal === 'init-job') {
         if (tipoGotaseleccionada) {
           setHabilitar(false)
-          setEncendidoApagado(runningJob ? 'apagar' : 'encender')
-          toggleOpenedState('preparacion-bomba')
+          toggleOpenedState(runningJob ? 'apagar-bomba' : 'encender-bomba')
         }
       }
       if (idModal === 'end-job') {
@@ -125,10 +134,9 @@ export function Trabajo(): JSX.Element {
         setHabilitar(true)
         setHayErrores(false)
         setLogNodos([])
-        setEncendidoApagado('apagar')
-        toggleOpenedState('preparacion-bomba')
+        toggleOpenedState('apagar-bomba')
       }
-      if (idModal === 'preparacion-bomba') {
+      if (idModal === 'encender-bomba') {
         iniciarOPausarTrabajoClick()
       }
       if (idModal === 'tipo-gota') {
@@ -230,7 +238,6 @@ export function Trabajo(): JSX.Element {
           setLogNodos(logs)
         }
       })
-      if (habilitar) finalizarTrabajoClick()
     }
     setRunningJob(!runningJob)
   }
@@ -654,8 +661,15 @@ export function Trabajo(): JSX.Element {
             outsideClose
           />
           <Modal<undefined>
-            idModal="preparacion-bomba"
-            ModalContent={PreparacionBomba}
+            idModal="encender-bomba"
+            ModalContent={EncenderBomba}
+            closed={modalClosed}
+            crossClose
+            outsideClose
+          />
+          <Modal<undefined>
+            idModal="apagar-bomba"
+            ModalContent={ApagarBomba}
             closed={modalClosed}
             crossClose
             outsideClose

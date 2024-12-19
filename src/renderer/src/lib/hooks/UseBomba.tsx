@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 
 interface UseBomba {
-  encendidoApagado: 'encender' | 'apagar'
-  setEncendidoApagado: (encendidoApagado: 'encender' | 'apagar') => void
+  encendido: boolean
+  encender: () => void
+  apagar: () => void
 }
 
 export const useBomba = create<UseBomba>((set) => ({
-  encendidoApagado: 'encender',
-  setEncendidoApagado: (encendidoApagado: 'encender' | 'apagar'): void => set({ encendidoApagado })
+  encendido: false,
+  encender: (): void => set({ encendido: true }),
+  apagar: (): void => set({ encendido: false })
 }))

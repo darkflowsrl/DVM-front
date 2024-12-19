@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../Button'
 import { ModalProps } from '../modal/Modal'
-import { useBomba } from '@renderer/lib/hooks/UseBomba'
+import { useModal } from '../modal/hooks/UseModal'
 
-
-export default function PreparacionBomba({ acept, close }: ModalProps<undefined>): JSX.Element {
+export default function ApagarBomba({ close }: ModalProps<undefined>): JSX.Element {
   const [percentageLoading, setPercentageLoading] = useState<number>(0)
-  const { encendidoApagado } = useBomba()
+  const { toggleOpenedState } = useModal()
+
   useEffect(() => {
     setPercentageLoading(0)
-
-    for (let index = 1; index < 101; index++) {
-      setTimeout(() => setPercentageLoading(index), index * 30)
-    }
   }, [])
 
   return (
@@ -44,8 +40,8 @@ export default function PreparacionBomba({ acept, close }: ModalProps<undefined>
       </div>
       <div className="flex flex-col gap-10">
         <p className="text-2xl not-italic font-normal text-dark dark:text-light">
-          {percentageLoading === 100
-            ? `Ahora puede ${encendidoApagado} la bomba.`
+          {percentageLoading === 0
+            ? '¿Apagó la bomba?'
             : 'Por favor, aguarde mientras se realiza el proceso de limpieza.'}
         </p>
         {percentageLoading !== 100 && (
@@ -70,7 +66,17 @@ export default function PreparacionBomba({ acept, close }: ModalProps<undefined>
           {' '}
           Cancelar
         </Button>
-        <Button type="success" onClick={acept} maxWith={false} disabled={percentageLoading !== 100}>
+        <Button
+          type="success"
+          onClick={() => {
+            for (let index = 1; index < 101; index++) {
+              setTimeout(() => setPercentageLoading(index), index * 30)
+            }
+            setTimeout(() => toggleOpenedState('apagar-bomba'), 3000)
+          }}
+          maxWith={false}
+          disabled={percentageLoading !== 0}
+        >
           Aceptar
         </Button>
       </div>
