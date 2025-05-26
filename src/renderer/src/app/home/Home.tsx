@@ -12,8 +12,10 @@ import log from 'electron-log/renderer'
 import { useOperario } from '@renderer/lib/hooks/UseOperario'
 import { useApp } from '@renderer/ui/hooks/useApp'
 import clsx from 'clsx'
+import { useLang } from '../configuracion-general/hooks/useLang'
 
 function Home(): JSX.Element {
+  const { dataLang } = useLang()
   const navigate = useNavigate()
   const { setTitle } = useTitle()
   const [data, setData] = useState<ItemInfoData[]>()
@@ -31,9 +33,9 @@ function Home(): JSX.Element {
 
   useEffect(() => {
     //addModal('init-testing')
-    setTitle('Inicio Aplicación')
+    setTitle(dataLang?.inicioAplicacion ?? 'Inicio Aplicación')
     fetchData()
-  }, [])
+  }, [dataLang])
 
   const items = data?.map(function (item, i) {
     return <ItemInfo key={i} data={item} />
@@ -72,7 +74,7 @@ function Home(): JSX.Element {
       </section>
       <section className="self-end">
         <Button onClick={handleClick} type="success" size="lg" disabled={!isValid}>
-          Iniciar Testing
+          {dataLang?.iniciarPrueba ?? "Iniciar Prueba"}
         </Button>
         <Modal<{
           title: string

@@ -9,10 +9,11 @@ import log from 'electron-log/renderer'
 import { useOperario } from '@renderer/lib/hooks/UseOperario'
 import AgregarLote from '@renderer/app/home/components/agregar/AgregarLote'
 import AgregarAplicacion from '@renderer/app/home/components/agregar/AgregarAplicacion'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 interface Props {
   label: string
-  name: 'operario' | 'lote' | 'tipoAplicacion'
+  name: string
   data: any[]
   options?: RegisterOptions
   register: UseFormRegister<Record<string, number>>
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): JSX.Element => {
+  const { dataLang } = useLang()
   const [inputValue, setInputValue] = useState('')
   const [selected, setSelected] = useState<any>()
   const [open, setOpen] = useState(false)
@@ -84,7 +86,7 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
             }
           }}
         >
-          {value?.name}
+          {dataLang ? dataLang[value?.name ?? ''] : ''}
         </li>
       ))
     )
@@ -124,7 +126,7 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
           ? selected.name?.length > 25
             ? selected.name?.substring(0, 25) + '...'
             : selected.name
-          : `Selecciona ${name !== 'tipoAplicacion' ? name : 'tipo de aplicación'}`}
+          : `${dataLang?.selecciona ?? 'Selecciona'} ${name !== 'tipoAplicacion' ? (dataLang ? dataLang[name] : (name ?? '')) : (dataLang?.tipoDeAplicacion ?? 'tipo de aplicación')}`}
         <svg
           width="16"
           height="9"
@@ -158,10 +160,11 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
 
 interface PropsOpcionNuevo {
   added: (data: any) => void
-  name: 'operario' | 'lote' | 'tipoAplicacion'
+  name: string
 }
 
 function OpcionNuevo({ added, name }: PropsOpcionNuevo): JSX.Element {
+  const { dataLang } = useLang()
   const { addModal, toggleOpenedState } = useModal()
   useEffect(() => {
     addModal('agregar' + name)
@@ -176,7 +179,12 @@ function OpcionNuevo({ added, name }: PropsOpcionNuevo): JSX.Element {
 
   return (
     <li className="flex justify-between items-center text-sm border-b-[1px] border-b-success px-[30px] h-[80px] hover:bg-sky-300 hover:dark:bg-sky-600 text-success font-bold">
-      Agregar {name !== 'tipoAplicacion' ? name : 'tipo de aplicación'}
+      {dataLang?.agregar ?? 'Agregar'}{' '}
+      {name !== 'tipoAplicacion'
+        ? dataLang
+          ? dataLang[name]
+          : (name ?? '')
+        : (dataLang?.tipoDeAplicacion ?? 'tipo de aplicación')}
       <div className="">
         <button
           onClick={handleClick}

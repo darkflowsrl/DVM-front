@@ -11,6 +11,7 @@ import { io, Socket } from 'socket.io-client'
 import { InputText } from '@renderer/ui/components/input-text/InputText'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
 import { Button } from '@renderer/ui/components/Button'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -27,7 +28,9 @@ interface ILote {
     long: number
   }
 }
+
 export default function AgregarLote({ added, close }: Props): JSX.Element {
+  const { dataLang } = useLang() // Obtener traducciones
   const { toggleOpenedState } = useModal()
   const [value, setValue] = useState<ILote>({
     name: '',
@@ -81,25 +84,27 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
       onSubmit={submit}
     >
       <div className="flex items-center">
-        <h3 className=" text-3xl not-italic font-bold text-dark dark:text-light">Agregar Lote</h3>
+        <h3 className="text-3xl not-italic font-bold text-dark dark:text-light">
+          {dataLang?.agregarLote ?? "Agregar Lote"}
+        </h3>
       </div>
-      <div className="flex flex-col justify-around ">
+      <div className="flex flex-col justify-around">
         <div className="flex justify-around gap-4">
           <InputText
-            label="Nombre"
+            label={dataLang?.nombre ?? "Nombre"}
             required={true}
             onChange={(v) => setValue({ ...value, name: v })}
           />
           <InputText
-            label="Superficie"
-            unidad="Has"
+            label={dataLang?.area ?? "Area"}
+            unidad={dataLang?.hectareasAbv ?? "Has"}
             required={true}
             onChange={(v) => setValue({ ...value, superficie: v })}
           />
         </div>
         <div className="flex">
           <InputText
-            label="Ubicación"
+            label={dataLang?.ubicacion ?? "Ubicación"}
             width="[800px]"
             required={true}
             onChange={(v) => setValue({ ...value, ubicacion: v })}
@@ -107,11 +112,11 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
         </div>
         <div className="flex flex-col">
           <label className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap mb-[36px] mt-[46px]">
-            Geoposicionamiento
+            {dataLang?.geoposicionamiento ?? "Geoposicionamiento"}
           </label>
           <div className="flex items-end justify-between">
             <InputNumber
-              label="Latitud"
+              label={dataLang?.latitud ?? "Latitud"}
               valueInitial={value.geoposicionamiento.lat}
               unidad=""
               required={true}
@@ -126,7 +131,7 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
               }
             />
             <InputNumber
-              label="Longitud"
+              label={dataLang?.longitud ?? "Longitud"}
               valueInitial={value.geoposicionamiento.long}
               unidad=""
               required={true}
@@ -144,7 +149,9 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
               onClick={usarUbicacionDelGPSHandle}
               className="flex items-center cursor-pointer justify-center h-[60px] w-[366px] rounded-[5px] bg-white dark:bg-[#2B465D] pl-[18px] text-dark dark:text-success p-4 shadow-2xl dark:shadow-slate-700"
             >
-              <p className="mr-2 cursor-pointer">Usar Ubicación actual del GPS</p>
+              <p className="mr-2 cursor-pointer">
+                {dataLang?.usarUbicacionGPS ?? "Usar Ubicación actual del GPS"}
+              </p>
               <svg
                 width="30"
                 height="32"
@@ -164,7 +171,7 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
       </div>
       <div className="w-full flex flex-row mt-8 gap-4 justify-end">
         <Button type="error" onClick={close} maxWith={false}>
-          Cancelar
+          {dataLang?.cancelar ?? "Cancelar"}
         </Button>
         <Button
           type="success"
@@ -172,7 +179,7 @@ export default function AgregarLote({ added, close }: Props): JSX.Element {
           maxWith={false}
           disabled={!esFormularioValido(value)}
         >
-          Agregar
+          {dataLang?.agregar ?? "Agregar"}
         </Button>
       </div>
     </form>

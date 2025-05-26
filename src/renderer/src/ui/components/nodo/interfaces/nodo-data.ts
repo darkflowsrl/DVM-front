@@ -1,16 +1,15 @@
-export type IdsEstadoAspersorType = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-export type DescripcionEstadoAspersorType =
-  | ''
-  | 'OK'
-  | 'Cortocircuito' // Grave
-  | 'Motor bloqueado' // Grave
-  | 'Motor no conectado'
-  | 'Sobrecorriente'
-  | 'Subcorriente'
-  | 'Baja tension'
-  | 'Error de sensor'
-  | 'RPM no alcanzada'
-  | 'Error de caudalimetro'
+export type IdsEstadoAspersorType = 
+  | -1 // '' 
+  | 0 // 'OK'
+  | 1 // 'Cortocircuito' Grave
+  | 2 // 'Motor bloqueado' Grave
+  | 3 // 'Motor no conectado'
+  | 4 // 'Sobrecorriente'
+  | 5 // 'Subcorriente'
+  | 6 // 'Baja tension'
+  | 7 // 'Error de sensor'
+  | 8 // 'RPM no alcanzada'
+  | 9 // 'Error de caudalimetro'
 
   export type UbicacionAspersorType =
   | {
@@ -49,7 +48,6 @@ export interface AspersorData {
 
 interface EstadoAspersor {
   id: IdsEstadoAspersorType
-  descripcion: DescripcionEstadoAspersorType
 }
 
 export type NodoType = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I'

@@ -25,10 +25,12 @@ import { DataUnidad } from '../home/interfaces/data-unidad.interface'
 import { useApp } from '@renderer/ui/hooks/useApp'
 import useTime from '@renderer/ui/hooks/useTime'
 import ApagarBomba from '@renderer/ui/components/preparacion-bomba/ApagarBomba'
+import { useLang } from '../configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Trabajo(): JSX.Element {
+  const { dataLang } = useLang()
   const [pausado, setPausado] = useState<boolean>(false)
   const { setTitle } = useTitle()
   const navigate = useNavigate()
@@ -44,7 +46,7 @@ export function Trabajo(): JSX.Element {
     useState<ConfiguracionesAvanzadasData>()
   const { setHabilitar, habilitar } = useMenu()
   const [unidades, setUnidades] = useState<DataUnidad[]>([])
-  const { modeApp } = useApp()
+  const { modeApp, getDescripcionEstado } = useApp()
   const [hayErrores, setHayErrores] = useState<boolean>(false)
 
   const { start, pause, stop, saveTime, loadTime } = useTime()
@@ -120,6 +122,8 @@ export function Trabajo(): JSX.Element {
     fetchConfiguracionesAvanzadas()
     fetchUnidades()
   }, [])
+
+  useEffect(() => setTitle(dataLang?.trabajo ?? 'Trabajo'), [dataLang])
 
   const modalClosed = (idModal: string, acept: boolean): void => {
     if (acept) {
@@ -229,7 +233,7 @@ export function Trabajo(): JSX.Element {
                         <b>
                           {nodo.nombre}-{a.id}
                         </b>
-                        : {a.estado?.descripcion} ({a.estado?.id})
+                        : {getDescripcionEstado(a.estado?.id ?? -1)} ({a.estado?.id})
                       </p>
                     </li>
                   )
@@ -256,7 +260,10 @@ export function Trabajo(): JSX.Element {
               size="lg"
               type="success"
             >
-              {tipoGotaseleccionada || 'TIPO DE GOTA'}
+              {(dataLang
+                ? (dataLang[tipoGotaseleccionada ?? ''] ?? tipoGotaseleccionada)
+                : tipoGotaseleccionada) ||
+                (dataLang?.tipoDeGota.toUpperCase() ?? 'TIPO DE GOTA')}
             </Button>
             <Modal<undefined>
               idModal="tipo-gota"
@@ -427,7 +434,7 @@ export function Trabajo(): JSX.Element {
             }}
           >
             <div className="p-1 absolute top-1 left-1 rounded-lg shadow-lg bg-white">
-              <span className="text-xs mb-0">Viento</span>
+              <span className="text-xs mb-0">{dataLang?.viento ?? 'Viento'}</span>
               <p className="font-bold text-sm mt-0">
                 {getUnidadVelocidadViento().valor} {getUnidadVelocidadViento().unidad}
               </p>
@@ -591,7 +598,7 @@ export function Trabajo(): JSX.Element {
             size="lg"
             disabled={!runningJob && !pausado}
           >
-            Finalizar
+            {dataLang?.finalizar ?? 'Finalizar'}
           </Button>
 
           <Modal<{
@@ -602,8 +609,8 @@ export function Trabajo(): JSX.Element {
             idModal="end-job"
             ModalContent={Dialog}
             modalContentProps={{
-              title: 'Finalizar trabajo',
-              message: '¿Desea finalizar trabajo?',
+              title: `${dataLang?.finalizarTrabajo ?? 'Finalizar trabajo'}`,
+              message: `${dataLang?.deseaFinalizarTrabajo_ ?? '¿Desea finalizar trabajo?'}`,
               type: 'error'
             }}
             closed={modalClosed}
@@ -615,7 +622,9 @@ export function Trabajo(): JSX.Element {
             type={runningJob ? 'warning' : 'success'}
             size="lg"
           >
-            {!runningJob ? 'Iniciar Trabajo' : 'Pausar'}
+            {!runningJob
+              ? (dataLang?.iniciarTrabajo ?? 'Iniciar Trabajo')
+              : (dataLang?.pausarTrabajo ?? 'Pausar')}
           </Button>
           <Modal<{
             title: string
@@ -638,20 +647,21 @@ export function Trabajo(): JSX.Element {
             ModalContent={Dialog}
             modalContentProps={{
               title: !tipoGotaseleccionada
-                ? 'Seleccionar Tipo de Gota'
+                ? (dataLang?.seleccionarTipoDeGota ?? 'Seleccionar Tipo de Gota')
                 : runningJob
-                  ? 'Pausar trabajo'
-                  : 'Iniciar trabajo',
+                  ? (dataLang?.pausarTrabajo ?? 'Pausar trabajo')
+                  : (dataLang?.iniciarTrabajo ?? 'Iniciar trabajo'),
               message: !tipoGotaseleccionada
-                ? 'Debe seleccionar Tipo de Gota para poder continuar.'
+                ? (dataLang?.debeSeleccionarTipoDeGota_ ??
+                  'Debe seleccionar Tipo de Gota para poder continuar.')
                 : runningJob
-                  ? '¿Desea pausar todos los aspersores?'
-                  : 'Se iniciará el funcionamiento de los<br />aspersores, ¿Desea Continuar?',
+                  ? dataLang?.deseaPausarTodos_ ?? '¿Desea pausar todos los aspersores?'
+                  : dataLang?.seIniciaraElFuncionamiento_ ?? 'Se iniciará el funcionamiento de los<br />aspersores, ¿Desea Continuar?',
               type: 'warning',
               buttons: {
                 cancelar: {
                   noShow: !tipoGotaseleccionada,
-                  text: 'Cancelar',
+                  text: dataLang?.cancelar ?? "Cancelar",
                   type: 'error'
                 }
               }

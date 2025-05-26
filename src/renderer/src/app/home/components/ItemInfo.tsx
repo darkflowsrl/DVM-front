@@ -41,14 +41,14 @@ export function ItemInfo({ data }: Props): JSX.Element {
     }
     const unidad =
       unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
-    switch (data.title) {
-      case 'Humedad':
+    switch (data.id) {
+      case 1:
         resp =
           datosMeteorologicos?.humedad !== undefined
             ? { valor: datosMeteorologicos?.humedad?.toString() ?? '', unidad: data.unidad }
             : { valor: '-- --', unidad: '' }
         break
-      case 'Velocidad del viento': {
+      case 2: {
         const unidadVelocidad =
           unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
         resp =
@@ -66,7 +66,7 @@ export function ItemInfo({ data }: Props): JSX.Element {
             : { valor: '-- --', unidad: '' }
         break
       }
-      case 'Temperatura': {
+      case 4: {
         const unidadTemperatura =
           unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
         resp =
@@ -82,23 +82,7 @@ export function ItemInfo({ data }: Props): JSX.Element {
             : { valor: '-- --', unidad: '' }
         break
       }
-      case 'Punto de Rocío': {
-        const unidadTemperatura =
-          unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
-        resp =
-          datosMeteorologicos?.puntoDeRocio !== undefined
-            ? {
-                valor:
-                  (unidadTemperatura === 'F'
-                    ? (datosMeteorologicos.puntoDeRocio ?? (1 * 9) / 5) + 32
-                    : datosMeteorologicos.puntoDeRocio
-                  )?.toString() ?? '',
-                unidad: '°' + unidad
-              }
-            : { valor: '-- --', unidad: '' }
-        break
-      }
-      case 'Dirección del viento': {
+      case 3: {
         resp =
           datosMeteorologicos?.dirViento !== undefined
             ? {

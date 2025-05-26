@@ -19,6 +19,7 @@ export type Api = GetApiType<
     removeOperarioAsync: (id: number) => Promise<Operario>
     getLangAsync: (lang?: LangType) => Promise<ILang>
     cambiarLangAsync: (lang: LangType) => Promise<LangType>
+    getTypeLangSelectedAsync: () => Promise<LangType>
     getLotesAsync: () => Promise<ILote[] | undefined>
     addLoteAsync: (lote: ILote) => Promise<ILote | undefined>
     removeLoteAsync: (id: number) => Promise<ILote | undefined>
@@ -78,6 +79,9 @@ const api: Api = {
     },
     cambiarLangAsync: async (lang: LangType) => {
       return await ipcRenderer.invoke('cambiarLangAsync', lang)
+    },
+    getTypeLangSelectedAsync: async () => {
+      return await ipcRenderer.invoke('getTypeLangSelectedAsync')
     },
     getLotesAsync: async () => {
       return await ipcRenderer.invoke('getLotesAsync')

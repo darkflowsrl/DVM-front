@@ -2,20 +2,18 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { APP_DATA_PATH } from '../../utils/urls'
 
-
-export type IdsEstadoAspersorType = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-export type DescripcionEstadoAspersorType =
-  | ''
-  | 'OK'
-  | 'Cortocircuito' // Grave
-  | 'Motor bloqueado' // Grave
-  | 'Motor no conectado'
-  | 'Sobrecorriente'
-  | 'Subcorriente'
-  | 'Baja tension'
-  | 'Error de sensor'
-  | 'RPM no alcanzada'
-  | 'Error de caudalimetro'
+export type IdsEstadoAspersorType =
+  | -1 // ''
+  | 0 // 'OK'
+  | 1 // 'Cortocircuito' Grave
+  | 2 // 'Motor bloqueado' Grave
+  | 3 // 'Motor no conectado'
+  | 4 // 'Sobrecorriente'
+  | 5 // 'Subcorriente'
+  | 6 // 'Baja tension'
+  | 7 // 'Error de sensor'
+  | 8 // 'RPM no alcanzada'
+  | 9 // 'Error de caudalimetro'
 
 export type UbicacionAspersorType =
   | {
@@ -54,7 +52,6 @@ export interface Aspersor {
 
 interface EstadoAspersor {
   id: IdsEstadoAspersorType
-  descripcion: DescripcionEstadoAspersorType
 }
 
 export interface EstadoNodoJob extends EstadoNodoTesting {
@@ -151,8 +148,7 @@ export const NodosStore = () => {
       let data = JSON.parse(readFileSync(urlDataJson).toString()) as Nodo[]
 
       data = data.map((n) => {
-        if (n.id === id)
-          n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: rpm }))
+        if (n.id === id) n.aspersores = n.aspersores.map((a) => ({ ...a, rpmDeseado: rpm }))
         return n
       })
 

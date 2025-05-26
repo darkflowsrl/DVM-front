@@ -1,7 +1,9 @@
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 import { Button } from '../../../../ui/components/Button'
 import { ModalProps } from '../../../../ui/components/modal/Modal'
 
 export function InfoInitTesting ({ close, acept }: ModalProps<undefined>) {
+  const { dataLang } = useLang()
   return (
     <div className='flex flex-col justify-between  w-[591px] h-[362px] bg-light dark:bg-dark boder border-white p-[28px]'>
 
@@ -25,10 +27,10 @@ export function InfoInitTesting ({ close, acept }: ModalProps<undefined>) {
       </div>
       <div className='w-full flex flex-row gap-4 justify-end'>
         <Button type='error' onClick={close}>
-          Cancelar
+          { dataLang?.cancelar ?? 'Cancelar' }
         </Button>
         <Button type='success' onClick={acept}>
-          Aceptar
+          { dataLang?.aceptar ?? 'Aceptar' }
         </Button>
       </div>
     </div>

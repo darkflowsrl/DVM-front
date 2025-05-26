@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../Button'
 import { ModalProps } from '../modal/Modal'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 export default function EncenderBomba({ acept, close }: ModalProps<undefined>): JSX.Element {
+  const { dataLang } = useLang()
   const [percentageLoading, setPercentageLoading] = useState<number>(0)
 
   useEffect(() => {
@@ -38,17 +40,17 @@ export default function EncenderBomba({ acept, close }: ModalProps<undefined>): 
             />
           </svg>
         </div>
-        <h3 className="text-3xl not-italic font-bold text-warning">Preparación de dispositivos</h3>
+        <h3 className="text-3xl not-italic font-bold text-warning">{dataLang?.preparacionDeDispositivos ?? 'Preparación de dispositivos'}</h3>
       </div>
       <div className="flex flex-col gap-10">
         <p className="text-2xl not-italic font-normal text-dark dark:text-light">
           {percentageLoading === 100
-            ? `Ahora puede encender la bomba.`
-            : 'Por favor, aguarde mientras se realiza el proceso de limpieza.'}
+            ? dataLang?.ahoraPuedeEncender_ ?? `Ahora puede encender la bomba.`
+            : dataLang?.porFavorAguarde_ ?? 'Por favor, aguarde mientras se realiza el proceso de limpieza.'}
         </p>
         {percentageLoading !== 100 && (
           <p className="text-2xl not-italic font-bold text-dark dark:text-light">
-            EL INCUMPLIMIENTO DE ESTA ORDEN PUEDE DAÑAR EL EQUIPO
+            {dataLang?.elIncumplimientoDeEsta_.toUpperCase() ?? 'EL INCUMPLIMIENTO DE ESTA ORDEN PUEDE DAÑAR EL EQUIPO'}
           </p>
         )}
         <section className="flex flex-col gap-2 content-center items-center justify-between">
@@ -65,11 +67,10 @@ export default function EncenderBomba({ acept, close }: ModalProps<undefined>): 
       </div>
       <div className="w-full flex flex-row gap-4 justify-end">
         <Button type="error" onClick={close} maxWith={false}>
-          {' '}
-          Cancelar
+          { dataLang?.cancelar ?? 'Cancelar' }
         </Button>
         <Button type="success" onClick={acept} maxWith={false} disabled={percentageLoading !== 100}>
-          Aceptar
+          { dataLang?.aceptar ?? 'Aceptar' }
         </Button>
       </div>
     </div>

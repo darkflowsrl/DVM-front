@@ -1,3 +1,4 @@
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 import { Button } from '../Button'
 import clsx from 'clsx'
 
@@ -23,6 +24,7 @@ export interface DialogProps {
 }
 
 export function Dialog({ close, acept, title, message, type, buttons }: DialogProps): JSX.Element {
+  const { dataLang } = useLang()
   const getColor = (): string => {
     let color = '#D9D9D9'
     switch (type) {
@@ -86,7 +88,7 @@ export function Dialog({ close, acept, title, message, type, buttons }: DialogPr
             onClick={close}
             maxWith={false}
           >
-            {buttons?.cancelar ? buttons.cancelar.text : 'Cancelar'}
+            {buttons?.cancelar ? buttons.cancelar.text : dataLang?.cancelar ?? 'Cancelar'}
           </Button>
         )}
         {!buttons?.aceptar?.noShow && (
@@ -95,7 +97,7 @@ export function Dialog({ close, acept, title, message, type, buttons }: DialogPr
             onClick={acept}
             maxWith={false}
           >
-            {buttons?.aceptar ? buttons.aceptar.text : 'Aceptar'}
+            {buttons?.aceptar ? buttons.aceptar.text : dataLang?.aceptar ?? 'Aceptar' }
           </Button>
         )}
       </div>

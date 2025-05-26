@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { Modal } from '../modal/Modal'
 import { DetailNodo } from './components/DetailNodo'
 import { useModal } from '../modal/hooks/UseModal'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 interface Props {
   data: NodoData
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function Nodo({ data, posicion, animacion = false }: Props): JSX.Element {
+  const { dataLang } = useLang()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
   const [nodoData, setNodoData] = useState<NodoData>(data)
 
@@ -100,7 +102,7 @@ export function Nodo({ data, posicion, animacion = false }: Props): JSX.Element 
         onClick={handleClickNodo}
       >
         <div className="flex flex-col justify-center items-center">
-          <p className="text-[20px] font-bold">NODO</p>
+          <p className="text-[20px] font-bold">{dataLang?.nodo.toUpperCase() ?? "NODO"}</p>
           <h2 className="text-[48px] font-bold">{nodoData.nombre}</h2>
         </div>
         <div className="flex flex-row justify-around w-full">{aspersores}</div>
@@ -122,8 +124,7 @@ function Aspersor({ data, posicion, animacion = false }: PropsAspersor): JSX.Ele
   useEffect(() => {
     if (data.deshabilitado) {
       data.estado = {
-        id: -1,
-        descripcion: ''
+        id: -1
       }
     }
     console.log(data)

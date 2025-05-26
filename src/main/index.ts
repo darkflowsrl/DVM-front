@@ -131,7 +131,7 @@ ipcMain.handle('removeOperarioAsync', async (_: IpcMainInvokeEvent, id: number) 
 const langStore = LangStore()
 
 ipcMain.handle('getLangAsync', async (_: IpcMainInvokeEvent, lang?: LangType) => {
-  const langAll = await (lang ? langStore.all(lang) : langStore.all())
+  const langAll = await (lang ? langStore.allAsync(lang) : langStore.allAsync())
   return langAll
 })
 
@@ -139,6 +139,12 @@ ipcMain.handle('cambiarLangAsync', async (_: IpcMainInvokeEvent, lang: LangType)
   const langAll = await langStore.cambiarLangAsync(lang)
   return langAll
 })
+
+ipcMain.handle('getTypeLangSelectedAsync', async () => {
+  const typeLang = await langStore.getTypeLangSelectedAsync()
+  return typeLang
+})
+
 
 const lotesStore = LotesStore()
 

@@ -1,3 +1,4 @@
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 import { Button } from '@renderer/ui/components/Button'
 import { Dialog } from '@renderer/ui/components/dialog/Dialog'
 import { Modal } from '@renderer/ui/components/modal/Modal'
@@ -40,6 +41,7 @@ interface Props {
   nodoData: NodoData
 }
 export function ConfiguracionDeNodo({ close, acept, nodoData }: Props): JSX.Element {
+  const { dataLang } = useLang()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
 
   const keyboardRef = useRef(null)
@@ -99,13 +101,13 @@ export function ConfiguracionDeNodo({ close, acept, nodoData }: Props): JSX.Elem
 
   return (
     <div className="flex flex-col gap-8 p-4">
-      <h1 className="font-roboto font-bold text-success text-[32px]">Nodo {nodoData?.nombre}</h1>
+      <h1 className="font-roboto font-bold text-success text-[32px]">{dataLang?.nodo ?? "Nodo"} {nodoData?.nombre}</h1>
       <div className="flex flex-row gap-4">
         <label className="font-roboto font-bold text-success text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-          Identificación:
+          {dataLang?.identificacion ?? 'Identificación'}:
         </label>
         <p className="font-roboto font-bold text-dark dark:text-light text-[20px] tracking-[0] leading-[normal] whitespace-nowrap">
-          {nodoData.id ?? 'Sin asignar'}
+          {nodoData.id ?? dataLang?.sinAsignar ?? 'Sin asignar'}
         </p>
       </div>
       <div className="grid grid-cols-[min-content_minmax(100px,_1fr)_min-content_minmax(100px,_1fr)] gap-4 items-center">
@@ -125,7 +127,7 @@ export function ConfiguracionDeNodo({ close, acept, nodoData }: Props): JSX.Elem
       </div>
       <div className="flex flex-row gap-4 justify-end">
         <Button type="error-light" onClick={() => openModal('restablecer-configuracion-de-nodo')}>
-          Restablecer Configuración
+          {dataLang?.restablecerConfiguracion ?? 'Restablecer Configuración' }
         </Button>
         <Modal<{
           title: string
@@ -135,8 +137,8 @@ export function ConfiguracionDeNodo({ close, acept, nodoData }: Props): JSX.Elem
           idModal="restablecer-configuracion-de-nodo"
           ModalContent={Dialog}
           modalContentProps={{
-            title: 'Restablecer configuración de Nodo',
-            message: '¿Esta seguro que desea restablecer los valores del Nodo?',
+            title: dataLang?.restablecerConfiguracionDeNodo ?? 'Restablecer configuración de Nodo',
+            message: dataLang?.estaSeguroQueDesea_ ?? '¿Esta seguro que desea restablecer los valores del Nodo?',
             type: 'warning'
           }}
           closed={modalClosed}
@@ -145,10 +147,10 @@ export function ConfiguracionDeNodo({ close, acept, nodoData }: Props): JSX.Elem
         />
 
         <Button type="error" onClick={close}>
-          Cancelar
+          {dataLang?.cancelar ?? "Cancelar"}
         </Button>
         <Button type="success" onClick={acept}>
-          Guardar
+          {dataLang?.guardar ?? "Guardar"}
         </Button>
       </div>
       <div
@@ -184,6 +186,7 @@ interface PropsSelect {
 }
 
 function Select({ idNodo, idAspersor, data, initValue }: PropsSelect): JSX.Element {
+  const { dataLang } = useLang()
   const [error, setError] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState(initValue?.name ?? 'Sin asignar')
   const [selected, setSelected] = useState<UbicacionAspersorType>(
@@ -219,7 +222,7 @@ function Select({ idNodo, idAspersor, data, initValue }: PropsSelect): JSX.Eleme
           ? selected.name?.length > 25
             ? selected.name?.substring(0, 25) + '...'
             : selected.name
-          : `Selecciona ${name}`}
+          : `${dataLang?.selecciona ?? 'Selecciona'} ${name}`}
         <svg
           width="16"
           height="9"

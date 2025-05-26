@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
 import { APP_DATA_PATH } from '../../utils/urls'
 
-export type LangType = 'es' | 'en'
+export type LangType = 'es' | 'en' | 'pt' | 'zh' | 'it' | 'de' | 'fr'
 
 export interface ILangConfig {
   selected: LangType
@@ -13,8 +13,9 @@ export interface ILang {
 }
 
 export const LangStore = (): {
-  all: (lang?: LangType) => Promise<ILang | undefined>
+  allAsync: (lang?: LangType) => Promise<ILang | undefined>
   cambiarLangAsync: (lang: LangType) => Promise<LangType | undefined>
+  getTypeLangSelectedAsync: () => Promise<LangType>
 } => {
   return {
     cambiarLangAsync: async (lang: LangType): Promise<LangType | undefined> => {
@@ -35,7 +36,7 @@ export const LangStore = (): {
 
       return langType.selected
     },
-    all: async (lang?: LangType): Promise<ILang | undefined> => {
+    allAsync: async (lang?: LangType): Promise<ILang | undefined> => {
       let urlConfigJson = path.join(APP_DATA_PATH(), 'data/languages', 'default.json')
       const urlConfigJsonDefault = path.join(
         __dirname,
@@ -54,6 +55,19 @@ export const LangStore = (): {
       )
       if (!existsSync(urlDataJson)) urlDataJson = urlDataJsonDefault
       return await (JSON.parse(readFileSync(urlDataJson).toString()) as ILang)
+    },
+    getTypeLangSelectedAsync: async (): Promise<LangType> => {
+      let urlConfigJson = path.join(APP_DATA_PATH(), 'data/languages', 'default.json')
+      const urlConfigJsonDefault = path.join(
+        __dirname,
+        '../../resources/data/languages',
+        'default.json'
+      )
+      if (!existsSync(urlConfigJson)) urlConfigJson = urlConfigJsonDefault
+
+      const lengConfig = await (JSON.parse(readFileSync(urlConfigJson).toString()) as ILangConfig)
+
+      return lengConfig.selected ?? 'es'
     }
   }
 }

@@ -410,8 +410,13 @@ export function Header(): JSX.Element {
                 {
                   [
                     { id: 'es', description: dataLang?.espaniol ?? 'Español' },
-                    { id: 'en', description: dataLang?.ingles ?? 'Ingles' }
-                  ].find((lang) => lang.id === idiomaActual).description
+                    { id: 'en', description: dataLang?.ingles ?? 'Ingles' },
+                    { id: 'pt', description: dataLang?.portugues ?? 'Portugues' },
+                    { id: 'it', description: dataLang?.italino ?? 'Italiano' },
+                    { id: 'fr', description: dataLang?.frances ?? 'Frances' },
+                    { id: 'zh', description: dataLang?.chino ?? 'Chino' },
+                    { id: 'de', description: dataLang?.aleman ?? 'Aleman' }
+                  ].find((lang) => lang.id === idiomaActual)?.description
                 }
                 <svg
                   width="16"
@@ -438,6 +443,41 @@ export function Header(): JSX.Element {
                     className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
                   >
                     {dataLang?.ingles ?? 'Ingles'}
+                  </li>
+                  <li
+                    onClick={() => setIdioma('pt')}
+                    key={2}
+                    className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
+                  >
+                    {dataLang?.portugues ?? 'Portugues'}
+                  </li>
+                  <li
+                    onClick={() => setIdioma('it')}
+                    key={2}
+                    className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
+                  >
+                    {dataLang?.italiano ?? 'Italiano'}
+                  </li>
+                  <li
+                    onClick={() => setIdioma('fr')}
+                    key={2}
+                    className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
+                  >
+                    {dataLang?.frances ?? 'Frances'}
+                  </li>
+                  <li
+                    onClick={() => setIdioma('zh')}
+                    key={2}
+                    className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
+                  >
+                    {dataLang?.chino ?? 'Chino'}
+                  </li>
+                  <li
+                    onClick={() => setIdioma('de')}
+                    key={2}
+                    className="p-2 text-sm border-b-[1px] border-b-success px-[30px] py-[20px] hover:bg-sky-300 hover:dark:bg-sky-600 hover:text-dark dark:text-light"
+                  >
+                    {dataLang?.aleman ?? 'Aleman'}
                   </li>
                 </ul>
               )}

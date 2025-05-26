@@ -4,11 +4,14 @@ import { ModalProps } from '../../../../ui/components/modal/Modal'
 import { useModal } from '../../../../ui/components/modal/hooks/UseModal'
 import { useState } from 'react'
 import { DataSelect } from '../../interfaces/data-select.interface'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 interface Props extends ModalProps<undefined> {
   added: (data: DataSelect) => void
 }
+
 export default function AgregarOperario({ added, close }: Props): JSX.Element {
+  const { dataLang } = useLang() // Obtener traducciones
   const { toggleOpenedState } = useModal()
   const [value, setValue] = useState<string>()
 
@@ -28,14 +31,18 @@ export default function AgregarOperario({ added, close }: Props): JSX.Element {
       onSubmit={submit}
     >
       <div className="flex items-center">
-        <h3 className=" text-3xl not-italic font-bold text-dark dark:text-light">
-          Agregar operario
+        <h3 className="text-3xl not-italic font-bold text-dark dark:text-light">
+          {dataLang?.agregarOperario ?? "Agregar operario"}
         </h3>
       </div>
-      <InputText label="Identificador" required={true} onChange={setValue} />
+      <InputText 
+        label={dataLang?.identificador ?? "Identificador"} 
+        required={true} 
+        onChange={setValue} 
+      />
       <div className="w-full flex flex-row mt-8 gap-4 justify-end">
         <Button type="error" onClick={close} maxWith={false}>
-          Cancelar
+          {dataLang?.cancelar ?? "Cancelar"}
         </Button>
         <Button
           type="success"
@@ -43,7 +50,7 @@ export default function AgregarOperario({ added, close }: Props): JSX.Element {
           maxWith={false}
           disabled={!(value && value?.length > 2)}
         >
-          Agregar
+          {dataLang?.agregar ?? "Agregar"}
         </Button>
       </div>
     </form>

@@ -8,10 +8,12 @@ import {
 } from '@renderer/lib/socket/interfaces/socket-client.interface'
 import { DatosMeteorologicos } from '@renderer/app/home/interfaces/datos-meteorologicos.interface'
 import { DataUnidad } from '@renderer/app/home/interfaces/data-unidad.interface'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function PanelLateralDerecha() {
+  const { dataLang } = useLang()
   const { getStateToggle, addToggle, toggleOpenedState } = useToggle()
   const divContenidoRef = useRef<HTMLDivElement>(null)
   const divPestaniaRef = useRef<HTMLDivElement>(null)
@@ -62,14 +64,7 @@ export function PanelLateralDerecha() {
     return ''
   }
 
-  const getData = (
-    tipo:
-      | 'Humedad'
-      | 'Velocidad del viento'
-      | 'Temperatura'
-      | 'Punto de Rocío'
-      | 'Dirección del viento'
-      | ''
+  const getData = (id: number
   ): {
     valor: string
     unidad: string
@@ -80,14 +75,14 @@ export function PanelLateralDerecha() {
     }
     const unidad =
       unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
-    switch (tipo) {
-      case 'Humedad':
+    switch (id) {
+      case 1:
         resp =
           datosMeteorologicos?.humedad !== undefined
             ? { valor: datosMeteorologicos?.humedad?.toString() ?? '', unidad: '%' }
             : { valor: '-- --', unidad: '' }
         break
-      case 'Velocidad del viento': {
+      case 2: {
         const unidadVelocidad =
           unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
         resp =
@@ -105,7 +100,7 @@ export function PanelLateralDerecha() {
             : { valor: '-- --', unidad: '' }
         break
       }
-      case 'Temperatura': {
+      case 4: {
         const unidadTemperatura =
           unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
         resp =
@@ -121,23 +116,7 @@ export function PanelLateralDerecha() {
             : { valor: '-- --', unidad: '' }
         break
       }
-      case 'Punto de Rocío': {
-        const unidadTemperatura =
-          unidades.find((u) => u.estaSeleccionada && u.tipo === 'temperatura')?.unidad ?? ''
-        resp =
-          datosMeteorologicos?.puntoDeRocio !== undefined
-            ? {
-                valor:
-                  (unidadTemperatura === 'F'
-                    ? (datosMeteorologicos.puntoDeRocio ?? (1 * 9) / 5) + 32
-                    : datosMeteorologicos.puntoDeRocio
-                  )?.toString() ?? '',
-                unidad: unidad
-              }
-            : { valor: '-- --', unidad: '' }
-        break
-      }
-      case 'Dirección del viento': {
+      case 3: {
         resp =
           datosMeteorologicos?.dirViento !== undefined
             ? {
@@ -208,40 +187,40 @@ export function PanelLateralDerecha() {
         )}
       >
         <div className="border-[1px] border-dark dark:border-light w-full h-[122px] rounded-lg p-3 flex flex-col">
-          <p className="text-success text-[16px] font-bold">Temperatura</p>
+          <p className="text-success text-[16px] font-bold">{dataLang?.temperatura ?? 'Temperatura'}</p>
 
           <div className="text-dark dark:text-light font-bold items-baseline flex justify-center w-full">
-            <h1 className="text-[46px] text-right">{getData('Temperatura').valor}</h1>
+            <h1 className="text-[46px] text-right">{getData(4).valor}</h1>
             <span className="text-[20px] ml-4 w-[60px] inline-block">
-              °{getData('Temperatura').unidad}
+              {getData(4).unidad}
             </span>
           </div>
         </div>
         <div className="flex gap-4">
           <div className="border-[1px] border-dark dark:border-light w-full h-[122px] rounded-lg p-3 flex flex-col">
-            <p className="text-success text-[16px] font-bold">Vel. del viento</p>
+            <p className="text-success text-[16px] font-bold">{dataLang?.velDelViento ?? 'Vel. del viento'}</p>
             <div className="text-dark dark:text-light font-bold items-baseline flex justify-end w-full">
-              <h1 className="text-[46px] text-right">{getData('Velocidad del viento').valor}</h1>
+              <h1 className="text-[46px] text-right">{getData(2).valor}</h1>
               <span className="text-[20px] ml-4 w-[60px] inline-block">
-                {getData('Velocidad del viento').unidad}
+                {getData(2).unidad}
               </span>
             </div>
           </div>
           <div className="border-[1px] border-dark dark:border-light w-full h-[122px] rounded-lg p-3 flex flex-col">
-            <p className="text-success text-[16px] font-bold">Dir. del viento</p>
+            <p className="text-success text-[16px] font-bold">{dataLang?.dirDelViento ?? 'Dir. del viento'}</p>
             <div className="text-dark dark:text-light font-bold items-baseline flex justify-end w-full">
-              <h1 className="text-[46px] text-right">{getData('Dirección del viento').unidad}</h1>
+              <h1 className="text-[46px] text-right">{getData(3).unidad}</h1>
               <span className="text-[20px] ml-4 w-[60px] inline-block">
-                {/* {getData('Dirección del viento').unidad} */}
+                {/* {getData(3).unidad} */}
               </span>
             </div>
           </div>
         </div>
         <div className="flex gap-4">
           <div className="border-[1px] border-dark dark:border-light w-full h-[122px] rounded-lg p-3 flex flex-col">
-            <p className="text-success text-[16px] font-bold">Humedad</p>
+            <p className="text-success text-[16px] font-bold">{dataLang?.humedad ?? 'Humedad'}</p>
             <div className="text-dark dark:text-light font-bold items-baseline flex justify-end w-full">
-              <h1 className="text-[46px] text-right">{getData('Humedad').valor}</h1>
+              <h1 className="text-[46px] text-right">{getData(1).valor}</h1>
               <span className="text-[20px] ml-4 w-[60px] inline-block">%</span>
             </div>
           </div>

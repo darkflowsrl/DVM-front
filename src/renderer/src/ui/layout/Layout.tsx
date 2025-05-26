@@ -17,6 +17,7 @@ import { useModal } from '../components/modal/hooks/UseModal'
 import { Dialog, DialogType } from '../components/dialog/Dialog'
 import { Modal } from '../components/modal/Modal'
 import { useApp } from '../hooks/useApp'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export function Layout({ children }: Props): JSX.Element {
+  const { dataLang } = useLang()
   const { toggles } = useToggle()
   const { cargando } = useCarga()
   const [opendToggle, setOpendToggle] = useState<boolean>()
@@ -99,9 +101,9 @@ export function Layout({ children }: Props): JSX.Element {
         idModal="sin-datos-meteorologicos"
         ModalContent={Dialog}
         modalContentProps={{
-          title: 'Estación Meteorológica Inactiva',
+          title: `${dataLang?.estacionMeteorologicaInactiva ?? 'Estación Meteorológica Inactiva'}`,
           message:
-            'Actualmente, la estación meteorológica no está funcionando.<br /> Por favor, verifique la conexión.',
+            `${dataLang?.actualmenteLaEstacion_ ?? 'Actualmente, la estación meteorológica no está funcionando'}.<br /> ${dataLang?.porFavorVerifique_ ?? 'Por favor, verifique la conexión.'}`,
           type: 'warning',
           buttons: {
             cancelar: {
@@ -152,7 +154,7 @@ export function Layout({ children }: Props): JSX.Element {
               />
             </svg>
           </div>
-          <p className="text-black dark:text-light">cargando...</p>
+          <p className="text-black dark:text-light">{dataLang?.cargando.toLowerCase() ?? 'cargando'}...</p>
         </div>
       )}
     </>

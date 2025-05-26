@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../../../../ui/components/Button'
 import InputDropdown from '@renderer/ui/components/input-dropdown/InputDropdown'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 interface Props extends ModalProps<undefined> {}
 interface ILote {
@@ -20,6 +21,8 @@ interface ILote {
 }
 
 export function FormEditar({ close, acept }: Props): JSX.Element {
+  const { dataLang } = useLang()
+  
   const {
     register,
     getValues,
@@ -92,7 +95,7 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
 
       <div className="flex flex-col gap-8">
         <InputDropdown
-          label="Identificación Operario"
+          label={dataLang?.identificacionOperario ?? "Identificación de Operario"}
           data={operarios}
           name="operario"
           register={register}
@@ -102,7 +105,7 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
         />
         <div className="flex flex-row gap-4">
           <InputDropdown
-            label="Identificación Lote"
+            label={dataLang?.identificacionLote ?? "Identificación de Lote"}
             data={lotes}
             name="lote"
             register={register}
@@ -111,7 +114,7 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
             options={{ required: true }}
           />
           <InputNumber
-            label="Hectáreas"
+            label={dataLang?.hectareas ?? "Hectáreas"}
             labelSuccess={true}
             valueInitial={0}
             unidad=""
@@ -122,7 +125,7 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
           />
         </div>
         <InputDropdown
-          label="Tipo de Aplicación"
+          label={dataLang?.tipoDeAplicacion ?? "Tipo de Aplicación"}
           data={tiposAplicaciones}
           name="tipoAplicacion"
           register={register}
@@ -134,10 +137,10 @@ export function FormEditar({ close, acept }: Props): JSX.Element {
 
       <div className="w-full flex flex-row mt-8 gap-4 justify-end">
         <Button type="error" maxWith={false} onClick={close}>
-          Cancelar
+        {dataLang?.cancelar ?? "Cancelar"}
         </Button>
         <Button type="success" maxWith={false} onClick={acept}>
-          Agregar
+        {dataLang?.agregar ?? "Agregar"}
         </Button>
       </div>
     </form>

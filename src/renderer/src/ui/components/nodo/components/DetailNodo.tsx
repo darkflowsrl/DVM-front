@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../../Button'
 import { ModalProps } from '../../modal/Modal'
-import { NodoData } from '../interfaces/nodo-data'
+import { IdsEstadoAspersorType, NodoData } from '../interfaces/nodo-data'
 import clsx from 'clsx'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
+import { useApp } from '@renderer/ui/hooks/useApp'
 
 interface Props extends ModalProps<undefined> {
   data: NodoData
@@ -10,7 +12,9 @@ interface Props extends ModalProps<undefined> {
 }
 
 export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Element {
+  const { dataLang } = useLang()
   const [nodo, setNodo] = useState<NodoData>(initialData)
+  const { getDescripcionEstado } = useApp()
 
   const handleBotonNodoClick = (): void => {
     setNodo({
@@ -59,14 +63,18 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
   return (
     <div className="w-[600px] flex flex-col gap-10 p-8">
       <div className="flex justify-between">
-        <h1 className="text-[36px] font-bold text-success">Nodo {nodo.nombre}</h1>
+        <h1 className="text-[36px] font-bold text-success">
+          {dataLang?.nodo ?? 'Nodo'} {nodo.nombre}
+        </h1>
         <Button
           size="md"
           onClick={handleBotonNodoClick}
           type={nodo.deshabilitado ? 'success-light' : 'error'}
           maxWith={false}
         >
-          {nodo.deshabilitado ? 'Habilitar Nodo' : 'Deshabilitar Nodo'}
+          {nodo.deshabilitado
+            ? (dataLang?.habilitarNodo ?? 'Habilitar Nodo')
+            : (dataLang?.deshabilitarNodo ?? 'Deshabilitar Nodo')}
         </Button>
       </div>
       <div
@@ -106,7 +114,9 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             </svg>
           </div>
           {nodo.aspersores[0].estado?.id != 0 && (
-            <p className="text-error font-bold">{nodo.aspersores[0].estado?.descripcion}</p>
+            <p className="text-error font-bold">
+              {getDescripcionEstado(nodo.aspersores[0].estado?.id ?? -1)}
+            </p>
           )}
           <Button
             size="sm"
@@ -114,7 +124,9 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             maxWith={false}
             onClick={() => handleBotonAspersorClick(nodo.aspersores[0].id)}
           >
-            {nodo.aspersores[0].deshabilitado ? 'Habilitar' : 'Deshabilitar'}
+            {nodo.aspersores[0].deshabilitado
+              ? (dataLang?.habilitar ?? 'Habilitar')
+              : (dataLang?.deshabilitar ?? 'Deshabilitar')}
           </Button>
         </div>
         <div className="flex items-center justify-between p-4 bg-white dark:bg-dark">
@@ -149,7 +161,7 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             </svg>
           </div>
           {nodo.aspersores[1].estado?.id != 0 && (
-            <p className="text-error font-bold">{nodo.aspersores[1].estado?.descripcion}</p>
+            <p className="text-error font-bold">{getDescripcionEstado(nodo.aspersores[0].estado?.id ?? -1)}</p>
           )}
           <Button
             size="sm"
@@ -157,7 +169,9 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             maxWith={false}
             onClick={() => handleBotonAspersorClick(nodo.aspersores[1].id)}
           >
-            {nodo.aspersores[1].deshabilitado ? 'Habilitar' : 'Deshabilitar'}
+            {nodo.aspersores[1].deshabilitado
+              ? (dataLang?.habilitar ?? 'Habilitar')
+              : (dataLang?.deshabilitar ?? 'Deshabilitar')}
           </Button>
         </div>
         <div className="flex items-center justify-between p-4 bg-white dark:bg-dark">
@@ -192,7 +206,7 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             </svg>
           </div>
           {nodo.aspersores[2].estado?.id != 0 && (
-            <p className="text-error font-bold">{nodo.aspersores[2].estado?.descripcion}</p>
+            <p className="text-error font-bold">{getDescripcionEstado(nodo.aspersores[0].estado?.id ?? -1)}</p>
           )}
           <Button
             size="sm"
@@ -200,7 +214,9 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             maxWith={false}
             onClick={() => handleBotonAspersorClick(nodo.aspersores[2].id)}
           >
-            {nodo.aspersores[2].deshabilitado ? 'Habilitar' : 'Deshabilitar'}
+            {nodo.aspersores[2].deshabilitado
+              ? (dataLang?.habilitar ?? 'Habilitar')
+              : (dataLang?.deshabilitar ?? 'Deshabilitar')}
           </Button>
         </div>
         <div className="flex items-center justify-between p-4 bg-white dark:bg-dark">
@@ -235,7 +251,7 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             </svg>
           </div>
           {nodo.aspersores[3].estado?.id != 0 && (
-            <p className="text-error font-bold">{nodo.aspersores[3].estado?.descripcion}</p>
+            <p className="text-error font-bold">{getDescripcionEstado(nodo.aspersores[0].estado?.id ?? -1)}</p>
           )}
           <Button
             size="sm"
@@ -243,13 +259,15 @@ export function DetailNodo({ data: initialData, nodoChange }: Props): JSX.Elemen
             maxWith={false}
             onClick={() => handleBotonAspersorClick(nodo.aspersores[3].id)}
           >
-            {nodo.aspersores[3].deshabilitado ? 'Habilitar' : 'Deshabilitar'}
+            {nodo.aspersores[3].deshabilitado
+              ? (dataLang?.habilitar ?? 'Habilitar')
+              : (dataLang?.deshabilitar ?? 'Deshabilitar')}
           </Button>
         </div>
       </div>
       <div className="flex flex-row gap-4 justify-end">
         <Button type="success" onClick={() => nodoChange(nodo)} maxWith={false}>
-          Confirmar
+          { dataLang?.confirmar ?? 'Confirmar' }
         </Button>
       </div>
     </div>

@@ -3,8 +3,10 @@ import { Modal } from '@renderer/ui/components/modal/Modal'
 import { useModal } from '@renderer/ui/components/modal/hooks/UseModal'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useLang } from '../configuracion-general/hooks/useLang'
 
 export function Reportes(): JSX.Element {
+  const { dataLang } = useLang()
   const navigate = useNavigate()
 
   const { addModal, toggleOpenedState, getStateModal } = useModal()
@@ -24,7 +26,9 @@ export function Reportes(): JSX.Element {
 
   return (
     <article className="w-full grid grid-cols-1 gap-10 h-[100%] px-20 py-16">
-      <section className="grid grid-cols-3 gap-4 w-full text-dark dark:text-light">Reportes</section>
+      <section className="grid grid-cols-3 gap-4 w-full text-dark dark:text-light">
+        {dataLang?.reportes ?? 'Reportes'}
+      </section>
       <Modal<{
         title: string
         message: string
@@ -43,17 +47,16 @@ export function Reportes(): JSX.Element {
         idModal="end-report"
         ModalContent={Dialog}
         modalContentProps={{
-          title: 'Reporte creado con éxito',
-          message:
-            'El reporte del trabajo finalizado ya está disponible. <br /> <br />¿Cómo desea continuar?',
+          title: `${dataLang?.reporteCreadoConExito ?? 'Reporte creado con éxito'}`,
+          message: `${dataLang?.elReporteDelTrabajo_ ?? ''} <br /> <br />${dataLang?.comoDeseaContinuar ?? '¿Cómo desea continuar?'}`,
           type: 'success',
           buttons: {
             cancelar: {
-              text: 'Apagar dispositivo',
+              text: `${dataLang?.apagarDispositivo ?? 'Apagar dispositivo'}`,
               type: 'default'
             },
             aceptar: {
-              text: 'Nuevo trabajo',
+              text: `${dataLang?.nuevoTrabajo ?? 'Nuevo trabajo'}`,
               type: 'success'
             }
           }

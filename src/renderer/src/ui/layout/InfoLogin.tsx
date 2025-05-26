@@ -6,8 +6,10 @@ import { Modal } from '../components/modal/Modal'
 import { useEffect } from 'react'
 import { useModal } from '../components/modal/hooks/UseModal'
 import { FormEditar } from '@renderer/app/home/components/form-initial/FormEditar'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 export function InfoLogin(): JSX.Element {
+  const { dataLang } = useLang()
   const { getStateToggle } = useToggle()
   const { getStateModal, addModal, toggleOpenedState } = useModal()
   const { isValid, operario, lote, tipoAplicacion } = useFormInitial()
@@ -37,20 +39,20 @@ export function InfoLogin(): JSX.Element {
         )}
       >
         <div className="">
-          <small className="text-[10px] text-dark dark:text-light">Usuario</small>
+          <small className="text-[10px] text-dark dark:text-light">{dataLang?.usuario ?? 'Usuario'}</small>
           <p className="font-medium text-dark dark:text-light">{operario.name}</p>
         </div>
         <div>
-          <small className="text-[10px] text-dark dark:text-light">Ident. Lote</small>
+          <small className="text-[10px] text-dark dark:text-light">{dataLang?.identificacionLote ?? 'Ident. de Lote'}</small>
           <p className="font-medium text-dark dark:text-light">{lote.name}</p>
         </div>
         <div>
-          <small className="text-[10px] text-dark dark:text-light">Tipo de Aplicación</small>
+          <small className="text-[10px] text-dark dark:text-light">{dataLang?.tipoDeAplicacion ?? 'Tipo de Aplicación'}</small>
           <p className="font-medium text-dark dark:text-light">{tipoAplicacion.name}</p>
         </div>
         <div className="w-full mt-4">
           <Button type="success-dark" size="sm" onClick={handleEditClick}>
-            Editar
+            {dataLang?.editar}
           </Button>
         </div>
       </aside>

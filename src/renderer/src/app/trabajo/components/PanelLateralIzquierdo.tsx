@@ -8,6 +8,7 @@ import {
   ClientToServerEvents,
   ServerToClientEvents
 } from '@renderer/lib/socket/interfaces/socket-client.interface'
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
@@ -18,6 +19,7 @@ const style = {
   transform: 'translate(-50%, -50%)'
 }
 export function PanelLateralIzquierdo() {
+  const { dataLang } = useLang()
   const { getStateToggle, addToggle, toggleOpenedState } = useToggle()
   const divContenidoRef = useRef<HTMLDivElement>(null)
   const divPestaniaRef = useRef<HTMLDivElement>(null)
@@ -56,16 +58,7 @@ export function PanelLateralIzquierdo() {
     toggleOpenedState('panel-lateral-izquierdo')
   }
 
-  const getData = (
-    tipo:
-      | 'Humedad'
-      | 'Velocidad del viento'
-      | 'Temperatura'
-      | 'Punto de Rocío'
-      | 'Dirección del viento'
-      | 'Velocidad del tractor'
-      | ''
-  ): {
+  const getDataVelocidadDelTractor = (): {
     valor: string
     unidad: string
   } => {
@@ -73,27 +66,22 @@ export function PanelLateralIzquierdo() {
       valor: '',
       unidad: ''
     }
-    switch (tipo) {
-      case 'Velocidad del tractor': {
-        const unidadVelocidad =
-          unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
-        resp =
-          datosMeteorologicos?.gpsInfo?.velocicidad !== undefined &&
-          datosMeteorologicos?.gpsInfo?.velocicidad != null
-            ? {
-                valor:
-                  (
-                    datosMeteorologicos.gpsInfo?.velocicidad *
-                    3.6 *
-                    (unidadVelocidad === 'mi/h' ? 0.621371 : 1)
-                  )?.toFixed(0) ?? '', // Constante para pasar de m/s a Km/h
-                unidad:
-                  unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
-              }
-            : { valor: '-- --', unidad: '' }
-        break
-      }
-    }
+    const unidadVelocidad =
+      unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
+    resp =
+      datosMeteorologicos?.gpsInfo?.velocicidad !== undefined &&
+      datosMeteorologicos?.gpsInfo?.velocicidad != null
+        ? {
+            valor:
+              (
+                datosMeteorologicos.gpsInfo?.velocicidad *
+                3.6 *
+                (unidadVelocidad === 'mi/h' ? 0.621371 : 1)
+              )?.toFixed(0) ?? '', // Constante para pasar de m/s a Km/h
+            unidad: unidades.find((u) => u.estaSeleccionada && u.tipo === 'velocidad')?.unidad ?? ''
+          }
+        : { valor: '-- --', unidad: '' }
+
     return resp
   }
 
@@ -112,32 +100,32 @@ export function PanelLateralIzquierdo() {
         )}
       >
         <div className="border-[1px] border-dark dark:border-light w-[197px] h-[122px] rounded-lg p-3 flex flex-col">
-          <p className="text-success text-[16px] font-bold">Superficie</p>
+          <p className="text-success text-[16px] font-bold">{dataLang?.superficie ?? 'Superficie'}</p>
           <div className="text-dark dark:text-light font-bold items-baseline flex justify-end">
             <h1 className="text-[46px] text-right">00</h1>
             <span className="text-[20px] ml-4 w-12 inline-block">Has</span>
           </div>
         </div>
         <div className="border-[1px] border-dark dark:border-light w-[197px] h-[122px] rounded-lg p-3 flex flex-col">
-          <p className="text-success text-[16px] font-bold">Volúmen x Superficie</p>
+          <p className="text-success text-[16px] font-bold">{ dataLang?.volumen ?? 'Volúmen'} x {dataLang?.superficie ?? 'Superficie'}</p>
           <div className="text-dark dark:text-light font-bold items-baseline flex justify-end">
             <h1 className="text-[46px] text-right">00</h1>
             <span className="text-[20px] ml-4 w-12 inline-block">L/ha</span>
           </div>
         </div>
         <div className="border-[1px] border-dark dark:border-light w-[197px] h-[122px] rounded-lg p-3 flex flex-col">
-          <p className="text-success text-[16px] font-bold">Volúmen / Minuto</p>
+          <p className="text-success text-[16px] font-bold">{ dataLang?.volumen ?? 'Volúmen'} / {dataLang?.minuto ?? 'Minuto'}</p>
           <div className="text-dark dark:text-light font-bold items-baseline flex justify-end">
             <h1 className="text-[46px] text-right">00</h1>
             <span className="text-[20px] ml-4 w-12 inline-block">L/min.</span>
           </div>
         </div>
         <div className="border-[1px] border-dark dark:border-light w-[197px] h-[122px] rounded-lg p-3 flex flex-col">
-          <p className="text-success text-[16px] font-bold">Velocidad</p>
+          <p className="text-success text-[16px] font-bold">{ dataLang?.velocidad ?? 'Velocidad'}</p>
           <div className="text-dark dark:text-light font-bold items-baseline flex justify-end">
-            <h1 className="text-[46px] text-right">{getData('Velocidad del tractor').valor}</h1>
+            <h1 className="text-[46px] text-right">{getDataVelocidadDelTractor().valor}</h1>
             <span className="text-[20px] ml-4 w-12 inline-block">
-              {getData('Velocidad del tractor').unidad}
+              {getDataVelocidadDelTractor().unidad}
             </span>
           </div>
         </div>

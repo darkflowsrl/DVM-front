@@ -8,8 +8,7 @@ import {
   EstadoNodoTesting,
   EstadoNodoJob,
   Nodo,
-  NodosStore,
-  DescripcionEstadoAspersorType
+  NodosStore  
 } from '../nodos/nodos.store'
 import { ConfiguracionesAvanzadasStore } from '../configuraciones/configuraciones-avanzadas.store'
 
@@ -200,46 +199,6 @@ try {
     return client.write(Buffer.from(JSON.stringify(send)))
   }
 
-  const getDescripcionEstado = (idEstado: IdsEstadoAspersorType): DescripcionEstadoAspersorType => {
-    let value: DescripcionEstadoAspersorType = ''
-    switch (idEstado) {
-      case -1:
-        value = ''
-        break
-      case 0:
-        value = 'OK'
-        break
-      case 1:
-        value = 'Cortocircuito'
-        break
-      case 2:
-        value = 'Motor bloqueado'
-        break
-      case 3:
-        value = 'Motor no conectado'
-        break
-      case 4:
-        value = 'Sobrecorriente'
-        break
-      case 5:
-        value = 'Subcorriente'
-        break
-      case 6:
-        value = 'Baja tension'
-        break
-      case 7:
-        value = 'Error de sensor'
-        break
-      case 8:
-        value = 'RPM no alcanzada'
-        break
-      case 9:
-        value = 'Error de caudalimetro'
-        break
-    }
-    return value
-  }
-
   const startTestingAsync = async (socket): Promise<void> => {
     const nodosStore = NodosStore()
     const nodos = await nodosStore.all()
@@ -269,16 +228,14 @@ try {
             {
               id: 1,
               estado: {
-                id: estadoNodo?.state1 ?? -1,
-                descripcion: getDescripcionEstado(estadoNodo?.state1 ?? -1)
+                id: estadoNodo?.state1 ?? -1
               },
               deshabilitado: n.aspersores.find((a) => a.id === 1)?.deshabilitado ?? false
             },
             {
               id: 2,
               estado: {
-                id: estadoNodo?.state2 ?? -1,
-                descripcion: getDescripcionEstado(estadoNodo?.state2 ?? -1)
+                id: estadoNodo?.state2 ?? -1
               },
               deshabilitado: n.aspersores.find((a) => a.id === 2)?.deshabilitado ?? false
             },
@@ -286,7 +243,7 @@ try {
               id: 3,
               estado: {
                 id: estadoNodo?.state3 ?? -1,
-                descripcion: getDescripcionEstado(estadoNodo?.state3 ?? -1)
+                
               },
               deshabilitado: n.aspersores.find((a) => a.id === 3)?.deshabilitado ?? false
             },
@@ -294,7 +251,7 @@ try {
               id: 4,
               estado: {
                 id: estadoNodo?.state4 ?? -1,
-                descripcion: getDescripcionEstado(estadoNodo?.state4 ?? -1)
+               
               },
               deshabilitado: n.aspersores.find((a) => a.id === 4)?.deshabilitado ?? false
             }
@@ -426,7 +383,7 @@ try {
                   id: 1,
                   estado: {
                     id: estadoNodo?.state1 ?? -1,
-                    descripcion: getDescripcionEstado(estadoNodo?.state1 ?? -1)
+                    
                   },
                   rpm: estadoNodo?.rpm1,
                   rpmDeseado: n.aspersores.find((a) => a.id === 1)?.rpmDeseado,
@@ -438,7 +395,7 @@ try {
                   id: 2,
                   estado: {
                     id: estadoNodo?.state2 ?? -1,
-                    descripcion: getDescripcionEstado(estadoNodo?.state2 ?? -1)
+                    
                   },
                   rpm: estadoNodo?.rpm2,
                   rpmDeseado: n.aspersores.find((a) => a.id === 2)?.rpmDeseado,
@@ -450,7 +407,7 @@ try {
                   id: 3,
                   estado: {
                     id: estadoNodo?.state3 ?? -1,
-                    descripcion: getDescripcionEstado(estadoNodo?.state3 ?? -1)
+                    
                   },
                   rpm: estadoNodo?.rpm3,
                   rpmDeseado: n.aspersores.find((a) => a.id === 3)?.rpmDeseado,
@@ -462,7 +419,7 @@ try {
                   id: 4,
                   estado: {
                     id: estadoNodo?.state4 ?? -1,
-                    descripcion: getDescripcionEstado(estadoNodo?.state4 ?? -1)
+                   
                   },
                   rpm: estadoNodo?.rpm4,
                   rpmDeseado: n.aspersores.find((a) => a.id === 4)?.rpmDeseado,
@@ -497,7 +454,7 @@ try {
                       id: 1,
                       estado: {
                         id: estadoNodo?.state1 ?? -1,
-                        descripcion: getDescripcionEstado(estadoNodo?.state1 ?? -1)
+                        
                       },
                       rpm: estadoNodo?.rpm1,
                       rpmDeseado: n.aspersores.find((a) => a.id === 1)?.rpmDeseado,
@@ -507,7 +464,7 @@ try {
                       id: 2,
                       estado: {
                         id: estadoNodo?.state2 ?? -1,
-                        descripcion: getDescripcionEstado(estadoNodo?.state2 ?? -1)
+                        
                       },
                       rpm: estadoNodo?.rpm2,
                       rpmDeseado: n.aspersores.find((a) => a.id === 2)?.rpmDeseado,
@@ -517,7 +474,7 @@ try {
                       id: 3,
                       estado: {
                         id: estadoNodo?.state3 ?? -1,
-                        descripcion: getDescripcionEstado(estadoNodo?.state3 ?? -1)
+                        
                       },
                       rpm: estadoNodo?.rpm3,
                       rpmDeseado: n.aspersores.find((a) => a.id === 3)?.rpmDeseado,
@@ -527,7 +484,7 @@ try {
                       id: 4,
                       estado: {
                         id: estadoNodo?.state4 ?? -1,
-                        descripcion: getDescripcionEstado(estadoNodo?.state4 ?? -1)
+                       
                       },
                       rpm: estadoNodo?.rpm4,
                       rpmDeseado: n.aspersores.find((a) => a.id === 4)?.rpmDeseado,
@@ -605,7 +562,7 @@ try {
                     id: 1,
                     estado: {
                       id: estadoNodo?.state1 ?? -1,
-                      descripcion: getDescripcionEstado(estadoNodo?.state1 ?? -1)
+                      
                     },
                     rpm: estadoNodo?.rpm1,
                     rpmDeseado: n.aspersores.find((a) => a.id === 1)?.rpmDeseado,
@@ -615,7 +572,7 @@ try {
                     id: 2,
                     estado: {
                       id: estadoNodo?.state2 ?? -1,
-                      descripcion: getDescripcionEstado(estadoNodo?.state2 ?? -1)
+                      
                     },
                     rpm: estadoNodo?.rpm2,
                     rpmDeseado: n.aspersores.find((a) => a.id === 2)?.rpmDeseado,
@@ -625,7 +582,7 @@ try {
                     id: 3,
                     estado: {
                       id: estadoNodo?.state3 ?? -1,
-                      descripcion: getDescripcionEstado(estadoNodo?.state3 ?? -1)
+                      
                     },
                     rpm: estadoNodo?.rpm3,
                     rpmDeseado: n.aspersores.find((a) => a.id === 3)?.rpmDeseado,
@@ -635,7 +592,7 @@ try {
                     id: 4,
                     estado: {
                       id: estadoNodo?.state4 ?? -1,
-                      descripcion: getDescripcionEstado(estadoNodo?.state4 ?? -1)
+                     
                     },
                     rpm: estadoNodo?.rpm4,
                     rpmDeseado: n.aspersores.find((a) => a.id === 4)?.rpmDeseado,

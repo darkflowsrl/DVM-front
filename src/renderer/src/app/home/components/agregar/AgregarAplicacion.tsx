@@ -4,7 +4,7 @@ import { DataSelect } from '../../interfaces/data-select.interface'
 import { InputText } from '@renderer/ui/components/input-text/InputText'
 import { Button } from '@renderer/ui/components/Button'
 import { useState } from 'react'
-
+import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 interface Props extends ModalProps<undefined> {
   added: (data: DataSelect) => void
@@ -15,7 +15,9 @@ interface IAplicacion {
   tipoCultivo: string
   recetaAgronomica: string
 }
+
 export default function AgregarAplicacion({ added, close }: Props): JSX.Element {
+  const { dataLang } = useLang() // Obtener las traducciones
   const { toggleOpenedState } = useModal()
   const [value, setValue] = useState<IAplicacion>({
     name: '',
@@ -48,19 +50,19 @@ export default function AgregarAplicacion({ added, close }: Props): JSX.Element 
       onSubmit={submit}
     >
       <div className="flex items-center">
-        <h3 className=" text-3xl not-italic font-bold text-dark dark:text-light">
-          Nueva Aplicación
+        <h3 className="text-3xl not-italic font-bold text-dark dark:text-light">
+          {dataLang?.nuevaAplicacion ?? "Nueva Aplicación"}
         </h3>
       </div>
-      <div className="flex flex-col justify-around ">
+      <div className="flex flex-col justify-around">
         <div className="flex justify-around gap-4">
           <InputText
-            label="Tipo de aplicación"
+            label={dataLang?.tipoDeAplicacion ?? "Tipo de aplicación"}
             required={true}
             onChange={(v) => setValue({ ...value, name: v })}
           />
           <InputText
-            label="Tipo de cultivo"
+            label={dataLang?.tipoDeCultivo ?? "Tipo de cultivo"}
             unidad=""
             required={true}
             onChange={(v) => setValue({ ...value, tipoCultivo: v })}
@@ -68,7 +70,7 @@ export default function AgregarAplicacion({ added, close }: Props): JSX.Element 
         </div>
         <div className="flex">
           <InputText
-            label="Receta agronómica"
+            label={dataLang?.recetaAgronomica ?? "Receta agronómica"}
             width="[800px]"
             required={true}
             onChange={(v) => setValue({ ...value, recetaAgronomica: v })}
@@ -77,7 +79,7 @@ export default function AgregarAplicacion({ added, close }: Props): JSX.Element 
       </div>
       <div className="w-full flex flex-row mt-8 gap-4 justify-end">
         <Button type="error" onClick={close} maxWith={false}>
-          Cancelar
+          {dataLang?.cancelar ?? "Cancelar"}
         </Button>
         <Button
           type="success"
@@ -85,7 +87,7 @@ export default function AgregarAplicacion({ added, close }: Props): JSX.Element 
           maxWith={false}
           disabled={!esFormularioValido(value)}
         >
-          Agregar
+          {dataLang?.agregar ?? "Agregar"}
         </Button>
       </div>
     </form>
