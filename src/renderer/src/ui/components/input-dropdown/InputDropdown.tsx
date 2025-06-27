@@ -86,7 +86,7 @@ const InputDropdown = ({ label, name, data, errors, withAdd = false }: Props): J
             }
           }}
         >
-          {dataLang ? dataLang[value?.name ?? ''] : ''}
+          {(dataLang && dataLang[value.name]) ?? value.name}
         </li>
       ))
     )
