@@ -206,7 +206,8 @@ try {
       command: 'testing',
       nodos: nodos.map((n) => n.id)
     }
-    if (process.env.NODE_ENV === 'development') {
+
+    if (process.env.MY_ENV === 'development') {
       const nodos = await nodosStore.all()
       const estadosNodosTesting = nodos.map<EstadoNodoTesting>((n) => ({
         command: 'testing',
@@ -273,6 +274,10 @@ try {
   client.on('close', function () {
     console.warn('socket closed')
     io.emit('desconectado')
+  })
+
+  client.on('connect', function () {
+    console.info('socket 8080 conectado')
   })
 
   const configuracionesAvanzadasStore = ConfiguracionesAvanzadasStore()
