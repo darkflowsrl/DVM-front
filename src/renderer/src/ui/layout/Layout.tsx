@@ -8,18 +8,13 @@ import { InfoLogin } from './InfoLogin'
 import { useFormInitial } from '@renderer/app/home/components/form-initial/hooks/UseFormInitial'
 import { useNavigate } from 'react-router-dom'
 import { DatosMeteorologicos } from '@renderer/app/home/interfaces/datos-meteorologicos.interface'
-import { io, Socket } from 'socket.io-client'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+
 import { useModal } from '../components/modal/hooks/UseModal'
 import { Dialog, DialogType } from '../components/dialog/Dialog'
 import { Modal } from '../components/modal/Modal'
 import { useApp } from '../hooks/useApp'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 interface Props {
   children: ReactNode
 }
@@ -44,10 +39,10 @@ export function Layout({ children }: Props): JSX.Element {
     }
     addModal('sin-datos-meteorologicos')
     navigate('/')
-    socket.on('getDatosMeteorologicos', (res) => {
+    /*socket.on('getDatosMeteorologicos', (res) => {
       setDatosMeteorologicos(res)
       setUltimaDataMeteorologica(new Date())
-    })
+    })*/
   }, [])
 
   useEffect(() => {

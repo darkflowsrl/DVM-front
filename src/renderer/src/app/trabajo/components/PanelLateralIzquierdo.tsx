@@ -7,7 +7,7 @@ import { io, Socket } from 'socket.io-client'
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')

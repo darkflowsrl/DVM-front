@@ -6,7 +6,7 @@ import { io, Socket } from 'socket.io-client'
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { DataUnidad } from '../interfaces/data-unidad.interface'
 
 interface Props {

@@ -5,15 +5,10 @@ import { useFormInitial } from '../../app/home/components/form-initial/hooks/Use
 import { useCarga } from './hooks/useCarga'
 import { useToggle } from '../hooks/useToggle'
 import { DatosMeteorologicos } from '@renderer/app/home/interfaces/datos-meteorologicos.interface'
-import { io, Socket } from 'socket.io-client'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+
 import clsx from 'clsx'
 import { LangType, useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Header(): JSX.Element {
   const { title } = useTitle()
@@ -41,34 +36,52 @@ export function Header(): JSX.Element {
   })
 
   useEffect(() => {
-    setDayCurrent(getCurrentDate())
-    socket.on('getDatosMeteorologicos', (res) => setDatosMeteorologicos(res))
-  }, [dayCurrent, dataLang])
 
-  const getCurrentDate = (): string => {
-    // Days array
-    const days = [
-      dataLang?.domingo ?? 'Domingo',
-      dataLang?.lunes ?? 'Lunes',
-      dataLang?.martes ?? 'Martes',
-      dataLang?.miercoles ?? 'Miércoles',
-      dataLang?.jueves ?? 'Jueves',
-      dataLang?.viernes ?? 'Viernes',
-      dataLang?.sabado ?? 'Sábado'
-    ]
+    const getDate = () => {
+      // Days array
+      const days = [
+        dataLang?.domingo ?? 'Domingo',
+        dataLang?.lunes ?? 'Lunes',
+        dataLang?.martes ?? 'Martes',
+        dataLang?.miercoles ?? 'Miércoles',
+        dataLang?.jueves ?? 'Jueves',
+        dataLang?.viernes ?? 'Viernes',
+        dataLang?.sabado ?? 'Sábado'
+      ]
 
-    const newDate = new Date()
-    const date = newDate.getDate()
-    const month = newDate.getMonth() + 1
-    const year = newDate.getFullYear()
-    const hours = newDate.getHours()
-    const mins = newDate.getMinutes()
-    const dayCurrent = newDate.getDay()
+      const newDate = new Date()
+      const date = newDate.getDate()
+      const month = newDate.getMonth() + 1
+      const year = newDate.getFullYear()
+      const hours = newDate.getHours()
+      const mins = newDate.getMinutes()
+      const dayCurrent = newDate.getDay()
 
-    return `${days[dayCurrent]} ${date}/${
-      month < 10 ? `0${month}` : `${month}`
-    }/${year} - ${hours}:${mins} hs.`
-  }
+      const dateString = days[dayCurrent] + 
+        date.toString().padStart(2, '0') +
+        month.toString().padStart(2, '0') +
+        '/' +
+        year +
+        ' - ' +
+        hours.toString().padStart(2, '0') +
+        ':' +
+        mins.toString().padStart(2, '0') +
+        'hs.'    
+
+      setDayCurrent(dateString)
+      //socket.on('getDatosMeteorologicos', (res) => setDatosMeteorologicos(res))
+    }
+
+    const interval = setInterval(getDate, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+    
+    
+  }, [dataLang])
+
+  
 
   useEffect(() => {
     addToggle('info-login')

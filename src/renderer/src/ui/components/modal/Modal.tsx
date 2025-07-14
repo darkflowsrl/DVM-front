@@ -2,8 +2,8 @@
 import { MouseEvent, ReactNode, FC, useEffect } from 'react'
 import { useModal } from './hooks/UseModal'
 
-export interface ModalProps<T> {
-  props?: T
+export interface ModalProps<T = undefined> {
+  props: T
   close?: () => void
   acept?: () => void
 }

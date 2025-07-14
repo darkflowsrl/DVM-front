@@ -9,7 +9,7 @@ import { io, Socket } from 'socket.io-client'
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { useCarga } from '@renderer/ui/layout/hooks/useCarga'
 import { useLang } from './hooks/useLang'
 

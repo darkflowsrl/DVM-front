@@ -15,7 +15,7 @@ import Keyboard from 'react-simple-keyboard'
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { DataSelect } from '../home/interfaces/data-select.interface'
 import { Dialog, DialogType } from '@renderer/ui/components/dialog/Dialog'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'
