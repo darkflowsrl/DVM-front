@@ -1,13 +1,13 @@
 import { create } from 'zustand'
-import { IdsEstadoAspersorType } from '../components/nodo/interfaces/nodo-data'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
+import { AspersorStatus } from '@renderer/interfaces/nodo-status'
 
 export type ModeAppType = 'light' | 'full'
 
 interface AppState {
   modeApp: ModeAppType
   changeMode: (modeApp: ModeAppType) => void
-  getDescripcionEstado: (idEstado: IdsEstadoAspersorType) => string
+  getDescripcionEstado: (idEstado: AspersorStatus) => string
 }
 
 export const useApp = create<AppState>((set) => ({
@@ -18,7 +18,7 @@ export const useApp = create<AppState>((set) => ({
       modeApp
     }))
   },
-  getDescripcionEstado: (idEstado: IdsEstadoAspersorType): string => {
+  getDescripcionEstado: (idEstado: AspersorStatus): string => {
       const { dataLang } = useLang()
       let value: string = ''
       switch (idEstado) {

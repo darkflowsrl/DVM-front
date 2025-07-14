@@ -1,59 +1,62 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTitle } from '../../lib/hooks/UseTitle'
 import { Modal } from '../../ui/components/modal/Modal'
 import { Dialog } from '../../ui/components/dialog/Dialog'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '../../ui/components/modal/hooks/UseModal'
-import { Nodo } from '../../ui/components/nodo/Nodo'
 import { Button } from '../../ui/components/Button'
-import { Socket, io } from 'socket.io-client'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
 import { useLang } from '../configuracion-general/hooks/useLang'
+import { postStartTesting } from '@renderer/lib/api/post-start-testing'
+import { useNodosStatus } from '@renderer/hooks/use-nodos-status'
+import { Nodo } from '@renderer/ui/components/nodo/Nodo'
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Testing(): JSX.Element {
   const { setTitle } = useTitle()
   const { dataLang } = useLang()
-  const [percentageLoading, setPercentageLoading] = useState<number>(0)
+
+  
   const navigate = useNavigate()
+  
   const { getStateModal, addModal, toggleOpenedState } = useModal()
-  const [nodos, setNodos] = useState<JSX.Element[]>([])
+  
+  const [percentageLoading, setPercentageLoading] = useState<number>(0)
+  const {nodosFull, nodosConfig} = useNodosStatus()
+  const [isFirstTesting, setIsFirstTesting] = useState<boolean>(true)
 
-  useEffect(() => {
-    addModal('repetir-testing')
-
-    socket.emit('testing')
+  const startTesting = useCallback((): void => {
+    if(isFirstTesting) {
+      setIsFirstTesting(false)
+    }
     setPercentageLoading(0)
-
+    postStartTesting({ nodes: nodosConfig?.filter(n => !n.deshabilitado).map(n => n.id) ?? [] })
     for (let index = 1; index < 101; index++) {
       setTimeout(() => setPercentageLoading(index), index * 45)
     }
+  }, [nodosConfig])
 
-    socket.on('getStateNodo', (nodos) => {
-      if (nodos) {
-        setNodos(
-          nodos.map((nodoData, i) => {
-            return <Nodo key={i} posicion={i} data={nodoData} />
-          })
-        )
-      }
-    })
+  // Modales
+  useEffect(() => {
+    addModal('repetir-testing')
   }, [])
 
-  useEffect(() => setTitle(dataLang?.testeoDeAspersores ?? 'Testeo de Aspersores'), [dataLang])
+  // Titulo
+  useEffect(() => {
+    setTitle(dataLang?.testeoDeAspersores ?? 'Testeo de Aspersores')
+  }, [])
+
+  // Al tener la config de los nodos inicia el testing
+  useEffect(() => {
+    if (nodosConfig == null) return
+    if(!isFirstTesting) return
+
+    startTesting()
+  }, [nodosConfig, isFirstTesting])
+  
 
   const modalClosed = (_: string, acept: boolean): void => {
     if (acept) {
-      socket.emit('testing')
-      setPercentageLoading(0)
-
-      for (let index = 1; index < 101; index++) {
-        setTimeout(() => setPercentageLoading(index), index * 45)
-      }
+      startTesting()      
     }
   }
 
@@ -63,14 +66,19 @@ export function Testing(): JSX.Element {
   }
 
   const handleIniciarTrabajoClick = (): void => {
-    navigate('/trabajo', {
-      state: nodos.map((n) => n.props['data'])
-    })
+    navigate('/trabajo')
   }
+
   return (
     <article className="w-full flex flex-col content-center justify-around h-[100%] px-20">
-      <section className="grid grid-cols-3 gap-4">{nodos}</section>
-      <section className="flex flex-col gap-2 content-center items-center justify-between">
+      <section className="grid grid-cols-3 gap-4">
+        {
+          nodosFull?.map((nodoFull, i) => (
+            <Nodo key={i} posicion={i} data={nodoFull} animacion={true} />
+          ))
+        }
+      </section>
+      <section className="flex flex-col gap-2 content-center items-center justify-between h-8">
         <div className="w-full border-2 border-dark dark:border-light bg-transparent p-1 rounded-md">
           <div
             className="bg-dark dark:bg-light h-2 rounded-sm"
@@ -84,7 +92,7 @@ export function Testing(): JSX.Element {
           </p>
         </div>
       </section>
-      <section className="flex justify-between gap-4">
+      <section className="flex justify-between gap-4 h-20">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center">
             <svg
@@ -176,7 +184,7 @@ export function Testing(): JSX.Element {
                 d="M39.8749 30.4749C38.8789 31.9862 37.8797 33.4943 36.8838 35.0056C36.6647 35.3364 36.1866 35.385 35.9045 35.1061L30.6195 29.9236C29.9389 29.2555 28.8302 29.0058 27.8641 29.3074C26.523 29.7225 26.0018 31.0619 25.8125 31.8241L23.8805 39.1697C23.8805 39.1697 23.8738 39.1924 23.8738 39.2022C23.741 39.8832 23.3327 41.3685 21.9982 42.4226C20.6504 43.4895 19.0602 43.5641 17.8618 43.6193C17.2576 43.6485 16.7198 43.6193 16.2683 43.5706C15.8766 43.5285 15.621 43.1458 15.7372 42.7761L20.169 28.4707L20.1856 28.4026C20.3416 27.7378 21.311 24.313 24.8299 22.7466C27.5653 21.5304 30.8087 21.8937 33.3184 23.6936C33.3417 23.7098 33.3649 23.7293 33.3881 23.7487L39.7819 29.6869C40.001 29.8912 40.0442 30.2187 39.8782 30.4685"
               />
             </svg>
-            <p className="text-dark dark:text-light text-[12px]">{ dataLang?.desconectado ?? 'Desconectado' }</p>
+            <p className="text-dark dark:text-light text-[12px]">{ dataLang?.deshabilitado ?? 'Deshabilitado' }</p>
           </div>
         </div>
         <div className="flex gap-4">

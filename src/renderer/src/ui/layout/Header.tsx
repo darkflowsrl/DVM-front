@@ -5,15 +5,10 @@ import { useFormInitial } from '../../app/home/components/form-initial/hooks/Use
 import { useCarga } from './hooks/useCarga'
 import { useToggle } from '../hooks/useToggle'
 import { DatosMeteorologicos } from '@renderer/app/home/interfaces/datos-meteorologicos.interface'
-import { io, Socket } from 'socket.io-client'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+
 import clsx from 'clsx'
 import { LangType, useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Header(): JSX.Element {
   const { title } = useTitle()
@@ -74,7 +69,7 @@ export function Header(): JSX.Element {
         'hs.'    
 
       setDayCurrent(dateString)
-      socket.on('getDatosMeteorologicos', (res) => setDatosMeteorologicos(res))
+      //socket.on('getDatosMeteorologicos', (res) => setDatosMeteorologicos(res))
     }
 
     const interval = setInterval(getDate, 1000)

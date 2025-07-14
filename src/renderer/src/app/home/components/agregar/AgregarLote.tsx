@@ -6,7 +6,7 @@ import { DatosMeteorologicos } from '../../interfaces/datos-meteorologicos.inter
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { io, Socket } from 'socket.io-client'
 import { InputText } from '@renderer/ui/components/input-text/InputText'
 import { InputNumber } from '@renderer/ui/components/input-number/InputNumber'

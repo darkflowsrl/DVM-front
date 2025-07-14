@@ -1,0 +1,1 @@
+export type TipoGotaType = 'FINA' | 'MEDIA' | 'GRUESA' | 'CUSTOM'

@@ -6,6 +6,19 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "cSpell.words": [
+    "Agronomica",
+    "Aplicacion",
+    "aspersor",
+    "Aspersor",
+    "aspersores",
+    "Configuracion",
+    "electrovalvula",
+    "Nodo",
+    "Nodos",
+    "sobrecorriente",
+    "variacion"
+  ]
 }

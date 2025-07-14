@@ -5,7 +5,7 @@ import { Socket, io } from 'socket.io-client'
 import {
   ClientToServerEvents,
   ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
+} from '@renderer/lib/socket/socket-client.interface'
 import { DatosMeteorologicos } from '@renderer/app/home/interfaces/datos-meteorologicos.interface'
 import { DataUnidad } from '@renderer/app/home/interfaces/data-unidad.interface'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'

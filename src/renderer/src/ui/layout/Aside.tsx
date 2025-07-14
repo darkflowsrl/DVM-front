@@ -6,15 +6,9 @@ import { useEffect, useState } from 'react'
 import { Modal } from '../components/modal/Modal'
 import { Dialog, DialogType } from '../components/dialog/Dialog'
 import { useModal } from '../components/modal/hooks/UseModal'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents
-} from '@renderer/lib/socket/interfaces/socket-client.interface'
-import { Socket, io } from 'socket.io-client'
+
 import { useApp } from '../hooks/useApp'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
-
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
 
 export function Aside(): JSX.Element {
   const { dataLang } = useLang()
@@ -55,7 +49,7 @@ export function Aside(): JSX.Element {
       if (!getStateModal(idModal)) toggleOpenedState(idModal)
       if (idModal === 'apagar') {
         openModal('apagando')
-        socket.emit('stopJob')
+        /*socket.emit('stopJob')
 
         socket.on('getStateNodo', (nodos) => {
           if (nodos) {
@@ -70,7 +64,7 @@ export function Aside(): JSX.Element {
             if (getStateModal(idModal)) toggleOpenedState('apagando')
             window.api.invoke.apagarDispositivo()
           }
-        })
+        })*/
 
         setTimeout(() => {
           if (getStateModal(idModal)) toggleOpenedState('apagando')

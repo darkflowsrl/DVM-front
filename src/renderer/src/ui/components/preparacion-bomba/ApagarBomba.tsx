@@ -4,13 +4,16 @@ import { ModalProps } from '../modal/Modal'
 import { useModal } from '../modal/hooks/UseModal'
 import { useLang } from '@renderer/app/configuracion-general/hooks/useLang'
 
-export default function ApagarBomba({ close }: ModalProps<undefined>): JSX.Element {
+export default function ApagarBomba({ close, acept }: ModalProps<undefined>): JSX.Element {
   const { dataLang } = useLang()
   const [percentageLoading, setPercentageLoading] = useState<number>(0)
-  const { toggleOpenedState } = useModal()
 
   useEffect(() => {
     setPercentageLoading(0)
+
+    for (let index = 1; index < 101; index++) {
+      setTimeout(() => setPercentageLoading(index), index * 30)
+    }
   }, [])
 
   return (
@@ -67,17 +70,7 @@ export default function ApagarBomba({ close }: ModalProps<undefined>): JSX.Eleme
         <Button type="error" onClick={close} maxWith={false}>
           { dataLang?.cancelar ?? 'Cancelar' }
         </Button>
-        <Button
-          type="success"
-          onClick={() => {
-            for (let index = 1; index < 101; index++) {
-              setTimeout(() => setPercentageLoading(index), index * 30)
-            }
-            setTimeout(() => toggleOpenedState('apagar-bomba'), 3000)
-          }}
-          maxWith={false}
-          disabled={percentageLoading !== 0}
-        >
+        <Button type="success" onClick={acept} maxWith={false} disabled={percentageLoading !== 100}>
           { dataLang?.aceptar ?? 'Aceptar' }
         </Button>
       </div>
