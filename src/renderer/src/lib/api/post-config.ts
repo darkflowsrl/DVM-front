@@ -3,6 +3,7 @@ import { API_URL } from '../const'
 import { IRes } from '../../interfaces'
 
 interface PostConfigProps {
+  nodo: number
   variacionRPM: number
   subcorriente: number
   sobrecorriente: number
@@ -11,7 +12,7 @@ interface PostConfigProps {
   electrovalvula: boolean
 }
 
-export async function postConfig (config: PostConfigProps): Promise<IRes> {
+export async function postConfig (config: { configuraciones: PostConfigProps[]} ): Promise<IRes> {
 
   try {
     const res = await fetch(`${API_URL}/setConfiguracion`, {

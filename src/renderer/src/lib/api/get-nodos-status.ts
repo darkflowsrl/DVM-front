@@ -17,9 +17,11 @@ export async function getNodosStatus (): Promise<IRes<{nodos: INodoStatus[]}>> {
       }
     }
 
-    const nodes = await res.json() as {nodos: INodoStatus[]}
+    const nodos = await res.json() as INodoStatus[]
 
-    return { res: nodes }
+    console.log('### Nodos status response:', nodos)
+
+    return { res: {nodos} }
 
   } catch (error) {
     return {

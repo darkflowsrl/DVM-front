@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './ui/layout/Layout'
 import Home from './app/home/Home'
 import { Testing } from './app/testing/Testing'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useCarga } from './ui/layout/hooks/useCarga'
 import { Trabajo } from './app/trabajo/Trabajo'
 import { Reportes } from './app/reportes/Reportes'
@@ -10,8 +10,7 @@ import ConfiguracionGeneral from './app/configuracion-general/ConfiguracionGener
 import ConfiguracionAvanzada from './app/configuracion-avanzada/ConfiguracionAvanzada'
 
 import {
-  ConfiguracionesAvanzadasData,
-  SendConfiguracionesAvanzadasData
+  ConfiguracionesAvanzadasData
 } from './app/configuracion-avanzada/interfaces/configuraciones-avanzadas-data'
 
 import { useNodosStatus } from './hooks/use-nodos-status'
@@ -23,13 +22,16 @@ export function App(): JSX.Element {
   const { nodosStatus } = useNodosStatus()
 
   useEffect(() => {
-    setCargando(true)
-    setConfiguracionInicial()
+    setCargando(true)    
   }, [])
   
   useEffect(() => {
     if(!cargando) {
       return
+    }
+
+    if(isConfigSend !== true) {
+      setConfiguracionInicial()
     }
 
     if(nodosStatus != null && isConfigSend === true) {
@@ -40,24 +42,29 @@ export function App(): JSX.Element {
 
  
 
-  const setConfiguracionInicial = async (): Promise<void> => {
+  const setConfiguracionInicial = useCallback(async (): Promise<void> => {
 
     const configuracionesAvanzadasData: ConfiguracionesAvanzadasData = await window.api.invoke.getConfiguracionesAvanzadasAsync()
 
     const { error } = await postConfig({
-      variacionRPM: configuracionesAvanzadasData.variacionRPM,
-      subcorriente: configuracionesAvanzadasData.corriente.minimo,
-      sobrecorriente: configuracionesAvanzadasData.corriente.maximo,
-      cortocicuito: configuracionesAvanzadasData.corriente.limite,
-      sensor: configuracionesAvanzadasData.sensorRPM,
-      electrovalvula: configuracionesAvanzadasData.electroValvula
+      configuraciones: (nodosStatus ?? []).map((nodo) => ({
+        nodo: nodo.nodo,
+        variacionRPM: configuracionesAvanzadasData.variacionRPM,
+        subcorriente: configuracionesAvanzadasData.corriente.minimo,
+        sobrecorriente: configuracionesAvanzadasData.corriente.maximo,
+        cortocicuito: configuracionesAvanzadasData.corriente.limite,
+        sensor: configuracionesAvanzadasData.sensorRPM,
+        electrovalvula: configuracionesAvanzadasData.electroValvula
+      }))
     })
+
+    console.log('### Configuración enviada:', error)
 
     if(error == null) {
       setIsConfigSend(true)
     }
     
-  }
+  }, [nodosStatus])
 
   return (
     <Router>

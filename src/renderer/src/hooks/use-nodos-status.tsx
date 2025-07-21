@@ -95,14 +95,16 @@ export function NodosStatusProvider ({ children }: NodosStatusProviderProps) {
       const fetchNodosStatus = async () => {
         const { res, error } = await getNodosStatus()
         if (error) {
-          console.error('Error fetching nodos status:', error)
+          console.error('### Error fetching nodos status:', error)
           return
         }
 
       if (res == null) {
-          console.warn('No nodos status received')
+          console.warn('### No nodos status received')
           return
         }
+
+        console.log('### Nodos status fetched:', res.nodos)
 
         setNodosStatus(res.nodos as INodoStatus[])
       }
