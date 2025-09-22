@@ -50,7 +50,15 @@ export function Header(): JSX.Element {
       ]
 
       const newDate = new Date()
-      newDate.setHours(-3)
+      var setHours = newDate.getHours() - 3
+
+      if (setHours < 0) {
+        setHours = 24 + setHours
+
+        newDate.setDate(newDate.getDate() - 1)
+      }
+      newDate.setHours(setHours)
+
       const date = newDate.getDate()
       const month = newDate.getMonth() + 1
       const year = newDate.getFullYear()
@@ -59,6 +67,7 @@ export function Header(): JSX.Element {
       const dayCurrent = newDate.getDay()
 
       const dateString = days[dayCurrent] + 
+        ' ' +
         date.toString().padStart(2, '0') +
         '/' +
         month.toString().padStart(2, '0') +
