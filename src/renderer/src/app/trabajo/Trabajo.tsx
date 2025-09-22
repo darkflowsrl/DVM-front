@@ -40,24 +40,20 @@ export function Trabajo(): JSX.Element {
 
   const errors = useMemo<string[]>(() => { // TODO: translate
     return nodosFull?.map<string[]>((nodo) => {      
-      if (!nodo.conectado) {
-        return ['Nodo desconectado']
+      if (!nodo.conectado && !nodo.deshabilitado) {
+        return [`Nodo ${nodo.id} desconectado`]
       }
       let nodoErrors = [] as string[]
       nodo.aspersores.forEach((aspersor) => {
-        if (aspersor.estado === -1) {
-          nodoErrors.push(`${nodo.nombre}${aspersor.id} desconectado`)
-        } else if (aspersor.estado === 0) {
-          nodoErrors.push(`${nodo.nombre}${aspersor.id} apagado`)
-        } else if (aspersor.estado === 1) {
+        if (aspersor.estado > 1 && !aspersor.deshabilitado) {
           nodoErrors.push(`${nodo.nombre}${aspersor.id} con error`)
-        } else if (aspersor.estado === 2) {
-          nodoErrors.push(`${nodo.nombre}${aspersor.id} en funcionamiento`)
         }
       })
       return nodoErrors
     }). flat() ?? []
   }, [nodosFull])
+
+  console.log('errors', errors)
 
   const [isPausado, setIsPausado] = useState<boolean>(false)
   const [isTrabajando, setIsTrabajando] = useState<boolean>(false)
@@ -455,26 +451,24 @@ export function Trabajo(): JSX.Element {
         {modeApp === 'light' && (
           <div
             className={clsx(
-              'relative border-[1px] border-white rounded-md col-span-2 w-full h-full bg-white  flex gap-10 dark:bg-dark overflow-auto',
+              'relative border-[1px] border-white rounded-md col-span-2 w-full h-full bg-white flex gap-1 dark:bg-dark flex flex-col',
               
             )}
           >
+            <h3 className="pl-2 text-dark dark:text-light font-bold text-xl">Errores</h3>
             {
-              errors != null && errors.length > 0 && (
-                <>
-                  <h3 className="pl-2 pt-2 text-dark dark:text-light font-bold text-[20px]">Errores</h3>
-                  <ul className="overflow-hidden h-[140px] w-full pt-10 flex flex-col gap-1">
-                    {
-                      errors.map((a) => (
-                            <li
-                          className='text-[20px] text-[#FF0000] dark:text-light font-bold pl-2'
-                        >
-                            {a}
-                        </li>
-                      ))
-                    }
-                  </ul>
-                </>
+              errors != null && errors.length > 0 && (                  
+                <ul className="overflow-x-hidden h-[120px] w-full flex flex-col gap-1 overflow-y-auto pl-4 pb-6">
+                  {
+                    errors.map((a) => (
+                          <li
+                        className='text-[20px] text-[#FF0000] dark:text-light font-bold'
+                      >
+                          - {a}
+                      </li>
+                    ))
+                  }
+                </ul>
               )
             }            
           </div>
