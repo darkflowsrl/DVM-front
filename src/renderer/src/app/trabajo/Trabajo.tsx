@@ -41,12 +41,12 @@ export function Trabajo(): JSX.Element {
   const errors = useMemo<string[]>(() => { // TODO: translate
     return nodosFull?.map<string[]>((nodo) => {      
       if (!nodo.conectado && !nodo.deshabilitado) {
-        return [`Nodo ${nodo.id} desconectado`]
+        return [`Nodo ${nodo.nombre} desconectado`]
       }
       let nodoErrors = [] as string[]
       nodo.aspersores.forEach((aspersor) => {
         if (aspersor.estado > 1 && !aspersor.deshabilitado) {
-          nodoErrors.push(`${nodo.nombre}${aspersor.id} con error`)
+          nodoErrors.push(`Aspersor ${nodo.nombre}-${aspersor.id} con error`)
         }
       })
       return nodoErrors
