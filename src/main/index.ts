@@ -316,7 +316,7 @@ ipcMain.handle(
 )
 
 ipcMain.handle('updateVersion', (): Promise<boolean> => {
-  const batchFilePath = '/root/DVM-Scripts/scripts/update.sh'
+  const batchFilePath = '/root/scripts/update.sh'
 
   return new Promise((resolve) => {
     execFile(batchFilePath, ['latest', 'latest'], (error, stdout) => {

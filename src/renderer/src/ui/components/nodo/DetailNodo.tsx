@@ -26,7 +26,7 @@ export function DetailNodo({ data, nodoDeshabilitadoChange, aspersorDeshabilitad
       case 2:
         return dataLang?.motorBloqueado ?? 'Motor bloqueado'
       case 3:
-        return dataLang?.motorNoConectado ?? 'Motor no conectado'
+        return dataLang?.motorNoConectado ?? 'Anomalia MOTOR'
       case 4:
         return dataLang?.sobrecorriente ?? 'Sobrecorriente'
       case 5:
@@ -36,7 +36,7 @@ export function DetailNodo({ data, nodoDeshabilitadoChange, aspersorDeshabilitad
       case 7:
         return dataLang?.errorDeSensor ?? 'Error de sensor'
       case 8:
-        return dataLang?.RPMNoAlcanzada ?? 'RPM no alcanzada'
+        return dataLang?.RPMNoAlcanzada ?? 'Anomalia RPM'
       case 9:
         return dataLang?.errorDeCaudalimetro ?? 'Error de caudalimetro'
     }
