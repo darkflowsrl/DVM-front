@@ -50,6 +50,7 @@ export function Header(): JSX.Element {
       ]
 
       const newDate = new Date()
+      newDate.setHours(-3)
       const date = newDate.getDate()
       const month = newDate.getMonth() + 1
       const year = newDate.getFullYear()
