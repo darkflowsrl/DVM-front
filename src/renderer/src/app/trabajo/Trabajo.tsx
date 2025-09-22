@@ -455,39 +455,28 @@ export function Trabajo(): JSX.Element {
         {modeApp === 'light' && (
           <div
             className={clsx(
-              'relative border-[1px] border-white rounded-md col-span-2 w-full h-full bg-white  flex gap-10 dark:bg-dark',
-              {
-                'animate-pulse border-error': errors != null && errors.length > 0
-              }
+              'relative border-[1px] border-white rounded-md col-span-2 w-full h-full bg-white  flex gap-10 dark:bg-dark overflow-auto',
+              
             )}
           >
-            {errors != null && errors.length > 0 && (
-              <>
-                <h3 className="pl-2 pt-2 text-dark dark:text-light font-bold text-[20px]">Errores</h3>
-                <ul className="overflow-hidden h-[140px] w-full pt-10">
-                  {/*
-                  errors.map((a) => (
-                        <li
-                      className={clsx('text-[20px]', {
-                        'text-error': [1, 2, 3].includes(a.estado?.id ?? 0),
-                        'text-warning': [4, 5, 6, 7, 8, 9].includes(a.estado?.id ?? 0),
-                        'text-[#696767]': [-1].includes(a.estado?.id ?? 0)
-                      })}
-                    >
-                      <p>
-                        <b>
-                          {nodo.nombre}-{a.id}
-                        </b>
-                        : {getDescripcionEstado(a.estado?.id ?? -1)} ({a.estado?.id})
-                      </p>
-                    </li>
-                  )
-              */
-              }
-            </ul>
-              </>
-            )}
-            
+            {
+              errors != null && errors.length > 0 && (
+                <>
+                  <h3 className="pl-2 pt-2 text-dark dark:text-light font-bold text-[20px]">Errores</h3>
+                  <ul className="overflow-hidden h-[140px] w-full pt-10 flex flex-col gap-1">
+                    {
+                      errors.map((a) => (
+                            <li
+                          className='text-[20px] text-[#FF0000] dark:text-light font-bold pl-2'
+                        >
+                            {a}
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </>
+              )
+            }            
           </div>
         )}
         {/* GPS y datos metereologicos */}

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, IpcMainInvokeEvent, nativeTheme } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, IpcMainInvokeEvent, nativeTheme, powerSaveBlocker } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -12,7 +12,7 @@ import { ItemsMenuStore } from './api/menu/items-menu.store'
 import { ItemsInfoStore } from './api/info/items-info.store'
 import { ILote, LotesStore } from './api/lotes/lotes.store'
 import * as shutdown from 'electron-shutdown-command'
-import { Nodo, NodosStore, UbicacionAspersorType } from './api/nodos/nodos.store'
+import { INodoConfig, NodosStore, UbicacionAspersorType } from './api/nodos/nodos.store'
 import { Configuraciones } from './api/configuraciones/configuraciones'
 import { UnidadesStore } from './api/unidades/unidades.store'
 import { ConfiguracionLogger } from './logs/configuracion-logger'
@@ -26,6 +26,8 @@ import { LangStore, LangType } from './api/lang/lang.store'
 
 log.initialize()
 ConfiguracionLogger()
+
+let psbId: number | null = null
 
 function createWindow(): void {
   // Create the browser window.
@@ -61,6 +63,8 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+
 }
 
 // This method will be called when Electron has finished
@@ -78,6 +82,12 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // Activar el PowerSaveBlocker al iniciar
+  if (psbId === null) {
+    psbId = powerSaveBlocker.start('prevent-display-sleep')
+    log.info('PowerSaveBlocker activo, id:', psbId)
+  }
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -207,7 +217,7 @@ ipcMain.handle('getNodosAsync', async () => {
   return nodos
 })
 
-ipcMain.handle('cambiarIdsNodosAsync', async (_: IpcMainInvokeEvent, nodos: Nodo[]) => {
+ipcMain.handle('cambiarIdsNodosAsync', async (_: IpcMainInvokeEvent, nodos: INodoConfig[]) => {
   const nodoCambiado = await nodosStore.cambiarIdsNodosAsync(nodos)
   return nodoCambiado
 })
@@ -219,11 +229,10 @@ ipcMain.handle('cambiarHabilitacionNodo', async (_: IpcMainInvokeEvent, idNodo: 
 
 ipcMain.handle(
   'cambiarHabilitacionAspersor',
-  async (_: IpcMainInvokeEvent, idNodo: number, idAspersor: number, deshabilitado: boolean) => {
+  async (_: IpcMainInvokeEvent, idNodo: number, idAspersor: number) => {
     const nodoConElAspersorCambiado = await nodosStore.cambiarHabilitacionAspersor(
       idNodo,
-      idAspersor,
-      deshabilitado
+      idAspersor
     )
     return nodoConElAspersorCambiado
   }
