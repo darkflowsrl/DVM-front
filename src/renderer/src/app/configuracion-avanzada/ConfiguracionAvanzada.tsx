@@ -130,6 +130,7 @@ export default function ConfiguracionAvanzada(): JSX.Element {
 
   const modalClosed = (idModal: string, acept: boolean): void => {
     if (acept) {
+      window.location.reload()
       if (!getStateModal(idModal)) toggleOpenedState(idModal)
     }
   }
@@ -241,7 +242,7 @@ export default function ConfiguracionAvanzada(): JSX.Element {
         ModalContent={Dialog}
         modalContentProps={{
           title: dataLang?.exito ?? 'Exito',
-          message: dataLang?.seGuardoSatisfactoriamente_ ?? 'Se guardo satisfactoriamente la configuración',
+          message: dataLang?.seGuardoSatisfactoriamente_ ?? 'Se guardo satisfactoriamente la configuración. </br> Se reiniciara el sistema para aplicar los cambios.',
           type: 'success',
           buttons: {
             cancelar: {
@@ -583,6 +584,7 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
           </div>
         </div>
       )}
+      {/*
       <div className="flex flex-col gap-4">
         <div className=" flex justify-between  gap-4">
           <div className="flex flex-col">
@@ -835,6 +837,7 @@ function Ajustes({ valueInicial, sendConfiguracionesAvanzadasData }: AjustesProp
           </div>
         </div>
       </div>
+      */}
     </div>
   )
 }

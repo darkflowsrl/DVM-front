@@ -19,7 +19,7 @@ import { postConfig } from './lib/api/post-config'
 export function App(): JSX.Element {
   const { cargando, setCargando } = useCarga()
   const [isConfigSend, setIsConfigSend] = useState<boolean>(false)
-  const { nodosStatus } = useNodosStatus()
+  const { nodosConfig } = useNodosStatus()
 
   useEffect(() => {
     setCargando(true)    
@@ -34,21 +34,25 @@ export function App(): JSX.Element {
       setConfiguracionInicial()
     }
 
-    if(nodosStatus != null && isConfigSend === true) {
+    if(isConfigSend === true) {
       setCargando(false)
     }
 
-  }, [cargando, nodosStatus, isConfigSend])
+  }, [cargando, nodosConfig, isConfigSend])
 
  
 
   const setConfiguracionInicial = useCallback(async (): Promise<void> => {
 
+    if(nodosConfig == null || nodosConfig.length === 0) {
+      return
+    }
+
     const configuracionesAvanzadasData: ConfiguracionesAvanzadasData = await window.api.invoke.getConfiguracionesAvanzadasAsync()
 
-    const { error } = await postConfig({
-      configuraciones: (nodosStatus ?? []).map((nodo) => ({
-        nodo: nodo.nodo,
+    const data = {
+      configuraciones: (nodosConfig).map((nodo) => ({
+        nodo: nodo.id,
         variacionRPM: configuracionesAvanzadasData.variacionRPM,
         subcorriente: configuracionesAvanzadasData.corriente.minimo,
         sobrecorriente: configuracionesAvanzadasData.corriente.maximo,
@@ -56,15 +60,19 @@ export function App(): JSX.Element {
         sensor: configuracionesAvanzadasData.sensorRPM,
         electrovalvula: configuracionesAvanzadasData.electroValvula
       }))
-    })
+    }
 
-    console.log('### Configuración enviada:', error)
+    console.log('***** Enviando configuración:', data)
+
+    const { error } = await postConfig(data)
+
+    console.log('***** Configuración enviada - error:', error)
 
     if(error == null) {
       setIsConfigSend(true)
     }
     
-  }, [nodosStatus])
+  }, [nodosConfig])
 
   return (
     <Router>
