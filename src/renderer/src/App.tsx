@@ -31,7 +31,8 @@ export function App(): JSX.Element {
     }
 
     if(isConfigSend !== true) {
-      setConfiguracionInicial()
+      //setConfiguracionInicial()
+      setIsConfigSend(true)
     }
 
     if(isConfigSend === true) {
