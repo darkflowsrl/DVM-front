@@ -315,17 +315,18 @@ ipcMain.handle(
   }
 )
 
-ipcMain.handle('updateVersion', (): Promise<boolean> => {
+ipcMain.handle('updateVersion', (): Promise<{ sucsses: boolean; error?: string  }> => {
+  console.log('#################################################')
   const batchFilePath = '/root/scripts/update.sh'
 
   return new Promise((resolve) => {
     execFile(batchFilePath, ['latest', 'latest'], (error, stdout) => {
       if (error) {
         console.error(`Error executing batch file: ${error}`)
-        return resolve(false)
+        return resolve({ sucsses: false, error: error.message })
       }
       console.log(`Batch file output: ${stdout}`)
-      resolve(true)
+      resolve({ sucsses: true})
     })
   })
 })

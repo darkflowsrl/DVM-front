@@ -55,7 +55,7 @@ export type Api = GetApiType<
     editConfiguracionesAvanzadasAsync: (
       value: ConfiguracionesAvanzadas
     ) => Promise<ConfiguracionesAvanzadas>
-    updateVersion: () => Promise<boolean>
+    updateVersion: () => Promise<{ success: boolean; error?: string  }>
     getVersionApp: () => Promise<string>
   },
   {}
@@ -154,7 +154,7 @@ const api: Api = {
       ipcRenderer.invoke('getConfiguracionesAvanzadasAsync'),
     editConfiguracionesAvanzadasAsync: async (value: ConfiguracionesAvanzadas) =>
       ipcRenderer.invoke('editConfiguracionesAvanzadasAsync', value),
-    updateVersion: async (): Promise<boolean> => {
+    updateVersion: async (): Promise<{ success: boolean; error?: string  }> => {
       return await ipcRenderer.invoke('updateVersion')
     },
     getVersionApp: async (): Promise<string> => {

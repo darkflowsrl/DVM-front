@@ -109,8 +109,8 @@ export default function ConfiguracionGeneral(): JSX.Element {
         setCargando(true)
         window.api.invoke.updateVersion().then((res, rej) => {
           setCargando(false)
-          if (!res || rej) {
-            alert('Error al actualizar')
+          if (res == null || !res.success || rej) {
+            alert('Error al actualizar la aplicación. ' + (res.error ?? ''))
           }
         })
       }
