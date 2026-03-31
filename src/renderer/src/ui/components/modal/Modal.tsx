@@ -2,22 +2,21 @@
 import { MouseEvent, ReactNode, FC, useEffect } from 'react'
 import { useModal } from './hooks/UseModal'
 
-export interface ModalProps<T = undefined> {
-  props: T
+export interface ModalProps {
   close?: () => void
   acept?: () => void
 }
 
-interface Props<T> {
+interface Props<T extends Record<string, unknown>> {
   idModal: string
-  ModalContent: FC<ModalProps<T>>
+  ModalContent: FC<T & ModalProps>
   modalContentProps?: T
   crossClose?: boolean
   outsideClose?: boolean
   closed: (idModal: string, acept: boolean) => void
 }
 
-export function Modal<T>({
+export function Modal<T extends Record<string, unknown>>({
   idModal,
   ModalContent,
   modalContentProps,
@@ -48,7 +47,11 @@ export function Modal<T>({
     <>
       {getStateModal(idModal) && (
         <ModalContainer onClickOutside={onClickOutside}>
-          <ModalContent close={onEventClose} acept={onEventAcept} {...modalContentProps} />
+          <ModalContent
+            close={onEventClose}
+            acept={onEventAcept}
+            {...(modalContentProps as T)}
+          />
         </ModalContainer>
       )}
     </>

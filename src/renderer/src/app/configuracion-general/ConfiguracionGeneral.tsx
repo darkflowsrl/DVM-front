@@ -10,7 +10,6 @@ import {
   ClientToServerEvents,
   ServerToClientEvents
 } from '@renderer/lib/socket/socket-client.interface'
-import { useCarga } from '@renderer/ui/layout/hooks/useCarga'
 import { useLang } from './hooks/useLang'
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://127.0.0.1:3000')
@@ -26,7 +25,15 @@ export default function ConfiguracionGeneral(): JSX.Element {
     version: '',
     boardVersion: ''
   })
-  const { setCargando } = useCarga()
+  const [updateResultDialog, setUpdateResultDialog] = useState<{
+    title: string
+    message: string
+    type: DialogType
+  }>({
+    title: 'Resultado de actualización',
+    message: '',
+    type: 'default'
+  })
 
   const [mostrarDropDownVelocidad, setMostrarDropDownVelocidad] = useState<boolean>(false)
   const [mostrarDropDownTemperatura, setMostrarDropDownTemperatura] = useState<boolean>(false)
@@ -61,7 +68,51 @@ export default function ConfiguracionGeneral(): JSX.Element {
     fetchUnidades()
     getVersiones()
     addModal('update-version')
+    addModal('update-version-loading')
+    addModal('update-version-result')
   }, [])
+
+  const openModal = (id: string): void => {
+    if (!getStateModal(id)) toggleOpenedState(id)
+  }
+
+  const closeModal = (id: string): void => {
+    if (getStateModal(id)) toggleOpenedState(id)
+  }
+
+  const executeVersionUpdate = async (): Promise<void> => {
+    openModal('update-version-loading')
+
+    try {
+      const res = await window.api.invoke.updateVersion()
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      closeModal('update-version-loading')
+
+      if (res == null || !res.success) {
+        setUpdateResultDialog({
+          title: 'Error de actualización',
+          message: `No se pudo actualizar la aplicación.${res?.error ? `<br/><small>${res.error}</small>` : ''}`,
+          type: 'error'
+        })
+      } else {
+        setUpdateResultDialog({
+          title: 'Actualización completada',
+          message: 'La aplicación se actualizó correctamente.',
+          type: 'success'
+        })
+      }
+    } catch {
+      closeModal('update-version-loading')
+      setUpdateResultDialog({
+        title: 'Error de actualización',
+        message: 'Ocurrió un error inesperado al actualizar la aplicación.',
+        type: 'error'
+      })
+    }
+
+    openModal('update-version-result')
+  }
+
   const handleClickTop = (): void => {
     const porcentaje = percentageLoading >= 100 ? 100 : percentageLoading + 10
     setPercentageLoading(porcentaje > 100 ? 100 : porcentaje < 0 ? 0 : porcentaje)
@@ -103,18 +154,8 @@ export default function ConfiguracionGeneral(): JSX.Element {
   }
 
   const modalClosed = (idModal: string, acept: boolean): void => {
-    if (acept) {
-      if (!getStateModal(idModal)) toggleOpenedState(idModal)
-      if (idModal === 'update-version') {
-        setCargando(true)
-        window.api.invoke.updateVersion().then((res, rej) => {
-          setCargando(false)
-          if (res == null || !res.success || rej) {
-            alert('Error al actualizar la aplicación. ' + (res.error ?? ''))
-          }
-        })
-      }
-    }
+    if (!acept) return
+    if (idModal === 'update-version') void executeVersionUpdate()
   }
 
   return (
@@ -267,6 +308,69 @@ export default function ConfiguracionGeneral(): JSX.Element {
         }}
         closed={modalClosed}
         crossClose
+        outsideClose
+      />
+
+      <Modal<{
+        title: string
+        message: string
+        type: 'success' | 'warning' | 'error' | 'default'
+        buttons?: {
+          cancelar?: {
+            noShow: boolean
+            text: string
+            type: DialogType
+          }
+          aceptar?: {
+            noShow: boolean
+            text: string
+            type: DialogType
+          }
+        }
+      }>
+        idModal="update-version-loading"
+        ModalContent={Dialog}
+        modalContentProps={{
+          title: 'Actualizando',
+          message: 'Actualizando la aplicación, por favor espere...',
+          type: 'warning',
+          buttons: {
+            cancelar: { noShow: true, text: '', type: 'default' },
+            aceptar: { noShow: true, text: '', type: 'default' }
+          }
+        }}
+        closed={modalClosed}
+      />
+
+      <Modal<{
+        title: string
+        message: string
+        type: 'success' | 'warning' | 'error' | 'default'
+        buttons?: {
+          cancelar?: {
+            noShow: boolean
+            text: string
+            type: DialogType
+          }
+          aceptar?: {
+            noShow: boolean
+            text: string
+            type: DialogType
+          }
+        }
+      }>
+        idModal="update-version-result"
+        ModalContent={Dialog}
+        modalContentProps={{
+          title: updateResultDialog.title,
+          message: updateResultDialog.message,
+          type: updateResultDialog.type,
+          buttons: {
+            cancelar: { noShow: true, text: '', type: 'default' },
+            aceptar: { noShow: false, text: 'OK', type: 'success' }
+          }
+        }}
+        closed={modalClosed}
         outsideClose
       />
     </article>
